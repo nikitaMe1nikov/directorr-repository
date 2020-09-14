@@ -4,7 +4,7 @@
 
 ## Why
 
-So that no one has to write their own solutions for form validation in each framework.
+Each framework should always have its own solution for validating forms.
 
 ## Installation
 

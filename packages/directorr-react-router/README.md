@@ -1,7 +1,7 @@
-# dirrector-react-router
+# directorr-react-router
 
->React router for [Directorr](https://github.com/nikitaMe1nikov/directorr).
+>Directorr router bindings for [React](https://github.com/facebook/react).
 
 ## Installation
 
-Run `npm install @nimel/next-directorr --save` or `yarn add @nimel/next-directorr`
+Run `npm install @nimel/directorr-react-router --save` or `yarn add @nimel/directorr-react-router`

@@ -1,6 +1,6 @@
 # directorr-middlewares
 
-Middlewares for [Directorr](https://github.com/nikitaMe1nikov/directorr).  
+Middlewares for Directorr.  
 
 ## Installation
 

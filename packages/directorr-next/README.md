@@ -1,10 +1,10 @@
-# next-directorr
+# directorr-next
 
 > Directorr HOC for Next.js
 
 ## Installation
 
-Run `npm install @nimel/next-directorr --save` or `yarn add @nimel/next-directorr`
+Run `npm install @nimel/directorr-next --save` or `yarn add @nimel/directorr-next`
 
 ## API
 
@@ -15,7 +15,7 @@ Commonly used in _app.js
 ```javascript
 import createSagaMiddleware from 'redux-saga';
 import App from 'next/app';
-import nextWithDirectorr, { MakeDirectorr, IWithDirectorrAppProps } from '@nimel/next-directorr';
+import nextWithDirectorr, { MakeDirectorr, IWithDirectorrAppProps } from '@nimel/directorr-next';
 
 export const makeDirectorr: MakeDirectorr = (ctx, initialState?: IDirectorrStoresState) => {
   const sagaMiddleware = createSagaMiddleware();

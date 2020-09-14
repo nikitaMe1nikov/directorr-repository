@@ -1,10 +1,10 @@
 # Directorr
 
->Like [Redux](https://redux.js.org/) but using decorators
+>Does the same as [Redux](https://github.com/reduxjs/redux), but more OOP and less coding
 
 ## Why
 
-To be able to write less code and separate business logic as much as possible from different frameworks (React, Inferno, etc.).
+Ability to write less code and easily separate business logic from different frameworks(React, Inferno and other).
 
 ## What
 
