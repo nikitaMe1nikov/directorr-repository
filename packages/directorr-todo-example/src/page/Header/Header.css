@@ -1,0 +1,9 @@
+.title {
+  composes: text_big from "~components/typography.css";
+  composes: children_center from "~components/layout.css";
+  height: 150px;
+  color: rgba(175, 47, 47, 0.15);
+  font-size: 100px;
+}
+
+

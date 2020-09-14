@@ -1,0 +1,40 @@
+{
+  "name": "@nimel/directorr-router",
+  "version": "1.0.0",
+  "keywords": [
+    "directorr",
+    "router"
+  ],
+  "description": "Router for Reactjs using directorr",
+  "main": "build/index.js",
+  "umd:main": "build/index.umd.js",
+  "module": "build/index.module.js",
+  "browser": {
+    "./build/index.js": "./build/index.js",
+    "./build/index.module.js": "./build/index.module.js"
+  },
+  "unpkg": "build/index.umd.min.js",
+  "jsnext:main": "build/index.module.js",
+  "react-native": "build/index.module.js",
+  "es2015": "build/index.es6.js",
+  "typings": "build/index.d.ts",
+  "scripts": {
+    "local-publish": "node ../../scripts/build.js && yalc publish",
+    "check-ts": "tsc --noEmit",
+    "lint": "eslint \"./**/*.{ts,tsx}\" --fix",
+    "test:all": "yarn run check-ts && yarn run lint && yarn run test",
+    "test": "jest --config jest.config.js",
+    "test:w": "jest --config jest.config.js --watchAll"
+  },
+  "peerDependencies": {
+    "@nimel/directorr": "1.0.0"
+  },
+  "dependencies": {
+    "history": "^5.0.0",
+    "path-to-regexp": "^6.1.0",
+    "query-string": "^6.13.1"
+  },
+  "devDependencies": {
+    "@nimel/directorr": "1.0.0"
+  }
+}

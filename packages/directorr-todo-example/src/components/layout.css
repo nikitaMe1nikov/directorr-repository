@@ -1,0 +1,156 @@
+@import '~sanitize.css';
+
+
+a,
+area,
+button,
+input,
+label,
+select,
+summary,
+textarea,
+[tabindex] {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  outline: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+body,
+div,
+a,
+i,
+button,
+figure,
+img,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+}
+
+
+:global(#app),
+.stretch {
+  flex: 1 1 auto;
+}
+
+html,
+body,
+.stretch_percent {
+  height: 100%;
+  width: 100%;
+}
+
+
+body,
+.background_color__primary {
+  background-color: #f5f5f5 !important;
+}
+
+.background_color__secondary {
+  background-color: #fff !important;
+}
+
+
+.children_row {
+  flex-direction: row;
+}
+
+.children_column {
+  flex-direction: column;
+}
+
+.children_wrap {
+  flex-wrap: wrap;
+}
+
+.children_main_center {
+  justify-content: center;
+}
+
+.children_main_start {
+  justify-content: flex-start;
+}
+
+.children_main_end {
+  justify-content: flex-end;
+}
+
+.children_main_around {
+  justify-content: space-around;
+}
+
+.children_main_between {
+  justify-content: space-between;
+}
+
+.children_cross_center {
+  align-items: center;
+}
+
+.children_cross_start {
+  align-items: flex-start;
+}
+
+.children_cross_end {
+  align-items: flex-end;
+}
+
+.children_cross_baseline {
+  align-items: baseline;
+}
+
+.children_cross_normal {
+  align-items: normal;
+}
+
+.children_cross_around {
+  align-content: space-around;
+}
+
+.children_cross_between {
+  align-content: space-between;
+}
+
+.children_must_wrap {
+  flex-wrap: wrap;
+}
+
+.childrens_start {
+  align-content: flex-start;
+}
+
+.shrink {
+  flex-shrink: 1;
+}
+
+.no_shrink {
+  flex-shrink: 0;
+}
+
+.bases_0 {
+  flex-basis: 0;
+}
+
+.children_center {
+  align-items: center;
+  justify-content: center;
+}
+
+.flex_to_grow {
+  flex-grow: 1;
+}
+
+
+.shadow_elevation_2 {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);;
+}

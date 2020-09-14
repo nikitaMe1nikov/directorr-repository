@@ -1,0 +1,32 @@
+.container {
+  composes: text_normal from "~components/typography.css";
+  composes: children_row from "~components/layout.css";
+  composes: children_cross_center from "~components/layout.css";
+  composes: children_main_between from "~components/layout.css";
+  height: 50px;
+  width: 550px;
+  padding: 0 16px;
+  box-shadow: inset 0 -1px 1px rgba(0,0,0,0.03);
+}
+
+.buttons {
+  composes: children_row from "~components/layout.css";
+}
+
+.filter_button {
+  composes: text_normal from "~components/typography.css";
+  composes: children_center from "~components/layout.css";
+  height: 32px;
+  margin: 0 4px;
+  padding: 0 8px;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 3px;
+}
+
+.filter_button__active {
+  border: 1px solid rgba(175, 47, 47, 0.2);
+}
+
+.clear_button {
+  composes: text_normal from "~components/typography.css";
+}

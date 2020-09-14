@@ -1,0 +1,46 @@
+body {
+  direction: ltr;
+  font-family: Arial, sans-serif;
+  font-feature-settings: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smoothing: antialiased;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  letter-spacing: normal;
+  line-height: normal;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  vertical-align: top;
+  word-wrap: normal;
+}
+
+.mid_black_color {
+  color: #333;
+}
+
+.text_small {
+  composes: mid_black_color;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 17px;
+}
+
+.text_normal {
+  composes: mid_black_color;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.text_big {
+  composes: mid_black_color;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.icon {
+  background-size: contain;
+}

@@ -1,0 +1,13 @@
+.container {
+  composes: stretch from "~components/layout.css";
+  composes: children_cross_center from "~components/layout.css";
+}
+
+.todos {
+  position: relative;
+  composes: background_color__secondary from "~components/layout.css";
+  composes: shadow_elevation_2 from "~components/layout.css";
+  width: 550px;
+  border-radius: 6px;
+  overflow: hidden;
+}

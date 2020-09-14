@@ -1,0 +1,23 @@
+.container {
+  composes: children_row from "~components/layout.css";
+  composes: children_cross_center from "~components/layout.css";
+  composes: text_normal from "~components/typography.css";
+  height: 65px;
+  padding: 0 4px 0 16px;
+  box-shadow: inset 0 -1px 1px rgba(0,0,0,0.03);
+}
+
+.text {
+  composes: stretch from "~components/layout.css";
+  composes: children_main_center from "~components/layout.css";
+  composes: text_big from "~components/typography.css";
+  padding-left: 16px;
+}
+
+.button {
+  composes: children_center from "~components/layout.css";
+  composes: text_big from "~components/typography.css";
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+}

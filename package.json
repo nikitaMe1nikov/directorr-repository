@@ -1,0 +1,80 @@
+{
+  "name": "@nimel/director-repo",
+  "private": true,
+  "version": "1.0.0",
+  "author": "Nikita Melnikov",
+  "license": "MIT",
+  "homepage": "https://github.com/nikitaMe1nikov/director-repo#readme",
+  "bugs": {
+    "url": "https://github.com/nikitaMe1nikov/director-repo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nikitaMe1nikov/director-repo.git"
+  },
+  "scripts": {
+    "local-publish": "npx oao all --tree 'yarn run local-publish'",
+    "preversion": "npm run test:all",
+    "postversion": "npm run build && npm publish --access public",
+    "postpublish": "git push origin --all && git push origin --tags",
+    "test:all": "npx oao all --tree 'yarn run test:all'",
+    "dedup": "npx yarn-deduplicate -s fewer yarn.lock"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "npm run lint",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && yarn test:all"
+    }
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-decorators": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/preset-typescript": "^7.8.3",
+    "@babel/runtime": "^7.8.4",
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@rollup/plugin-replace": "^2.3.3",
+    "@testing-library/react": "^11.0.2",
+    "@testing-library/react-hooks": "^3.4.1",
+    "@types/core-js": "^2.5.3",
+    "@types/enzyme": "^3.10.6",
+    "@types/jest": "^25.1.2",
+    "@typescript-eslint/eslint-plugin": "^2.19.0",
+    "@typescript-eslint/parser": "^2.19.0",
+    "babel-jest": "^26.3.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.4",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-css-modules": "^2.11.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.1.0",
+    "fs-extra": "^8.1.0",
+    "husky": "^4.2.1",
+    "jest": "^26.4.2",
+    "lint-staged": "^10.0.7",
+    "oao": "^2.0.0",
+    "prettier": "^1.19.1",
+    "redux": "^4.0.5",
+    "rollup": "^1.31.0",
+    "rollup-plugin-filesize": "^6.2.1",
+    "rollup-plugin-peer-deps-external": "^2.2.3",
+    "rollup-plugin-terser": "^5.2.0",
+    "ts-jest": "^26.3.0",
+    "typescript": "3.9.7"
+  },
+  "dependencies": {}
+}

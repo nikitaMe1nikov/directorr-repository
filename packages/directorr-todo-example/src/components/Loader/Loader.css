@@ -1,0 +1,38 @@
+.container {
+  composes: children_cross_center from "~components/layout.css";
+  composes: children_row from "~components/layout.css";
+  composes: children_main_center from "~components/layout.css";
+}
+
+.ball {
+  height: 64px;
+  width: 64px;
+  margin: 8px;
+  background: rgb(175, 47, 47);
+  border-radius: 50%;
+  will-change: transform;
+  animation: loader_magnify_ball_bounce 0.4s ease 0s alternate infinite both;
+  backface-visibility: hidden;
+}
+
+
+.ball_1 {
+  composes: ball;
+  animation-delay: calc((0.4s / 5) * 1);
+}
+
+.ball_2 {
+  composes: ball;
+  animation-delay: calc((0.4s / 5) * 2);
+}
+
+.ball_3 {
+  composes: ball;
+  animation-delay: calc((0.4s / 5) * 3);
+}
+
+@keyframes loader_magnify_ball_bounce {
+  0% {
+    transform: scale(0);
+  }
+}

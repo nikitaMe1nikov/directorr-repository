@@ -1,0 +1,40 @@
+{
+  "name": "@nimel/directorr",
+  "version": "1.0.0",
+  "keywords": [
+    "directorr",
+    "mobx",
+    "action",
+    "decorators"
+  ],
+  "description": "Like Redux but using decorators",
+  "main": "build/index.js",
+  "umd:main": "build/index.umd.js",
+  "module": "build/index.module.js",
+  "browser": {
+    "./build/index.js": "./build/index.js",
+    "./build/index.module.js": "./build/index.module.js"
+  },
+  "unpkg": "build/index.umd.min.js",
+  "jsnext:main": "build/index.module.js",
+  "react-native": "build/index.module.js",
+  "es2015": "build/index.es6.js",
+  "typings": "build/index.d.ts",
+  "scripts": {
+    "local-publish": "node ../../scripts/build.js && yalc publish",
+    "check-ts": "tsc --noEmit",
+    "lint": "eslint \"./**/*.{tsx,ts}\" --fix",
+    "test:all": "yarn run check-ts && yarn run lint && yarn run test-babel && yarn run test-typescript",
+    "test-babel": "jest --config jest.config.babel.js",
+    "test-typescript": "jest --config jest.config.typescript.js",
+    "test-typescript:w": "jest --config jest.config.typescript.js --watchAll",
+    "test-babel:w": "jest --config jest.config.babel.js --watchAll"
+  },
+  "peerDependencies": {
+    "redux": "^4.0.5"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "redux": "^4.0.5"
+  }
+}

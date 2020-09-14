@@ -1,0 +1,42 @@
+{
+  "name": "@nimel/directorr-react",
+  "version": "1.0.0",
+  "keywords": [
+    "directorr",
+    "react"
+  ],
+  "description": "Reactjs binding for directorr",
+  "main": "build/index.js",
+  "umd:main": "build/index.umd.js",
+  "module": "build/index.module.js",
+  "browser": {
+    "./build/index.js": "./build/index.js",
+    "./build/index.module.js": "./build/index.module.js"
+  },
+  "unpkg": "build/index.umd.min.js",
+  "jsnext:main": "build/index.module.js",
+  "react-native": "build/index.module.js",
+  "es2015": "build/index.es6.js",
+  "typings": "build/index.d.ts",
+  "scripts": {
+    "local-publish": "node ../../scripts/build.js && yalc publish",
+    "check-ts": "tsc --noEmit",
+    "lint": "eslint \"./**/*.{ts,tsx}\" --fix",
+    "test:all": "yarn run check-ts && yarn run lint && yarn run test",
+    "test": "jest --config jest.config.js",
+    "test:w": "jest --config jest.config.js --watchAll"
+  },
+  "peerDependencies": {
+    "@nimel/directorr": "~1.0.0",
+    "react": ">=16.10.0"
+  },
+  "dependencies": {
+    "hoist-non-react-statics": "^3.3.2"
+  },
+  "devDependencies": {
+    "@nimel/directorr": "1.0.0",
+    "@types/hoist-non-react-statics": "^3.3.1",
+    "react": "^16.13.1",
+    "react-test-renderer": "^16.13.1"
+  }
+}

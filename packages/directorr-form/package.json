@@ -1,0 +1,39 @@
+{
+  "name": "@nimel/directorr-form",
+  "version": "1.0.0",
+  "keywords": [
+    "directorr",
+    "form"
+  ],
+  "description": "Form logic in directorr",
+  "main": "build/index.js",
+  "umd:main": "build/index.umd.js",
+  "module": "build/index.module.js",
+  "browser": {
+    "./build/index.js": "./build/index.js",
+    "./build/index.module.js": "./build/index.module.js"
+  },
+  "unpkg": "build/index.umd.min.js",
+  "jsnext:main": "build/index.module.js",
+  "react-native": "build/index.module.js",
+  "es2015": "build/index.es6.js",
+  "typings": "build/index.d.ts",
+  "scripts": {
+    "local-publish": "node ../../scripts/build.js && yalc publish",
+    "check-ts": "tsc --build tsconfig.json",
+    "lint": "eslint \"./**/*.{tsx,ts}\" --fix",
+    "test:all": "yarn run check-ts && yarn run lint"
+  },
+  "peerDependencies": {
+    "@nimel/directorr": ">=1.0.0",
+    "mobx": ">=5.15.6",
+    "yup": ">=0.29.3"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@nimel/directorr": "1.0.0",
+    "@types/yup": "^0.29.6",
+    "mobx": "^5.15.6",
+    "yup": "^0.29.3"
+  }
+}

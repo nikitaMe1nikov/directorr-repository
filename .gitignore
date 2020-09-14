@@ -1,0 +1,16 @@
+node_modules
+build
+
+.vscode
+
+# misc
+.yalc
+yalc.lock
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings

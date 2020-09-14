@@ -1,0 +1,11 @@
+.input {
+  composes: text_big from "~components/typography.css";
+  composes: background_color__secondary from "~components/layout.css";
+  height: 65px;
+  width: 550px;
+  padding: 16px 16px 16px 70px;
+
+  &::placeholder {
+    color: rgba(51, 51, 51, 0.7);
+  }
+}
