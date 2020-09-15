@@ -33,7 +33,7 @@ export default class RouterStore {
       handlersStack,
     } = this;
 
-    const routersTookTask = [];
+    const routersTookTask: RouterTask[] = [];
 
     for (let i = 0, l = handlersStack.length, task; i < l; ++i) {
       task = handlersStack[i](newRouterState);

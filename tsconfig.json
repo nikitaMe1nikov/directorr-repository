@@ -8,13 +8,16 @@
       "dom"
     ],
     "typeRoots": ["node_modules/@types"],
-    "declaration": true,
     "noEmit": true,
+    "declaration": true,
+    "removeComments": false,
+    "alwaysStrict": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
-    "sourceMap": true,
+    "sourceMap": false,
     "importHelpers": true,
+    "noEmitHelpers": true,
     "esModuleInterop": true,
     "allowJs": true,
     "jsx": "react",
@@ -22,8 +25,13 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "strictPropertyInitialization": false,
+    "useDefineForClassFields": false,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "noImplicitReturns": false,
+    "noUnusedLocals": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
   },
   "exclude": ["node_modules", "build"]
 }

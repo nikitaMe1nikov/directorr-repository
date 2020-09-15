@@ -1,9 +1,11 @@
 {
   "name": "@nimel/directorr-todo-example",
-  "version": "1.0.0",
+  "version": "1.0.0-rc.0",
+  "private": true,
   "main": "src/index.js",
   "scripts": {
     "local-publish": "echo 'skip'",
+    "build": "echo 'skip'",
     "check-ts": "tsc --noEmit",
     "lint": "eslint \"./**/*.{ts,tsx}\" --fix",
     "test:all": "yarn run check-ts && yarn run lint",
@@ -83,5 +85,13 @@
       "not IE < 10",
       "last 4 versions"
     ]
+  },
+  "homepage": "https://github.com/nikitaMe1nikov/director-repo#readme",
+  "bugs": {
+    "url": "https://github.com/nikitaMe1nikov/director-repo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nikitaMe1nikov/director-repo.git"
   }
 }

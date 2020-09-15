@@ -104,12 +104,13 @@ describe('injectStore', () => {
     class InjectStore {}
 
     expect(() => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       class SomeClass {
         @injectStore(InjectStore)
         @injectStore(InjectStore)
         store: any;
       }
+
+      new SomeClass();
     }).toThrowError(dontUseWithAnotherDecorator(MODULE_NAME));
   });
 });

@@ -1,7 +1,7 @@
 {
   "name": "@nimel/director-repo",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.0-rc.0",
   "author": "Nikita Melnikov",
   "license": "MIT",
   "homepage": "https://github.com/nikitaMe1nikov/director-repo#readme",
@@ -14,21 +14,21 @@
   },
   "scripts": {
     "local-publish": "npx oao all --tree 'yarn run local-publish'",
-    "preversion": "npm run test:all",
-    "postversion": "npm run build && npm publish --access public",
-    "postpublish": "git push origin --all && git push origin --tags",
+    "build:all": "npx oao all --tree 'yarn run build'",
     "test:all": "npx oao all --tree 'yarn run test:all'",
+    "lint:all": "npx oao all --tree 'yarn run lint'",
+    "prerelease": "yarn test:all && yarn build:all && npx oao prepublish",
+    "release": "npx oao publish",
     "dedup": "npx yarn-deduplicate -s fewer yarn.lock"
   },
   "lint-staged": {
-    "*.{js,ts}": [
-      "npm run lint",
-      "git add"
+    "*.{js,ts,tsx}": [
+      "npm run lint:all"
     ]
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && yarn test:all"
+      "pre-commit": "lint-staged"
     }
   },
   "workspaces": [
@@ -63,7 +63,7 @@
     "eslint-plugin-react": "^7.20.6",
     "eslint-plugin-react-hooks": "^4.1.0",
     "fs-extra": "^8.1.0",
-    "husky": "^4.2.1",
+    "husky": "^4.3.0",
     "jest": "^26.4.2",
     "lint-staged": "^10.0.7",
     "oao": "^2.0.0",
@@ -74,7 +74,8 @@
     "rollup-plugin-peer-deps-external": "^2.2.3",
     "rollup-plugin-terser": "^5.2.0",
     "ts-jest": "^26.3.0",
-    "typescript": "3.9.7"
+    "typescript": "3.9.7",
+    "yarn-deduplicate": "^3.0.0"
   },
   "dependencies": {}
 }

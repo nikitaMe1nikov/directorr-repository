@@ -36,6 +36,7 @@ function runTypeScriptBuild(outDir, target, declarations) {
   options.module = ts.ModuleKind.ES2015;
   options.importHelpers = true;
   options.noEmitHelpers = true;
+  options.noEmit = false;
 
   if (target === ts.ScriptTarget.ES5) options.downlevelIteration = true;
 

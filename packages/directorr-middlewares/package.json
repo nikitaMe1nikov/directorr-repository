@@ -1,6 +1,9 @@
 {
   "name": "@nimel/directorr-middlewares",
-  "version": "1.0.0",
+  "version": "1.0.0-rc.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "directorr",
     "middleware"
@@ -20,7 +23,8 @@
   "typings": "build/index.d.ts",
   "scripts": {
     "local-publish": "node ../../scripts/build.js && yalc publish",
-    "check-ts": "tsc --build tsconfig.json",
+    "build": "node ../../scripts/build.js",
+    "check-ts": "tsc --noEmit",
     "lint": "eslint \"./**/*.{tsx,ts}\" --fix",
     "test:all": "yarn run check-ts && yarn run lint"
   },
@@ -30,5 +34,15 @@
   "dependencies": {},
   "devDependencies": {
     "@nimel/directorr": "1.0.0"
+  },
+  "author": "Nikita Melnikov",
+  "license": "MIT",
+  "homepage": "https://github.com/nikitaMe1nikov/director-repo#readme",
+  "bugs": {
+    "url": "https://github.com/nikitaMe1nikov/director-repo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nikitaMe1nikov/director-repo.git"
   }
 }

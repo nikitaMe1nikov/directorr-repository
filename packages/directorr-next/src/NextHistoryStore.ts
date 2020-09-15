@@ -82,7 +82,7 @@ export default class NextHistoryStore {
   }
 
   @whenDestroy
-  private toClear = () => this.nextRouter.events.off(ROUTER_EVENT, this.dispatchAction);
+  toClear = () => this.nextRouter.events.off(ROUTER_EVENT, this.dispatchAction);
 
   @effectRouterPush
   toPush = ({ path, queryObject }: RouterActionPayload) =>
