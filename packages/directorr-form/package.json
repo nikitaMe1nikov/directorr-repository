@@ -1,6 +1,6 @@
 {
   "name": "@nimel/directorr-form",
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0-rc.1",
   "publishConfig": {
     "access": "public"
   },
@@ -29,13 +29,13 @@
     "test:all": "yarn run check-ts && yarn run lint"
   },
   "peerDependencies": {
-    "@nimel/directorr": ">=1.0.0",
+    "@nimel/directorr": "^1.0.0-rc.1",
     "mobx": ">=5.15.6",
     "yup": ">=0.29.3"
   },
   "dependencies": {},
   "devDependencies": {
-    "@nimel/directorr": "1.0.0",
+    "@nimel/directorr": "^1.0.0-rc.1",
     "@types/yup": "^0.29.6",
     "mobx": "^5.15.6",
     "yup": "^0.29.3"

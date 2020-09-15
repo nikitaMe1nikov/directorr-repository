@@ -1,6 +1,6 @@
 {
   "name": "@nimel/directorr-middlewares",
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0-rc.1",
   "publishConfig": {
     "access": "public"
   },
@@ -29,11 +29,11 @@
     "test:all": "yarn run check-ts && yarn run lint"
   },
   "peerDependencies": {
-    "@nimel/directorr": "~1.0.0"
+    "@nimel/directorr": "^1.0.0-rc.1"
   },
   "dependencies": {},
   "devDependencies": {
-    "@nimel/directorr": "1.0.0"
+    "@nimel/directorr": "^1.0.0-rc.1"
   },
   "author": "Nikita Melnikov",
   "license": "MIT",

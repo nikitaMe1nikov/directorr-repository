@@ -1,6 +1,6 @@
 {
   "name": "@nimel/directorr-router",
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0-rc.1",
   "publishConfig": {
     "access": "public"
   },
@@ -31,7 +31,7 @@
     "test:w": "jest --config jest.config.js --watchAll"
   },
   "peerDependencies": {
-    "@nimel/directorr": "1.0.0"
+    "@nimel/directorr": "^1.0.0-rc.1"
   },
   "dependencies": {
     "history": "^5.0.0",
@@ -39,7 +39,7 @@
     "query-string": "^6.13.1"
   },
   "devDependencies": {
-    "@nimel/directorr": "1.0.0"
+    "@nimel/directorr": "^1.0.0-rc.1"
   },
   "author": "Nikita Melnikov",
   "license": "MIT",

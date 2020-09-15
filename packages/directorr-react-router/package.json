@@ -1,6 +1,6 @@
 {
   "name": "@nimel/directorr-react-router",
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0-rc.1",
   "publishConfig": {
     "access": "public"
   },
@@ -30,16 +30,16 @@
     "test:all": "yarn run check-ts && yarn run lint"
   },
   "peerDependencies": {
-    "@nimel/directorr": "1.0.0",
+    "@nimel/directorr": "^1.0.0-rc.1",
     "react": ">=16.10.0",
     "react-dom": ">=16.10.0"
   },
   "dependencies": {
-    "@nimel/directorr-react": "1.0.0",
-    "@nimel/directorr-router": "1.0.0"
+    "@nimel/directorr-react": "^1.0.0-rc.1",
+    "@nimel/directorr-router": "^1.0.0-rc.1"
   },
   "devDependencies": {
-    "@nimel/directorr": "1.0.0",
+    "@nimel/directorr": "^1.0.0-rc.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
