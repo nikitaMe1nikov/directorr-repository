@@ -12,9 +12,9 @@ const ts = require('typescript');
 // make sure we're in the right folder
 process.chdir(process.env.PWD);
 
-const BUILDS_PATH = 'build';
-const TYPE_BUILDS_ES6_PATH = '.build.es6';
-const TYPE_BUILDS_ES5_PATH = '.build.es5';
+const BUILDS_PATH = 'dist';
+const TYPE_BUILDS_ES6_PATH = '.dist.es6';
+const TYPE_BUILDS_ES5_PATH = '.dist.es5';
 const INDEX_PATH = 'index';
 const BUILD_NAME = 'index';
 

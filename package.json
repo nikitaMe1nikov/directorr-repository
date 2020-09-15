@@ -1,7 +1,7 @@
 {
   "name": "@nimel/director-repo",
   "private": true,
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0-rc.1",
   "author": "Nikita Melnikov",
   "license": "MIT",
   "homepage": "https://github.com/nikitaMe1nikov/director-repo#readme",
@@ -76,6 +76,5 @@
     "ts-jest": "^26.3.0",
     "typescript": "3.9.7",
     "yarn-deduplicate": "^3.0.0"
-  },
-  "dependencies": {}
+  }
 }
