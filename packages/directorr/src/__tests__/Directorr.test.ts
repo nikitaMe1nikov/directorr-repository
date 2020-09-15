@@ -517,10 +517,7 @@ describe('Directorr', () => {
 
     director.addStores(StoreTrue);
 
-    director
-      .waitAllStoresState()
-      .then(resolve)
-      .catch(reject);
+    director.waitAllStoresState().then(resolve).catch(reject);
 
     await flushPromises();
 
@@ -540,10 +537,7 @@ describe('Directorr', () => {
 
     director.addStores(StoreFalse);
 
-    director
-      .waitAllStoresState()
-      .then(resolve)
-      .catch(reject);
+    director.waitAllStoresState().then(resolve).catch(reject);
 
     await flushPromises();
 
@@ -567,20 +561,14 @@ describe('Directorr', () => {
 
     director.addStores(StoreTrue, StoreFalse);
 
-    director
-      .waitStoresState([StoreFalse])
-      .then(resolve)
-      .catch(reject);
+    director.waitStoresState([StoreFalse]).then(resolve).catch(reject);
 
     await flushPromises();
 
     expect(resolve).not.toHaveBeenCalled();
     expect(reject).not.toHaveBeenCalled();
 
-    director
-      .waitStoresState([StoreTrue])
-      .then(resolve)
-      .catch(reject);
+    director.waitStoresState([StoreTrue]).then(resolve).catch(reject);
 
     await flushPromises();
 
@@ -604,10 +592,7 @@ describe('Directorr', () => {
 
     director.addStores(StoreTrue, StoreFalse);
 
-    director
-      .findStoreState()
-      .then(resolve)
-      .catch(reject);
+    director.findStoreState().then(resolve).catch(reject);
 
     await flushPromises();
 

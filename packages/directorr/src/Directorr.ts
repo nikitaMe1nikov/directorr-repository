@@ -37,6 +37,8 @@ import {
   CheckStoreState,
   Afterware,
   DirectorrStoreClassConstructor,
+  Depency,
+  SomeObject,
 } from './types';
 import { ReduxMiddlewareAdapter, MiddlewareAdapter } from './MiddlewareAdapters';
 
@@ -82,8 +84,8 @@ class Directorr implements DirectorrInterface {
 
   addStoreDependency(
     StoreConstructor: DirectorrStoreClassConstructor<any>,
-    depName: any,
-    initOptions?: any
+    depName: Depency,
+    initOptions?: SomeObject
   ) {
     const store = this.initStore(StoreConstructor, initOptions);
 
@@ -96,7 +98,7 @@ class Directorr implements DirectorrInterface {
     return store;
   }
 
-  removeStoreDependency(StoreConstructor: DirectorrStoreClassConstructor<any>, depName: any) {
+  removeStoreDependency(StoreConstructor: DirectorrStoreClassConstructor<any>, depName: Depency) {
     const store = this.getStore(StoreConstructor);
 
     if (store) {
@@ -110,7 +112,7 @@ class Directorr implements DirectorrInterface {
     }
   }
 
-  private initStore(StoreConstructor: DirectorrStoreClassConstructor, initOptions?: any) {
+  private initStore(StoreConstructor: DirectorrStoreClassConstructor, initOptions?: SomeObject) {
     const storeName = getStoreName(StoreConstructor);
 
     if (this.stores.has(storeName)) return this.stores.get(storeName);
@@ -357,10 +359,8 @@ class Directorr implements DirectorrInterface {
   };
 
   private runEffects(action: Action) {
-    // console.log('runEffects', action);
     for (const store of this.stores.values()) {
       store[DISPATCH_EFFECTS_FIELD_NAME](action);
-      // console.log('run store', store[DISPATCH_EFFECTS_FIELD_NAME].mock.calls);
     }
 
     for (const afterware of this.afterwares) {

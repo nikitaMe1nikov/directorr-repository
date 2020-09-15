@@ -196,15 +196,20 @@ export interface DirectorrStoresState {
   [key: string]: DirectorrStoreState;
 }
 
+export type Depency = symbol | SomeObject;
+
 export interface DirectorrInterface {
   addInitState: (initStoreState: DirectorrStoresState) => void;
   addStores: (...storeClasses: DirectorrStoreClassConstructor[]) => void;
-  addStore: <I>(StoreConstructor: DirectorrStoreClassConstructor, initStoreOptions?: any) => I;
+  addStore: <I extends DirectorrStore>(
+    StoreConstructor: DirectorrStoreClassConstructor<I>,
+    initStoreOptions?: SomeObject
+  ) => I;
   removeStore: (StoreConstructor: DirectorrStoreClassConstructor) => void;
   addReduxMiddlewares: (...middlewares: ReduxMiddleware[]) => void;
   addMiddlewares: (...middlewares: Middleware[]) => void;
   dispatch: DispatchAction;
-  dispatchType: (type: string, payload?: any) => void;
+  dispatchType: (type: string, payload?: any) => Action;
   getStore: <I>(StoreConstructor: DirectorrStoreClassConstructor<I, any>) => I | undefined;
   getHydrateStoresState: () => DirectorrStoresState;
   mergeStateToStore: (storeState: DirectorrStoresState) => void;
@@ -216,12 +221,12 @@ export interface DirectorrInterface {
   findStoreState: (checkStoreState?: CheckStoreState) => Promise<any>;
   addStoreDependency: <I>(
     StoreConstructor: DirectorrStoreClassConstructor<any>,
-    depName: any,
-    initStoreOptions?: any
+    depName: Depency,
+    initStoreOptions?: SomeObject
   ) => I;
   removeStoreDependency: (
     StoreConstructor: DirectorrStoreClassConstructor<any>,
-    depName: any
+    depName: Depency
   ) => void;
 }
 

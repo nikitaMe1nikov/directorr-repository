@@ -13,7 +13,7 @@ export const enum Action {
   REPLACE = 'REPLACE',
 }
 export type Location = LocationHistory;
-export type LocationState = object | null;
+export type LocationState = Record<string, any> | null;
 export type Blocker = (...args: any[]) => any;
 export type History = HistoryType;
 

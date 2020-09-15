@@ -10,7 +10,7 @@ export declare type MakeDirectorr = (
 ) => Directorr;
 
 export interface NextWithDirectorrInitialProps {
-  initialProps: any;
+  initialProps: Record<string, any>;
   initialState?: DirectorrStoresState;
   directorr?: Directorr;
   directorrWrapper: {
@@ -33,7 +33,10 @@ export type CreateDirectorr = (
   initialState?: DirectorrStoresState
 ) => Directorr;
 
-export type DirectorrNextComponent<P = {}, IP = {}> = NextComponentType<NextPageContext, IP, P> & {
+export type DirectorrNextComponent<
+  P = Record<string, any>,
+  IP = Record<string, any>
+> = NextComponentType<NextPageContext, IP, P> & {
   whenServerLoadDirectorr?(
     directorr: Directorr,
     appCtx: AppContextWithDirectorr

@@ -54,9 +54,9 @@ export default function NextWithDirectorr(
       </DirectorrProvider>
     );
 
-    NextWithDirectorrContainer.displayName = `NextWithDirectorrContainer(${Page.displayName ||
-      Page.name ||
-      'Unknown'})`;
+    NextWithDirectorrContainer.displayName = `NextWithDirectorrContainer(${
+      Page.displayName || Page.name || 'Unknown'
+    })`;
 
     NextWithDirectorrContainer.getInitialProps = async appCtx => {
       const directorr = createDirectorr(makeDirectorr, appCtx.ctx, appCtx.router);

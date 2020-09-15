@@ -7,7 +7,7 @@
     "local-publish": "echo 'skip'",
     "build": "echo 'skip'",
     "check-ts": "tsc --noEmit",
-    "lint": "eslint \"./**/*.{ts,tsx}\" --fix",
+    "lint": "eslint \"./**/*.{tsx,ts}\" --fix --ignore-path='../../.eslintignore'",
     "test:all": "yarn run check-ts && yarn run lint",
     "start": "webpack-dev-server --config webpack.dev.js"
   },
