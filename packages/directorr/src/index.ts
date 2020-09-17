@@ -1,9 +1,4 @@
-if (typeof Symbol === 'undefined' && typeof Map === 'undefined') {
-  throw new Error(
-    "Directorr requires Symbol and Map objects. If your environment doesn't support, magic won`t work."
-  );
-}
-
+import './checkEnv';
 import Directorr from './Directorr';
 import config from './config';
 import action from './action';
@@ -40,7 +35,7 @@ import {
   isStoreError,
 } from './utils';
 import { callWithPropNotEquallFunc } from './messages';
-import DirectorrMock from './__tests__/DirectorrMock';
+import DirectorrMock from './__mocks__/DirectorrMock';
 export * from './types';
 
 export {

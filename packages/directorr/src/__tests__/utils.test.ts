@@ -39,6 +39,7 @@ import {
   isConverter,
   isTypescriptDecorator,
 } from '../utils';
+import { notFindStoreName } from '../messages';
 import {
   someProperty,
   someValue,
@@ -51,7 +52,7 @@ import {
   context,
   storeName,
   SomeClass,
-} from './mocks';
+} from '../__mocks__/mocks';
 
 describe('utils', () => {
   it('symbols', () => {
@@ -66,6 +67,8 @@ describe('utils', () => {
 
   it('isLikeActionType', () => {
     expect(isLikeActionType()).toBeFalsy();
+    expect(isLikeActionType([])).toBeFalsy();
+    expect(isLikeActionType([{}] as any)).toBeFalsy();
     expect(isLikeActionType(actionType)).toBeTruthy();
     expect(isLikeActionType(actionTypeArray)).toBeTruthy();
   });
@@ -99,6 +102,7 @@ describe('utils', () => {
     expect(getStoreName(SomeStoreStaticName)).toEqual(SomeStoreStaticName.storeName);
     expect(getStoreName(new SomeStore())).toEqual(SomeStore.name);
     expect(getStoreName(new SomeStoreStaticName())).toEqual(SomeStoreStaticName.storeName);
+    expect(() => getStoreName(Object.create(null))).toThrowError(notFindStoreName());
   });
 
   it('calcActionType', () => {
@@ -117,6 +121,9 @@ describe('utils', () => {
     expect(createActionType(SomeClass, ACTION_TYPE_DIVIDER)).toEqual(SomeClass.name);
     expect(createActionType([actionType, SomeClass], ACTION_TYPE_DIVIDER)).toEqual(
       [actionType, SomeClass.name].join(ACTION_TYPE_DIVIDER)
+    );
+    expect(createActionType([[actionType, SomeClass], SomeClass], ACTION_TYPE_DIVIDER)).toEqual(
+      [actionType, SomeClass.name, SomeClass.name].join(ACTION_TYPE_DIVIDER)
     );
   });
 
@@ -194,6 +201,8 @@ describe('utils', () => {
   });
 
   it('createPropertyDescriptor', () => {
+    expect(createPropertyDescriptor().get).toEqual(emptyFunc);
+    expect(createPropertyDescriptor().set).toEqual(emptyFunc);
     expect(createPropertyDescriptor(someFunc, someFunc).get).toEqual(someFunc);
     expect(createPropertyDescriptor(someFunc, someFunc).set).toEqual(someFunc);
   });

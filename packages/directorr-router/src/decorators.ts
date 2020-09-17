@@ -1,9 +1,9 @@
 import {
   whenPayload,
-  CreateDecorator,
   composePropertyDecorators,
   createActionAndEffect,
   DecoratorValueTyped,
+  SomeEffect,
 } from '@nimel/directorr';
 import {
   HistoryActionPayload,
@@ -63,11 +63,11 @@ export const [actionHistoryReplace, effectHistoryReplace] = createActionAndEffec
   HistoryActionPayload
 >(HISTORY_ACTIONS.REPLACE);
 
-export const historyChange: CreateDecorator<string, Options> = (
+export function historyChange(
   urlPattern: string,
   { exact, strict }: Options = DEFAULT_OPTIONS
-): DecoratorValueTyped<HistoryChangeActionPayload> =>
-  composePropertyDecorators([
+): DecoratorValueTyped<SomeEffect<HistoryChangeActionPayload>> {
+  return composePropertyDecorators([
     effectHistoryPop,
     effectHistoryPush,
     effectHistoryReplace,
@@ -86,3 +86,4 @@ export const historyChange: CreateDecorator<string, Options> = (
       return payload;
     }),
   ]);
+}

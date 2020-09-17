@@ -7,7 +7,7 @@ import {
   someDescriptor,
   context,
   somePropertyDescriptor,
-} from './mocks';
+} from '../__mocks__/mocks';
 import { useForNotPropDecorator } from '../messages';
 
 describe('decorator', () => {

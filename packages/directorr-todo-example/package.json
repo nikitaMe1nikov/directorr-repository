@@ -7,7 +7,7 @@
     "local-publish": "echo 'skip'",
     "build": "echo 'skip'",
     "check-ts": "tsc --noEmit",
-    "lint": "eslint \"./**/*.{tsx,ts}\" --fix --ignore-path='../../.eslintignore'",
+    "lint": "eslint \"./**/*.{tsx,ts}\" --fix",
     "test:all": "yarn run check-ts && yarn run lint",
     "start": "webpack-dev-server --config webpack.dev.js"
   },
@@ -86,12 +86,12 @@
       "last 4 versions"
     ]
   },
-  "homepage": "https://github.com/nikitaMe1nikov/director-repo#readme",
+  "homepage": "https://github.com/nikitaMe1nikov/directorr-repository#readme",
   "bugs": {
-    "url": "https://github.com/nikitaMe1nikov/director-repo/issues"
+    "url": "https://github.com/nikitaMe1nikov/directorr-repository/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nikitaMe1nikov/director-repo.git"
+    "url": "https://github.com/nikitaMe1nikov/directorr-repository.git"
   }
 }

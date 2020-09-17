@@ -14,7 +14,7 @@ import {
   createValueDescriptor,
 } from '../utils';
 import { useForPropNotEquallObject } from '../messages';
-import { someValue, someFunc, actionType, someProperty, action } from './mocks';
+import { someValue, someFunc, actionType, someProperty, action } from '../__mocks__/mocks';
 
 describe('connectStore', () => {
   it('dispatchProxyAction', () => {

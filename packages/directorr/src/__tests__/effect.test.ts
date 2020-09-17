@@ -6,8 +6,15 @@ import {
   createActionType,
   ACTION_TYPE_DIVIDER,
 } from '../utils';
-import { someValue, someValue2, someFunc, actionType, actionType2, someProperty } from './mocks';
-import { callDecoratorWithNotActionType } from '../messages';
+import {
+  someValue,
+  someValue2,
+  someFunc,
+  actionType,
+  actionType2,
+  someProperty,
+} from '../__mocks__/mocks';
+import { callDecoratorWithNotActionType, callWithPropNotEquallFunc } from '../messages';
 
 describe('effect', () => {
   it('initializer', () => {
@@ -16,6 +23,10 @@ describe('effect', () => {
     };
     const addFields = jest.fn();
     const secondProp = 'secondProp';
+
+    expect(() => initializer(store, someValue, someProperty, actionType)).toThrowError(
+      callWithPropNotEquallFunc(MODULE_NAME, someProperty)
+    );
 
     expect(initializer(store, someFunc, someProperty, actionType, addFields)).toEqual(someFunc);
 

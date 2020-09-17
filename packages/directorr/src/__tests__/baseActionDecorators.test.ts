@@ -10,7 +10,7 @@ import {
   createValueDescriptor,
 } from '../utils';
 import config from '../config';
-import { someValue } from './mocks';
+import { someValue } from '../__mocks__/mocks';
 
 describe('baseActionDecorators', () => {
   it('reloadAction', () => {

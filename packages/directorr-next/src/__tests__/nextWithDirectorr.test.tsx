@@ -2,8 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { DirectorrProvider } from '@nimel/directorr-react';
 import { isStoreReady, isStoreError, DirectorrMock } from '@nimel/directorr';
-import NextWithDirectorr, { toJSON, createMemoDirectorr } from '../nextWithDirectorr';
-import { flushPromises } from './utils';
+import NextWithDirectorr, { toJSON, createMemoDirectorr, UNKNOWN } from '../nextWithDirectorr';
+import { flushPromises } from '../../../../tests/utils';
 import { NextWithDirectorrProps } from '../types';
 
 const env = {
@@ -35,15 +35,12 @@ const someValue = {};
 const props = {
   initialProps: {} as any,
   initialState: {} as any,
-  directorrWrapper: {} as any,
   pageProps: {} as any,
   Component: {} as any,
   router: {} as any,
 };
 
 describe('nextWithDirectorr', () => {
-  afterAll(jest.clearAllMocks);
-
   it('createMemoDirectorr', () => {
     env.inServer();
     createMemoDirectorr.memoDirectorr = null;
@@ -70,6 +67,11 @@ describe('nextWithDirectorr', () => {
     expect(makeDirectorr).toHaveBeenCalledTimes(1);
     expect(makeDirectorr).toHaveBeenLastCalledWith(undefined, undefined, initialState);
     expect(createMemoDirectorr.memoDirectorr).toEqual(someValue);
+
+    expect(createMemoDirectorr(makeDirectorr, ctx, router, initialState)).toEqual(someValue);
+    expect(makeDirectorr).toHaveBeenCalledTimes(1);
+    expect(makeDirectorr).toHaveBeenLastCalledWith(undefined, undefined, initialState);
+    expect(createMemoDirectorr.memoDirectorr).toEqual(someValue);
   });
 
   it('toJSON', () => {
@@ -80,6 +82,9 @@ describe('nextWithDirectorr', () => {
     env.inServer();
     const makeDirectorr = jest.fn();
     const createDirectorr = jest.fn().mockReturnValue(someValue);
+
+    expect(() => NextWithDirectorr(makeDirectorr)).not.toThrowError();
+
     const Container = NextWithDirectorr(makeDirectorr, createDirectorr)(SomeComponent);
 
     const wrapper = shallow(<Container {...props} />);
@@ -127,11 +132,54 @@ describe('nextWithDirectorr', () => {
     const makeDirectorr = jest.fn();
     const createDirectorr = jest.fn().mockReturnValue(someValue);
     const Container = NextWithDirectorr(makeDirectorr, createDirectorr)(SomeComponent);
+    const ContainerUnknown = NextWithDirectorr(makeDirectorr, createDirectorr)(() => null);
 
     expect(Container.displayName).toMatch(SomeComponent.name);
+    expect(ContainerUnknown.displayName).toMatch(UNKNOWN);
   });
 
   it('getInitialProps', async () => {
+    env.inServer();
+    const directorr = new DirectorrMock();
+    const makeDirectorr = jest.fn();
+    const createDirectorr = jest.fn().mockReturnValue(directorr);
+    const ctx = {};
+    const router = {};
+    const appCtx = {
+      ctx,
+      router,
+      Component: SomeComponent,
+      directorr: null,
+      AppTree: {},
+    } as any;
+    const Container = NextWithDirectorr(makeDirectorr, createDirectorr)(SomeComponent);
+
+    const initialProps = await Container.getInitialProps?.(appCtx);
+
+    await flushPromises();
+
+    expect(initialProps).toEqual({
+      directorrWrapper: {
+        directorr,
+        toJSON,
+      },
+      initialProps: {
+        pageProps: {},
+      },
+    });
+
+    expect(createDirectorr).toHaveBeenCalledTimes(1);
+    expect(createDirectorr).toHaveBeenLastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
+    expect(appCtx.directorr).toEqual(directorr);
+
+    expect(directorr.findStoreState).toHaveBeenCalledTimes(1);
+    expect(directorr.findStoreState).toHaveBeenLastCalledWith(isStoreError);
+    expect(directorr.waitAllStoresState).toHaveBeenCalledTimes(1);
+    expect(directorr.waitAllStoresState).toHaveBeenLastCalledWith(isStoreReady);
+    expect(directorr.getHydrateStoresState).toHaveBeenCalledTimes(1);
+  });
+
+  it('getInitialProps with static lifemethods', async () => {
     env.inServer();
     class ComponentWithStatic extends SomeComponent {
       static whenServerLoadDirectorr = jest.fn();
@@ -179,6 +227,58 @@ describe('nextWithDirectorr', () => {
       appCtx
     );
     expect(ComponentWithStatic.whenServerDirectorrError).toHaveBeenCalledTimes(0);
+
+    expect(directorr.findStoreState).toHaveBeenCalledTimes(1);
+    expect(directorr.findStoreState).toHaveBeenLastCalledWith(isStoreError);
+    expect(directorr.waitAllStoresState).toHaveBeenCalledTimes(1);
+    expect(directorr.waitAllStoresState).toHaveBeenLastCalledWith(isStoreReady);
+    expect(directorr.getHydrateStoresState).toHaveBeenCalledTimes(1);
+  });
+
+  it('getInitialProps when find store with isError but dont have lifemethods', async () => {
+    env.inServer();
+    const storeWithError = {};
+    class DirectorrMockWithErrorStore extends DirectorrMock {
+      findStoreState = jest.fn().mockImplementationOnce(() => Promise.resolve(storeWithError));
+    }
+    class ComponentWithStatic extends SomeComponent {
+      static whenServerLoadDirectorr = jest.fn();
+    }
+
+    const directorr = new DirectorrMockWithErrorStore();
+    const makeDirectorr = jest.fn();
+    const createDirectorr = jest.fn().mockReturnValue(directorr);
+    const ctx = {};
+    const router = {};
+    const appCtx = {
+      ctx,
+      router,
+      Component: ComponentWithStatic,
+      directorr: null,
+      AppTree: {},
+    } as any;
+    const Container = NextWithDirectorr(makeDirectorr, createDirectorr)(ComponentWithStatic);
+
+    const initialProps = await Container.getInitialProps?.(appCtx);
+
+    await flushPromises();
+
+    expect(initialProps).toEqual({
+      directorrWrapper: {
+        directorr,
+        toJSON,
+      },
+      initialProps: {
+        pageProps: {},
+      },
+    });
+
+    expect(createDirectorr).toHaveBeenCalledTimes(1);
+    expect(createDirectorr).toHaveBeenLastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
+    expect(appCtx.directorr).toEqual(directorr);
+
+    expect(ComponentWithStatic.whenServerLoadDirectorr).toHaveBeenCalledTimes(1);
+    expect(ComponentWithStatic.whenServerLoadDirectorr).toHaveBeenLastCalledWith(directorr, appCtx);
 
     expect(directorr.findStoreState).toHaveBeenCalledTimes(1);
     expect(directorr.findStoreState).toHaveBeenLastCalledWith(isStoreError);

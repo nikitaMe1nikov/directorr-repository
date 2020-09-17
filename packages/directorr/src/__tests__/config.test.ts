@@ -8,7 +8,7 @@ import {
   mergeStateToStore,
 } from '../utils';
 import config from '../config';
-import { actionType, actionType2 } from './mocks';
+import { actionType, actionType2 } from '../__mocks__/mocks';
 
 describe('config', () => {
   it('config default', () => {

@@ -1,6 +1,6 @@
 import createActionTypeContext from '../createActionTypeContext';
 import { callDecoratorWithNotActionType } from '../messages';
-import { moduleName, actionType } from './mocks';
+import { moduleName, actionType } from '../__mocks__/mocks';
 
 describe('createActionTypeContext', () => {
   it('createActionTypeContext', () => {

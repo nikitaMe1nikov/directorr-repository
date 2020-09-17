@@ -20,4 +20,19 @@ describe('useLocalStore', () => {
 
     expect(store).toBeInstanceOf(SomeStore);
   });
+
+  it('should useLocalStore return store when rerender', async () => {
+    class SomeStore {}
+
+    const {
+      result: { current: store },
+      rerender,
+    } = renderHook(() => useLocalStore(SomeStore));
+
+    expect(store).toBeInstanceOf(SomeStore);
+
+    rerender();
+
+    expect(store).toBeInstanceOf(SomeStore);
+  });
 });

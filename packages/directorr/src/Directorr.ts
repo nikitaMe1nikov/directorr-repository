@@ -20,9 +20,10 @@ import {
   findStoreStateInStores,
   isStoreError,
   hasOwnProperty,
+  isObject,
 } from './utils';
 import config from './config';
-import { callWithNotAction, haveCycleInjectedStore } from './messages';
+import { callWithNotAction, haveCycleInjectedStore, notObserver } from './messages';
 import {
   FindNextMiddleware,
   DispatchAction,
@@ -66,7 +67,7 @@ class Directorr implements DirectorrInterface {
 
   private initStoreState: DirectorrStoresState = EMPTY_OBJECT;
 
-  addInitState(initStoreState: DirectorrStoresState = EMPTY_OBJECT) {
+  addInitState(initStoreState: DirectorrStoresState) {
     this.initStoreState = initStoreState;
   }
 
@@ -108,7 +109,7 @@ class Directorr implements DirectorrInterface {
 
       if (index !== -1) dependency.splice(index, 1);
 
-      if (!dependency.includes(depName)) this.destroyStore(StoreConstructor);
+      if (!dependency.length) this.destroyStore(StoreConstructor);
     }
   }
 
@@ -122,7 +123,7 @@ class Directorr implements DirectorrInterface {
       const InjectedStores = (StoreConstructor as any)[INJECTED_STORES_FIELD_NAME];
 
       try {
-        for (let i = 0, l = InjectedStores.length, injectedFrom; i < l; ++i) {
+        for (let i = 0, l = InjectedStores.length, injectedFrom: any; i < l; ++i) {
           injectedFrom = this.initStore(InjectedStores[i])[INJECTED_FROM_FIELD_NAME];
 
           if (!injectedFrom.includes(StoreConstructor)) injectedFrom.push(StoreConstructor);
@@ -215,16 +216,16 @@ class Directorr implements DirectorrInterface {
 
   private subscribeHandlers: SubscribeHandler[] = [];
 
-  subscribe(handler: SubscribeHandler): UnsubscribeHandler {
+  subscribe = (handler: SubscribeHandler): UnsubscribeHandler => {
     this.subscribeHandlers.push(handler);
 
     return () => this.unsubscribe(handler);
-  }
+  };
 
-  unsubscribe(handler: SubscribeHandler) {
+  unsubscribe = (handler: SubscribeHandler) => {
     const index = this.subscribeHandlers.indexOf(handler);
     if (index !== -1) this.subscribeHandlers.splice(index, 1);
-  }
+  };
 
   waitAllStoresState(isStoreState: CheckStoreState = isStoreReady) {
     return new Promise<any>(res => {
@@ -277,7 +278,7 @@ class Directorr implements DirectorrInterface {
     });
   }
 
-  middlewares: MiddlewareAdapter[] = [];
+  private middlewares: MiddlewareAdapter[] = [];
 
   private addSomeMiddlewares(
     middlewares: ReduxMiddleware[] | Middleware[],
@@ -344,18 +345,26 @@ class Directorr implements DirectorrInterface {
   reduxStores: Store = {
     getState: () => this.stores,
     dispatch: this.dispatch,
-    subscribe() {
-      return emptyFunc;
-    },
+    subscribe: this.subscribe,
     replaceReducer: emptyFunc,
-    [Symbol.observable]: () => ({
-      subscribe() {
-        return { unsubscribe: emptyFunc };
-      },
-      [Symbol.observable]() {
-        return this;
-      },
-    }),
+    [Symbol.observable]: () => {
+      const { subscribe } = this;
+
+      return {
+        subscribe(observer: any) {
+          if (observer === null || !isObject(observer)) {
+            throw new TypeError(notObserver());
+          }
+
+          return {
+            unsubscribe: observer.next ? subscribe(stores => observer.next(stores)) : emptyFunc,
+          };
+        },
+        [Symbol.observable]() {
+          return this;
+        },
+      };
+    },
   };
 
   private runEffects(action: Action) {

@@ -1,5 +1,5 @@
 import createActionAndEffect from '../createActionAndEffect';
-import { actionType } from './mocks';
+import { actionType } from '../__mocks__/mocks';
 
 jest.mock('../action', () => {
   const actionDescriptor = jest.fn();

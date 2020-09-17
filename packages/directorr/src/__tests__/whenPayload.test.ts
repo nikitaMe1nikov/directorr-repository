@@ -4,7 +4,7 @@ import {
   callDecoratorWithNotActionChecker,
   callDecoratorWithNotConvertPayload,
 } from '../messages';
-import { someValue, someValue2, someFunc, someProperty } from './mocks';
+import { someValue, someValue2, someFunc, someProperty } from '../__mocks__/mocks';
 
 const emptyFunc = () => {};
 

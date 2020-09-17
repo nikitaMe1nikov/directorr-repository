@@ -24,6 +24,7 @@ class RouterMock {
     query: {},
     pathname: 'pathname',
   };
+  pattern?: string;
 
   push = jest.fn();
   replace = jest.fn();
@@ -32,6 +33,8 @@ class RouterMock {
 
 describe('NextHistoryStore', () => {
   it('constructor', () => {
+    expect(() => new NextHistoryStore()).not.toThrowError();
+
     const router = (new RouterMock() as unknown) as SingletonRouter;
     const store = new NextHistoryStore(router);
 
@@ -146,6 +149,16 @@ describe('NextHistoryStore', () => {
     expect(reloadWindow).toHaveBeenCalledTimes(1);
   });
 
+  it('dispatchAction without inner router', () => {
+    const routerWithouInnerRouter = (new RouterMock() as unknown) as SingletonRouter;
+    delete routerWithouInnerRouter.router;
+    const store: any = new NextHistoryStore(routerWithouInnerRouter);
+
+    store.dispatchAction();
+
+    expect(store).toMatchObject({});
+  });
+
   it('dispatchAction', () => {
     const router = (new RouterMock() as unknown) as SingletonRouter;
     const store: any = new NextHistoryStore(router);
@@ -164,5 +177,24 @@ describe('NextHistoryStore', () => {
     const store: any = new NextHistoryStore(router);
 
     expect(store.toJSON()).toBeUndefined();
+  });
+
+  it('isCurrentPattern', () => {
+    const path = 'path';
+    const queryObject = {};
+    const pattern = 'pattern';
+    const otherPattern = 'otherPattern';
+    const router = (new RouterMock() as unknown) as SingletonRouter;
+    const store: any = new NextHistoryStore(router);
+
+    store[DISPATCH_EFFECTS_FIELD_NAME](
+      createAction(DIRECTORR_INIT_STORE_ACTION, {
+        StoreConstructor: NextHistoryStore,
+        initOptions: { pattern, path, queryObject },
+      })
+    );
+
+    expect(store.isCurrentPattern(pattern)).toBeTruthy();
+    expect(store.isCurrentPattern(otherPattern)).toBeFalsy();
   });
 });

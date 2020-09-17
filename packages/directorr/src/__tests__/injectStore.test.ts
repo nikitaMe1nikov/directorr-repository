@@ -12,7 +12,7 @@ import {
   dontUseWithAnotherDecorator,
 } from '../messages';
 import { DirectorrStoreClass } from '../types';
-import { someValue, SomeClass, someProperty } from './mocks';
+import { someValue, SomeClass, someProperty } from '../__mocks__/mocks';
 
 describe('injectStore', () => {
   it('decorator', () => {

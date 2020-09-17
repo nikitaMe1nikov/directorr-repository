@@ -13,7 +13,7 @@ import {
 import { DirectorrMock } from '@nimel/directorr';
 
 describe('createUseStoreHooks', () => {
-  it('should throw when call with not like context', () => {
+  it('throw when call with not like context', () => {
     const context: any = 1;
 
     expect(() => createUseStoreHooks(context)).toThrowError(
@@ -21,7 +21,7 @@ describe('createUseStoreHooks', () => {
     );
   });
 
-  it('should useStore throw when call with not constructor', () => {
+  it('useStore throw when call with not constructor', () => {
     const SomeStore: any = 1;
     const context = createContext(new DirectorrMock());
     const useStore = createUseStoreHooks(context);
@@ -31,7 +31,7 @@ describe('createUseStoreHooks', () => {
     );
   });
 
-  it('should throw when call with context not like Directorr', () => {
+  it('throw when call with context not like Directorr', () => {
     class SomeStore {}
     const FakeDirectorr = {};
     const context = createContext(FakeDirectorr);
@@ -42,7 +42,7 @@ describe('createUseStoreHooks', () => {
     );
   });
 
-  it('should useStore return store', () => {
+  it('useStore return store', () => {
     class SomeStore {}
     const storeInstance = new SomeStore();
     const directorr = new DirectorrMock();
@@ -68,5 +68,31 @@ describe('createUseStoreHooks', () => {
     );
     expect(directorr.removeStoreDependency).toHaveBeenCalledTimes(1);
     expect(directorr.removeStoreDependency).toHaveBeenLastCalledWith(SomeStore, USE_HOOKS);
+  });
+
+  it('useStore return store when rerender', () => {
+    class SomeStore {}
+    const storeInstance = new SomeStore();
+    const directorr = new DirectorrMock();
+    const context = createContext(directorr);
+    const useStore = createUseStoreHooks(context);
+    const initOptions = {};
+
+    const {
+      result: { current: store },
+      rerender,
+    } = renderHook(() => useStore(SomeStore, initOptions));
+
+    expect(store).toEqual(storeInstance);
+    expect(store).toBeInstanceOf(SomeStore);
+
+    rerender();
+
+    expect(directorr.addStoreDependency).toHaveBeenCalledTimes(1);
+    expect(directorr.addStoreDependency).toHaveBeenLastCalledWith(
+      SomeStore,
+      USE_HOOKS,
+      initOptions
+    );
   });
 });

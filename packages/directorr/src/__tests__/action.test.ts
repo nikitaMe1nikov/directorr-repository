@@ -7,7 +7,7 @@ import {
   createAction,
   ACTION_TYPE_DIVIDER,
 } from '../utils';
-import { callDecoratorWithNotActionType } from '../messages';
+import { callDecoratorWithNotActionType, callWithPropNotEquallFunc } from '../messages';
 import {
   someValue,
   someFunc,
@@ -15,7 +15,7 @@ import {
   actionType2,
   someProperty,
   action as someAction,
-} from './mocks';
+} from '../__mocks__/mocks';
 
 describe('action', () => {
   it('runDispatcher', () => {
@@ -48,7 +48,7 @@ describe('action', () => {
 
     expect(() =>
       initializer(store, someValue, someProperty, actionType, dispatcher, addFieds)(...args)
-    ).toThrow();
+    ).toThrowError(callWithPropNotEquallFunc(MODULE_NAME, someProperty));
 
     initializer(store, someFunc, someProperty, actionType, dispatcher, addFieds)(...args);
 

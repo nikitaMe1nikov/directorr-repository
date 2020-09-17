@@ -1,6 +1,6 @@
 import createCheckerContext from '../createCheckerContext';
 import { callDecoratorWithNotActionChecker, callDecoratorWithNotConvertPayload } from '../messages';
-import { moduleName } from './mocks';
+import { moduleName } from '../__mocks__/mocks';
 
 describe('createCheckerContext', () => {
   it('createCheckerContext', () => {

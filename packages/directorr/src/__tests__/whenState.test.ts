@@ -1,6 +1,6 @@
 import whenState, { initializer, stateChecker, MODULE_NAME } from '../whenState';
 import { callWithPropNotEquallFunc, callDecoratorWithNotActionChecker } from '../messages';
-import { someValue, someFunc, someProperty } from './mocks';
+import { someValue, someFunc, someProperty } from '../__mocks__/mocks';
 
 describe('whenState', () => {
   it('call stateChecker with checker function', () => {

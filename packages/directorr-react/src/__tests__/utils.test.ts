@@ -1,5 +1,5 @@
 import { isFunction, isContext, isDirrectorInstance } from '../utils';
-import { someValue, someFunc } from './mocks';
+import { someValue, someFunc } from '../__mocks__/mocks';
 import { DirectorrMock } from '@nimel/directorr';
 
 describe('utils', () => {

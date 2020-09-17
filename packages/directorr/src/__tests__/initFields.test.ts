@@ -10,7 +10,7 @@ import {
 import config from '../config';
 
 describe('initFields', () => {
-  it.only('initFields', () => {
+  it('initFields', () => {
     const store: any = {};
 
     initFields(store);

@@ -21,6 +21,7 @@ import {
   DirectorrInterface,
   DirectorrStoreClassConstructor,
 } from './types';
+import { notFindStoreName, errorWhenWrongEnv } from './messages';
 
 export const EFFECTS_FIELD_NAME = Symbol.for('dirrector: effects');
 
@@ -112,13 +113,19 @@ export function hasOwnProperty(target: any, prop: string | symbol) {
   return hasOwnPropertyFromPrototype.call(target, prop);
 }
 
+export function checkEnv() {
+  if (typeof Symbol === 'undefined' || typeof Map === 'undefined') {
+    throw new Error(errorWhenWrongEnv());
+  }
+}
+
 export function isLikeActionType(actionType?: ActionType): boolean {
   if (!actionType) return false;
 
   if (isArray(actionType)) {
     if (!actionType.length) return false;
 
-    for (let i = 0, l = actionType.length, at; i < l; ++i) {
+    for (let i = 0, l = actionType.length, at: any; i < l; ++i) {
       at = actionType[i];
 
       if (!isString(at) && !isFunction(at) && !isLikeActionType(at)) return false;
@@ -139,7 +146,9 @@ export function isLikeAction(action?: any): boolean {
 export function getStoreName(v: DirectorrStoreClassConstructor<any> | SomeObject): string {
   if (isFunction(v)) return v.storeName || v.name;
 
-  return (v?.constructor as DirectorrStoreClassConstructor).storeName || v?.constructor.name;
+  if (v.constructor) return getStoreName(v.constructor);
+
+  throw new Error(notFindStoreName());
 }
 
 export function calcActionType(someActionType: SomeActionType): string {
@@ -152,7 +161,7 @@ export function createActionType(actionType: ActionType, divider: string): strin
   if (isArray(actionType)) {
     let result = EMPTY_STRING;
 
-    for (let i = 0, l = actionType.length, action, type; i < l; ++i) {
+    for (let i = 0, l = actionType.length, action: any, type: any; i < l; ++i) {
       type = actionType[i];
 
       action = isArray(type) ? createActionType(type, divider) : calcActionType(type);

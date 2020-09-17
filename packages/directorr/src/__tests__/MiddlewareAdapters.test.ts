@@ -1,5 +1,5 @@
 import { MiddlewareAdapter, ReduxMiddlewareAdapter } from '../MiddlewareAdapters';
-import { action } from './mocks';
+import { action } from '../__mocks__/mocks';
 
 describe('MiddlewareAdapters', () => {
   it('MiddlewareAdapter', () => {

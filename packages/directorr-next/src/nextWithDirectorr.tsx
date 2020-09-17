@@ -13,6 +13,7 @@ import {
 import { isServer } from './env';
 
 export const toJSON = () => undefined;
+export const UNKNOWN = 'Unknown';
 
 export const createMemoDirectorr: CreateDirectorr & { memoDirectorr: Directorr | null } = (
   makeDirectorr,

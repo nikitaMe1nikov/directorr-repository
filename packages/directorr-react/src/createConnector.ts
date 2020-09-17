@@ -11,7 +11,7 @@ import { isFunction, isDirrectorInstance } from './utils';
 export const MODULE_NAME = 'createConnector';
 
 export function getStoreName(StoreConstructor: DirectorrStoreClassConstructor) {
-  return StoreConstructor.storeName || StoreConstructor.name || MODULE_NAME;
+  return StoreConstructor.storeName || StoreConstructor.name;
 }
 
 export default function createConnector(

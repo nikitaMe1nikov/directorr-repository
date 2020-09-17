@@ -1,6 +1,5 @@
 import {
   whenPayload,
-  CreateDecoratorOneArg,
   composePropertyDecorators,
   DecoratorValueTyped,
   SomeEffect,
@@ -8,15 +7,14 @@ import {
 import { HistoryActionPayload, effectHistoryPop } from '@nimel/directorr-router';
 import { HistoryChangeActionPayload } from './types';
 
-function returnTrue() {
+export function returnTrue() {
   return true;
 }
 
-export const historyChange: CreateDecoratorOneArg<
-  string,
-  DecoratorValueTyped<SomeEffect<HistoryChangeActionPayload>>
-> = (urlPattern: string) =>
-  composePropertyDecorators([
+export function historyChange(
+  urlPattern: string
+): DecoratorValueTyped<SomeEffect<HistoryChangeActionPayload>> {
+  return composePropertyDecorators([
     effectHistoryPop,
     whenPayload(returnTrue, (payload: HistoryActionPayload) => {
       const match = urlPattern === payload.pattern;
@@ -31,3 +29,4 @@ export const historyChange: CreateDecoratorOneArg<
       return payload;
     }),
   ]);
+}

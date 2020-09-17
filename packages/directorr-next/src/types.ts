@@ -13,7 +13,7 @@ export interface NextWithDirectorrInitialProps {
   initialProps: Record<string, any>;
   initialState?: DirectorrStoresState;
   directorr?: Directorr;
-  directorrWrapper: {
+  directorrWrapper?: {
     directorr: Directorr;
     toJSON: () => undefined;
   };

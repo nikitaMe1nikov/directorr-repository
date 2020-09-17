@@ -1,10 +1,12 @@
 import createBuilderDecorator from '../createBuilderDecorator';
-import { someValue, someFunc, someProperty, moduleName, someDescriptor } from './mocks';
+import { someValue, someFunc, someProperty, moduleName, someDescriptor } from '../__mocks__/mocks';
 
 describe('createBuilderDecorator', () => {
   it('createBuilderDecorator', () => {
     const decorator = jest.fn().mockImplementation(() => someValue);
     const createContext = jest.fn().mockImplementation(() => someValue);
+
+    expect(() => createBuilderDecorator(moduleName, decorator, someFunc)).not.toThrow();
 
     const builderDecorator = createBuilderDecorator(moduleName, decorator, someFunc, createContext);
 
