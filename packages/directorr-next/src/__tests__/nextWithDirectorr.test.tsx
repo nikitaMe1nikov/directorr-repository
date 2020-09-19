@@ -50,8 +50,8 @@ describe('nextWithDirectorr', () => {
     const initialState: any = {};
 
     expect(createMemoDirectorr(makeDirectorr, ctx, router, initialState)).toEqual(someValue);
-    expect(makeDirectorr).toHaveBeenCalledTimes(1);
-    expect(makeDirectorr).toHaveBeenLastCalledWith(ctx, router, initialState);
+    expect(makeDirectorr).toBeCalledTimes(1);
+    expect(makeDirectorr).lastCalledWith(ctx, router, initialState);
     expect(createMemoDirectorr.memoDirectorr).toEqual(null);
   });
 
@@ -64,13 +64,13 @@ describe('nextWithDirectorr', () => {
     const initialState: any = {};
 
     expect(createMemoDirectorr(makeDirectorr, ctx, router, initialState)).toEqual(someValue);
-    expect(makeDirectorr).toHaveBeenCalledTimes(1);
-    expect(makeDirectorr).toHaveBeenLastCalledWith(undefined, undefined, initialState);
+    expect(makeDirectorr).toBeCalledTimes(1);
+    expect(makeDirectorr).lastCalledWith(undefined, undefined, initialState);
     expect(createMemoDirectorr.memoDirectorr).toEqual(someValue);
 
     expect(createMemoDirectorr(makeDirectorr, ctx, router, initialState)).toEqual(someValue);
-    expect(makeDirectorr).toHaveBeenCalledTimes(1);
-    expect(makeDirectorr).toHaveBeenLastCalledWith(undefined, undefined, initialState);
+    expect(makeDirectorr).toBeCalledTimes(1);
+    expect(makeDirectorr).lastCalledWith(undefined, undefined, initialState);
     expect(createMemoDirectorr.memoDirectorr).toEqual(someValue);
   });
 
@@ -95,13 +95,8 @@ describe('nextWithDirectorr', () => {
     expect(someComponent.props()).toEqual(props);
     expect(provider).toHaveLength(1);
     expect(provider.props()).toMatchObject({ value: someValue });
-    expect(createDirectorr).toHaveBeenCalledTimes(1);
-    expect(createDirectorr).toHaveBeenLastCalledWith(
-      makeDirectorr,
-      undefined,
-      undefined,
-      props.initialState
-    );
+    expect(createDirectorr).toBeCalledTimes(1);
+    expect(createDirectorr).lastCalledWith(makeDirectorr, undefined, undefined, props.initialState);
   });
 
   it('render in browser', () => {
@@ -125,7 +120,7 @@ describe('nextWithDirectorr', () => {
     expect(someComponent.props()).toEqual(browserProps);
     expect(provider).toHaveLength(1);
     expect(provider.props()).toMatchObject({ value: directorr });
-    expect(createDirectorr).toHaveBeenCalledTimes(0);
+    expect(createDirectorr).toBeCalledTimes(0);
   });
 
   it('displayName', () => {
@@ -168,15 +163,15 @@ describe('nextWithDirectorr', () => {
       },
     });
 
-    expect(createDirectorr).toHaveBeenCalledTimes(1);
-    expect(createDirectorr).toHaveBeenLastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
+    expect(createDirectorr).toBeCalledTimes(1);
+    expect(createDirectorr).lastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
     expect(appCtx.directorr).toEqual(directorr);
 
-    expect(directorr.findStoreState).toHaveBeenCalledTimes(1);
-    expect(directorr.findStoreState).toHaveBeenLastCalledWith(isStoreError);
-    expect(directorr.waitAllStoresState).toHaveBeenCalledTimes(1);
-    expect(directorr.waitAllStoresState).toHaveBeenLastCalledWith(isStoreReady);
-    expect(directorr.getHydrateStoresState).toHaveBeenCalledTimes(1);
+    expect(directorr.findStoreState).toBeCalledTimes(1);
+    expect(directorr.findStoreState).lastCalledWith(isStoreError);
+    expect(directorr.waitAllStoresState).toBeCalledTimes(1);
+    expect(directorr.waitAllStoresState).lastCalledWith(isStoreReady);
+    expect(directorr.getHydrateStoresState).toBeCalledTimes(1);
   });
 
   it('getInitialProps with static lifemethods', async () => {
@@ -215,24 +210,21 @@ describe('nextWithDirectorr', () => {
       },
     });
 
-    expect(createDirectorr).toHaveBeenCalledTimes(1);
-    expect(createDirectorr).toHaveBeenLastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
+    expect(createDirectorr).toBeCalledTimes(1);
+    expect(createDirectorr).lastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
     expect(appCtx.directorr).toEqual(directorr);
 
-    expect(ComponentWithStatic.whenServerLoadDirectorr).toHaveBeenCalledTimes(1);
-    expect(ComponentWithStatic.whenServerLoadDirectorr).toHaveBeenLastCalledWith(directorr, appCtx);
-    expect(ComponentWithStatic.whenServerDirectorrReady).toHaveBeenCalledTimes(1);
-    expect(ComponentWithStatic.whenServerDirectorrReady).toHaveBeenLastCalledWith(
-      directorr,
-      appCtx
-    );
-    expect(ComponentWithStatic.whenServerDirectorrError).toHaveBeenCalledTimes(0);
+    expect(ComponentWithStatic.whenServerLoadDirectorr).toBeCalledTimes(1);
+    expect(ComponentWithStatic.whenServerLoadDirectorr).lastCalledWith(directorr, appCtx);
+    expect(ComponentWithStatic.whenServerDirectorrReady).toBeCalledTimes(1);
+    expect(ComponentWithStatic.whenServerDirectorrReady).lastCalledWith(directorr, appCtx);
+    expect(ComponentWithStatic.whenServerDirectorrError).toBeCalledTimes(0);
 
-    expect(directorr.findStoreState).toHaveBeenCalledTimes(1);
-    expect(directorr.findStoreState).toHaveBeenLastCalledWith(isStoreError);
-    expect(directorr.waitAllStoresState).toHaveBeenCalledTimes(1);
-    expect(directorr.waitAllStoresState).toHaveBeenLastCalledWith(isStoreReady);
-    expect(directorr.getHydrateStoresState).toHaveBeenCalledTimes(1);
+    expect(directorr.findStoreState).toBeCalledTimes(1);
+    expect(directorr.findStoreState).lastCalledWith(isStoreError);
+    expect(directorr.waitAllStoresState).toBeCalledTimes(1);
+    expect(directorr.waitAllStoresState).lastCalledWith(isStoreReady);
+    expect(directorr.getHydrateStoresState).toBeCalledTimes(1);
   });
 
   it('getInitialProps when find store with isError but dont have lifemethods', async () => {
@@ -273,18 +265,18 @@ describe('nextWithDirectorr', () => {
       },
     });
 
-    expect(createDirectorr).toHaveBeenCalledTimes(1);
-    expect(createDirectorr).toHaveBeenLastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
+    expect(createDirectorr).toBeCalledTimes(1);
+    expect(createDirectorr).lastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
     expect(appCtx.directorr).toEqual(directorr);
 
-    expect(ComponentWithStatic.whenServerLoadDirectorr).toHaveBeenCalledTimes(1);
-    expect(ComponentWithStatic.whenServerLoadDirectorr).toHaveBeenLastCalledWith(directorr, appCtx);
+    expect(ComponentWithStatic.whenServerLoadDirectorr).toBeCalledTimes(1);
+    expect(ComponentWithStatic.whenServerLoadDirectorr).lastCalledWith(directorr, appCtx);
 
-    expect(directorr.findStoreState).toHaveBeenCalledTimes(1);
-    expect(directorr.findStoreState).toHaveBeenLastCalledWith(isStoreError);
-    expect(directorr.waitAllStoresState).toHaveBeenCalledTimes(1);
-    expect(directorr.waitAllStoresState).toHaveBeenLastCalledWith(isStoreReady);
-    expect(directorr.getHydrateStoresState).toHaveBeenCalledTimes(1);
+    expect(directorr.findStoreState).toBeCalledTimes(1);
+    expect(directorr.findStoreState).lastCalledWith(isStoreError);
+    expect(directorr.waitAllStoresState).toBeCalledTimes(1);
+    expect(directorr.waitAllStoresState).lastCalledWith(isStoreReady);
+    expect(directorr.getHydrateStoresState).toBeCalledTimes(1);
   });
 
   it('getInitialProps when find store with isError', async () => {
@@ -327,24 +319,24 @@ describe('nextWithDirectorr', () => {
       },
     });
 
-    expect(createDirectorr).toHaveBeenCalledTimes(1);
-    expect(createDirectorr).toHaveBeenLastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
+    expect(createDirectorr).toBeCalledTimes(1);
+    expect(createDirectorr).lastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
     expect(appCtx.directorr).toEqual(directorr);
 
-    expect(ComponentWithStatic.whenServerLoadDirectorr).toHaveBeenCalledTimes(1);
-    expect(ComponentWithStatic.whenServerLoadDirectorr).toHaveBeenLastCalledWith(directorr, appCtx);
-    expect(ComponentWithStatic.whenServerDirectorrError).toHaveBeenCalledTimes(1);
-    expect(ComponentWithStatic.whenServerDirectorrError).toHaveBeenLastCalledWith(
+    expect(ComponentWithStatic.whenServerLoadDirectorr).toBeCalledTimes(1);
+    expect(ComponentWithStatic.whenServerLoadDirectorr).lastCalledWith(directorr, appCtx);
+    expect(ComponentWithStatic.whenServerDirectorrError).toBeCalledTimes(1);
+    expect(ComponentWithStatic.whenServerDirectorrError).lastCalledWith(
       storeWithError,
       directorr,
       appCtx
     );
 
-    expect(directorr.findStoreState).toHaveBeenCalledTimes(1);
-    expect(directorr.findStoreState).toHaveBeenLastCalledWith(isStoreError);
-    expect(directorr.waitAllStoresState).toHaveBeenCalledTimes(1);
-    expect(directorr.waitAllStoresState).toHaveBeenLastCalledWith(isStoreReady);
-    expect(directorr.getHydrateStoresState).toHaveBeenCalledTimes(1);
+    expect(directorr.findStoreState).toBeCalledTimes(1);
+    expect(directorr.findStoreState).lastCalledWith(isStoreError);
+    expect(directorr.waitAllStoresState).toBeCalledTimes(1);
+    expect(directorr.waitAllStoresState).lastCalledWith(isStoreReady);
+    expect(directorr.getHydrateStoresState).toBeCalledTimes(1);
   });
 
   it('getInitialProps in browser', async () => {
@@ -383,16 +375,16 @@ describe('nextWithDirectorr', () => {
       },
     });
 
-    expect(createDirectorr).toHaveBeenCalledTimes(1);
-    expect(createDirectorr).toHaveBeenLastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
+    expect(createDirectorr).toBeCalledTimes(1);
+    expect(createDirectorr).lastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
     expect(appCtx.directorr).toEqual(directorr);
 
-    expect(ComponentWithStatic.whenServerLoadDirectorr).toHaveBeenCalledTimes(0);
-    expect(ComponentWithStatic.whenServerDirectorrReady).toHaveBeenCalledTimes(0);
-    expect(ComponentWithStatic.whenServerDirectorrError).toHaveBeenCalledTimes(0);
+    expect(ComponentWithStatic.whenServerLoadDirectorr).toBeCalledTimes(0);
+    expect(ComponentWithStatic.whenServerDirectorrReady).toBeCalledTimes(0);
+    expect(ComponentWithStatic.whenServerDirectorrError).toBeCalledTimes(0);
 
-    expect(directorr.findStoreState).toHaveBeenCalledTimes(0);
-    expect(directorr.waitAllStoresState).toHaveBeenCalledTimes(0);
-    expect(directorr.getHydrateStoresState).toHaveBeenCalledTimes(0);
+    expect(directorr.findStoreState).toBeCalledTimes(0);
+    expect(directorr.waitAllStoresState).toBeCalledTimes(0);
+    expect(directorr.getHydrateStoresState).toBeCalledTimes(0);
   });
 });

@@ -174,8 +174,8 @@ describe('utils', () => {
       payload: someValue,
     });
 
-    expect(store.someEffect).toHaveBeenCalledTimes(1);
-    expect(store.someEffect).toHaveBeenLastCalledWith(someValue);
+    expect(store.someEffect).toBeCalledTimes(1);
+    expect(store.someEffect).lastCalledWith(someValue);
   });
 
   it('DESCRIPTOR', () => {
@@ -227,8 +227,8 @@ describe('utils', () => {
 
     descriptor.set(someValue);
 
-    expect(initializer).toHaveBeenCalledTimes(1);
-    expect(initializer).toHaveBeenLastCalledWith(descriptor, someValue, someProperty, context);
+    expect(initializer).toBeCalledTimes(1);
+    expect(initializer).lastCalledWith(descriptor, someValue, someProperty, context);
     expect(descriptor[Symbol.for(someProperty)]).toEqual(someValue);
     expect(descriptor.get()).toEqual(someValue);
 
@@ -251,11 +251,11 @@ describe('utils', () => {
 
     propDescriptor.set(someValue);
 
-    expect(set).toHaveBeenCalledTimes(1);
-    expect(set).toHaveBeenCalledWith(someValue);
-    expect(get).toHaveBeenCalledTimes(1);
-    expect(initializer).toHaveBeenCalledTimes(2);
-    expect(initializer).toHaveBeenLastCalledWith(propDescriptor, someValue, someProperty, context);
+    expect(set).toBeCalledTimes(1);
+    expect(set).toBeCalledWith(someValue);
+    expect(get).toBeCalledTimes(1);
+    expect(initializer).toBeCalledTimes(2);
+    expect(initializer).lastCalledWith(propDescriptor, someValue, someProperty, context);
     expect(propDescriptor[Symbol.for(someProperty)]).toEqual(someValue);
     expect(propDescriptor.get()).toEqual(someValue);
   });
@@ -291,9 +291,9 @@ describe('utils', () => {
 
     expect(descriptor.writable).toBeFalsy();
     expect(descriptor).toEqual(babelDescriptor);
-    expect(babelInitializer).toHaveBeenCalledTimes(1);
-    expect(initializer).toHaveBeenCalledTimes(1);
-    expect(initializer).toHaveBeenLastCalledWith(babelDescriptor, someValue, someProperty, context);
+    expect(babelInitializer).toBeCalledTimes(1);
+    expect(initializer).toBeCalledTimes(1);
+    expect(initializer).lastCalledWith(babelDescriptor, someValue, someProperty, context);
   });
 
   it('createDescriptor', () => {
@@ -319,10 +319,10 @@ describe('utils', () => {
 
     expect(decorator(someValue, someProperty, descriptor)).toEqual(descriptor);
 
-    expect(decorator1).toHaveBeenCalledTimes(1);
-    expect(decorator1).toHaveBeenLastCalledWith(someValue, someProperty, descriptor);
-    expect(decorator2).toHaveBeenCalledTimes(1);
-    expect(decorator2).toHaveBeenLastCalledWith(someValue, someProperty, descriptor);
+    expect(decorator1).toBeCalledTimes(1);
+    expect(decorator1).lastCalledWith(someValue, someProperty, descriptor);
+    expect(decorator2).toBeCalledTimes(1);
+    expect(decorator2).lastCalledWith(someValue, someProperty, descriptor);
   });
 
   it('checkStoresState', () => {
@@ -333,28 +333,28 @@ describe('utils', () => {
     const storesNameNotExist = ['someNotExistStoreName'];
 
     expect(checkStoresState(stores, isStoreStateFalse)).toEqual(false);
-    expect(isStoreStateFalse).toHaveBeenCalledTimes(1);
-    expect(isStoreStateFalse).toHaveBeenLastCalledWith(someValue);
+    expect(isStoreStateFalse).toBeCalledTimes(1);
+    expect(isStoreStateFalse).lastCalledWith(someValue);
 
     expect(checkStoresState(stores, isStoreStateTrue)).toEqual(true);
-    expect(isStoreStateTrue).toHaveBeenCalledTimes(1);
-    expect(isStoreStateTrue).toHaveBeenLastCalledWith(someValue);
+    expect(isStoreStateTrue).toBeCalledTimes(1);
+    expect(isStoreStateTrue).lastCalledWith(someValue);
 
     expect(checkStoresState(stores, isStoreStateFalse, storesNameExist)).toEqual(false);
-    expect(isStoreStateFalse).toHaveBeenCalledTimes(2);
-    expect(isStoreStateFalse).toHaveBeenLastCalledWith(someValue);
+    expect(isStoreStateFalse).toBeCalledTimes(2);
+    expect(isStoreStateFalse).lastCalledWith(someValue);
 
     expect(checkStoresState(stores, isStoreStateTrue, storesNameExist)).toEqual(true);
-    expect(isStoreStateTrue).toHaveBeenCalledTimes(2);
-    expect(isStoreStateTrue).toHaveBeenLastCalledWith(someValue);
+    expect(isStoreStateTrue).toBeCalledTimes(2);
+    expect(isStoreStateTrue).lastCalledWith(someValue);
 
     expect(checkStoresState(stores, isStoreStateFalse, storesNameNotExist)).toEqual(true);
-    expect(isStoreStateFalse).toHaveBeenCalledTimes(2);
-    expect(isStoreStateFalse).toHaveBeenLastCalledWith(someValue);
+    expect(isStoreStateFalse).toBeCalledTimes(2);
+    expect(isStoreStateFalse).lastCalledWith(someValue);
 
     expect(checkStoresState(stores, isStoreStateTrue, storesNameNotExist)).toEqual(true);
-    expect(isStoreStateTrue).toHaveBeenCalledTimes(2);
-    expect(isStoreStateTrue).toHaveBeenLastCalledWith(someValue);
+    expect(isStoreStateTrue).toBeCalledTimes(2);
+    expect(isStoreStateTrue).lastCalledWith(someValue);
   });
 
   it('isStoreReady', () => {
@@ -377,12 +377,12 @@ describe('utils', () => {
     const isStoreStateFalse = jest.fn().mockReturnValue(false);
 
     expect(findStoreStateInStores(stores, isStoreStateFalse)).toBeUndefined();
-    expect(isStoreStateFalse).toHaveBeenCalledTimes(1);
-    expect(isStoreStateFalse).toHaveBeenLastCalledWith(someValue);
+    expect(isStoreStateFalse).toBeCalledTimes(1);
+    expect(isStoreStateFalse).lastCalledWith(someValue);
 
     expect(findStoreStateInStores(stores, isStoreStateTrue)).toEqual(someValue);
-    expect(isStoreStateTrue).toHaveBeenCalledTimes(1);
-    expect(isStoreStateTrue).toHaveBeenLastCalledWith(someValue);
+    expect(isStoreStateTrue).toBeCalledTimes(1);
+    expect(isStoreStateTrue).lastCalledWith(someValue);
   });
 
   it('isStoreError', () => {
@@ -421,8 +421,8 @@ describe('utils', () => {
 
     mergeStateToStore(storeState, directorrStoreWithJSON);
 
-    expect(directorrStoreWithJSON.fromJSON).toHaveBeenCalledTimes(1);
-    expect(directorrStoreWithJSON.fromJSON).toHaveBeenLastCalledWith(storeState);
+    expect(directorrStoreWithJSON.fromJSON).toBeCalledTimes(1);
+    expect(directorrStoreWithJSON.fromJSON).lastCalledWith(storeState);
 
     mergeStateToStore(storeState, directorrStoreEmpty);
 
@@ -464,17 +464,17 @@ describe('utils', () => {
 
     afterware({ type: 'type', payload: {} }, dispatch);
 
-    expect(actionTypePayloadAfterware).toHaveBeenCalledTimes(0);
-    expect(actionType2PayloadAfterware).toHaveBeenCalledTimes(0);
+    expect(actionTypePayloadAfterware).toBeCalledTimes(0);
+    expect(actionType2PayloadAfterware).toBeCalledTimes(0);
 
     afterware(action, dispatch);
 
-    expect(actionTypePayloadAfterware).toHaveBeenCalledTimes(1);
-    expect(actionTypePayloadAfterware).toHaveBeenLastCalledWith(dispatch, action.payload);
+    expect(actionTypePayloadAfterware).toBeCalledTimes(1);
+    expect(actionTypePayloadAfterware).lastCalledWith(dispatch, action.payload);
 
     afterware(actionTwo, dispatch);
 
-    expect(actionType2PayloadAfterware).toHaveBeenCalledTimes(1);
-    expect(actionType2PayloadAfterware).toHaveBeenLastCalledWith(dispatch, actionTwo.payload);
+    expect(actionType2PayloadAfterware).toBeCalledTimes(1);
+    expect(actionType2PayloadAfterware).lastCalledWith(dispatch, actionTwo.payload);
   });
 });

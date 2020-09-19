@@ -19,22 +19,22 @@ describe('whenPayload', () => {
     const converterToNewObj = jest.fn().mockImplementation(() => convertedObj);
 
     expect(payloadChecker(payload, valueFunc, [checkerFalse])).toEqual(payload);
-    expect(checkerFalse).toHaveBeenCalledTimes(0);
-    expect(valueFunc).toHaveBeenCalledTimes(1);
+    expect(checkerFalse).toBeCalledTimes(0);
+    expect(valueFunc).toBeCalledTimes(1);
 
     expect(payloadChecker(payload, valueFunc, [checkerFalse, converter])).toEqual(payload);
-    expect(checkerFalse).toHaveBeenCalledTimes(0);
-    expect(converter).toHaveBeenCalledTimes(1);
-    expect(converter).toHaveBeenLastCalledWith(payload);
-    expect(valueFunc).toHaveBeenCalledTimes(2);
+    expect(checkerFalse).toBeCalledTimes(0);
+    expect(converter).toBeCalledTimes(1);
+    expect(converter).lastCalledWith(payload);
+    expect(valueFunc).toBeCalledTimes(2);
 
     expect(payloadChecker(payload, valueFunc, [checkerFalse, converterToNewObj])).toEqual(
       convertedObj
     );
-    expect(checkerFalse).toHaveBeenCalledTimes(0);
-    expect(converterToNewObj).toHaveBeenCalledTimes(1);
-    expect(converterToNewObj).toHaveBeenLastCalledWith(payload);
-    expect(valueFunc).toHaveBeenCalledTimes(3);
+    expect(checkerFalse).toBeCalledTimes(0);
+    expect(converterToNewObj).toBeCalledTimes(1);
+    expect(converterToNewObj).lastCalledWith(payload);
+    expect(valueFunc).toBeCalledTimes(3);
   });
 
   it('call payloadChecker with checker and converter', () => {
@@ -48,23 +48,23 @@ describe('whenPayload', () => {
     const converterToNewObj = jest.fn().mockImplementation(() => convertedObj);
 
     expect(payloadChecker(payload, valueFunc, [checkerTrue])).toEqual(payload);
-    expect(valueFunc).toHaveBeenCalledTimes(1);
-    expect(valueFunc).toHaveBeenLastCalledWith(payload);
-    expect(checkerTrue).toHaveBeenCalledTimes(1);
-    expect(checkerTrue).toHaveBeenLastCalledWith(payload);
+    expect(valueFunc).toBeCalledTimes(1);
+    expect(valueFunc).lastCalledWith(payload);
+    expect(checkerTrue).toBeCalledTimes(1);
+    expect(checkerTrue).lastCalledWith(payload);
 
     expect(payloadChecker(payload, valueFunc, [checkerFalse])).toBeUndefined();
-    expect(valueFunc).toHaveBeenCalledTimes(1);
-    expect(checkerFalse).toHaveBeenCalledTimes(1);
-    expect(checkerFalse).toHaveBeenLastCalledWith(payload);
+    expect(valueFunc).toBeCalledTimes(1);
+    expect(checkerFalse).toBeCalledTimes(1);
+    expect(checkerFalse).lastCalledWith(payload);
 
     expect(payloadChecker(payload, valueFunc, [checkerTrue, converterToNewObj])).toEqual(
       convertedObj
     );
-    expect(valueFunc).toHaveBeenCalledTimes(2);
-    expect(valueFunc).toHaveBeenLastCalledWith(convertedObj);
-    expect(converterToNewObj).toHaveBeenCalledTimes(1);
-    expect(converterToNewObj).toHaveBeenLastCalledWith(payload);
+    expect(valueFunc).toBeCalledTimes(2);
+    expect(valueFunc).lastCalledWith(convertedObj);
+    expect(converterToNewObj).toBeCalledTimes(1);
+    expect(converterToNewObj).lastCalledWith(payload);
   });
 
   it('call payloadChecker with checker pattern', () => {
@@ -80,23 +80,23 @@ describe('whenPayload', () => {
     const converterToNewObj = jest.fn().mockImplementation(() => convertedObj);
 
     expect(payloadChecker(payload, valueFunc, [checkerEmptyObj])).toEqual(payload);
-    expect(valueFunc).toHaveBeenCalledTimes(1);
-    expect(valueFunc).toHaveBeenLastCalledWith(payload);
+    expect(valueFunc).toBeCalledTimes(1);
+    expect(valueFunc).lastCalledWith(payload);
 
     expect(payloadChecker(payload, valueFunc, [checkerEmptyObj, converterToNewObj])).toEqual(
       convertedObj
     );
-    expect(converterToNewObj).toHaveBeenCalledTimes(1);
-    expect(converterToNewObj).toHaveBeenLastCalledWith(payload);
-    expect(valueFunc).toHaveBeenCalledTimes(2);
-    expect(valueFunc).toHaveBeenLastCalledWith(convertedObj);
+    expect(converterToNewObj).toBeCalledTimes(1);
+    expect(converterToNewObj).lastCalledWith(payload);
+    expect(valueFunc).toBeCalledTimes(2);
+    expect(valueFunc).lastCalledWith(convertedObj);
 
     expect(payloadChecker(payload, valueFunc, [checkerObjLike])).toBeUndefined();
-    expect(valueFunc).toHaveBeenCalledTimes(2);
+    expect(valueFunc).toBeCalledTimes(2);
 
     expect(payloadChecker(checkerObjLike, valueFunc, [checkerObjLike])).toEqual(checkerObjLike);
-    expect(valueFunc).toHaveBeenCalledTimes(3);
-    expect(valueFunc).toHaveBeenLastCalledWith(checkerObjLike);
+    expect(valueFunc).toBeCalledTimes(3);
+    expect(valueFunc).lastCalledWith(checkerObjLike);
   });
 
   it('call payloadChecker with checker pattern and prop checker function', () => {
@@ -122,44 +122,44 @@ describe('whenPayload', () => {
     expect(
       payloadChecker(payload, valueFunc, [checkerObjLikeWithCheckerFalse, converter])
     ).toBeUndefined();
-    expect(checkerFalse).toHaveBeenCalledTimes(0);
-    expect(converter).toHaveBeenCalledTimes(0);
-    expect(valueFunc).toHaveBeenCalledTimes(0);
+    expect(checkerFalse).toBeCalledTimes(0);
+    expect(converter).toBeCalledTimes(0);
+    expect(valueFunc).toBeCalledTimes(0);
 
     expect(
       payloadChecker(checkerObjLike, valueFunc, [checkerObjLikeWithCheckerFalse, converter])
     ).toBeUndefined();
-    expect(checkerFalse).toHaveBeenCalledTimes(1);
-    expect(checkerFalse).toHaveBeenLastCalledWith(checkerObjLike, someProperty);
-    expect(converter).toHaveBeenCalledTimes(0);
-    expect(valueFunc).toHaveBeenCalledTimes(0);
+    expect(checkerFalse).toBeCalledTimes(1);
+    expect(checkerFalse).lastCalledWith(checkerObjLike, someProperty);
+    expect(converter).toBeCalledTimes(0);
+    expect(valueFunc).toBeCalledTimes(0);
 
     expect(
       payloadChecker(payload, valueFunc, [checkerObjLikeWithCheckerTrue, converter])
     ).toBeUndefined();
-    expect(checkerTrue).toHaveBeenCalledTimes(0);
-    expect(converter).toHaveBeenCalledTimes(0);
-    expect(valueFunc).toHaveBeenCalledTimes(0);
+    expect(checkerTrue).toBeCalledTimes(0);
+    expect(converter).toBeCalledTimes(0);
+    expect(valueFunc).toBeCalledTimes(0);
 
     expect(
       payloadChecker(checkerObjLike, valueFunc, [checkerObjLikeWithCheckerTrue, converter])
     ).toEqual(checkerObjLike);
-    expect(checkerTrue).toHaveBeenCalledTimes(1);
-    expect(checkerTrue).toHaveBeenLastCalledWith(checkerObjLike, someProperty);
-    expect(converter).toHaveBeenCalledTimes(1);
-    expect(converter).toHaveBeenLastCalledWith(checkerObjLike);
-    expect(valueFunc).toHaveBeenCalledTimes(1);
-    expect(valueFunc).toHaveBeenLastCalledWith(checkerObjLike);
+    expect(checkerTrue).toBeCalledTimes(1);
+    expect(checkerTrue).lastCalledWith(checkerObjLike, someProperty);
+    expect(converter).toBeCalledTimes(1);
+    expect(converter).lastCalledWith(checkerObjLike);
+    expect(valueFunc).toBeCalledTimes(1);
+    expect(valueFunc).lastCalledWith(checkerObjLike);
 
     expect(
       payloadChecker(checkerObjLike, valueFunc, [checkerObjLikeWithCheckerTrue, converterToNewObj])
     ).toEqual(convertedObj);
-    expect(checkerTrue).toHaveBeenCalledTimes(2);
-    expect(checkerTrue).toHaveBeenLastCalledWith(checkerObjLike, someProperty);
-    expect(converterToNewObj).toHaveBeenCalledTimes(1);
-    expect(converterToNewObj).toHaveBeenLastCalledWith(checkerObjLike);
-    expect(valueFunc).toHaveBeenCalledTimes(2);
-    expect(valueFunc).toHaveBeenLastCalledWith(convertedObj);
+    expect(checkerTrue).toBeCalledTimes(2);
+    expect(checkerTrue).lastCalledWith(checkerObjLike, someProperty);
+    expect(converterToNewObj).toBeCalledTimes(1);
+    expect(converterToNewObj).lastCalledWith(checkerObjLike);
+    expect(valueFunc).toBeCalledTimes(2);
+    expect(valueFunc).lastCalledWith(convertedObj);
   });
 
   it('initializer', () => {
@@ -173,8 +173,8 @@ describe('whenPayload', () => {
 
     initializer(store, someFunc, someProperty, someFunc, payloadChecker)(payload);
 
-    expect(payloadChecker).toHaveBeenCalledTimes(1);
-    expect(payloadChecker).toHaveBeenLastCalledWith(payload, someFunc, someFunc);
+    expect(payloadChecker).toBeCalledTimes(1);
+    expect(payloadChecker).lastCalledWith(payload, someFunc, someFunc);
   });
 
   it('call whenPayload with correct arg', () => {
@@ -244,56 +244,56 @@ describe('whenPayload', () => {
 
     obj.effectFalse(payload);
 
-    expect(checkerFalse).toHaveBeenCalledTimes(1);
-    expect(checkerFalse).toHaveBeenLastCalledWith(payload);
-    expect(converter).toHaveBeenCalledTimes(0);
-    expect(callEffect).toHaveBeenCalledTimes(0);
+    expect(checkerFalse).toBeCalledTimes(1);
+    expect(checkerFalse).lastCalledWith(payload);
+    expect(converter).toBeCalledTimes(0);
+    expect(callEffect).toBeCalledTimes(0);
 
     obj.effectTrueNoConverter(payload);
 
-    expect(checkerTrue).toHaveBeenCalledTimes(1);
-    expect(checkerTrue).toHaveBeenLastCalledWith(payload);
-    expect(converter).toHaveBeenCalledTimes(0);
-    expect(callEffect).toHaveBeenCalledTimes(1);
+    expect(checkerTrue).toBeCalledTimes(1);
+    expect(checkerTrue).lastCalledWith(payload);
+    expect(converter).toBeCalledTimes(0);
+    expect(callEffect).toBeCalledTimes(1);
 
     obj.effectTrue(payload);
 
-    expect(checkerTrue).toHaveBeenCalledTimes(2);
-    expect(checkerTrue).toHaveBeenLastCalledWith(payload);
-    expect(converter).toHaveBeenCalledTimes(1);
-    expect(converter).toHaveBeenLastCalledWith(payload);
-    expect(callEffect).toHaveBeenCalledTimes(2);
-    expect(callEffect).toHaveBeenLastCalledWith(payload);
+    expect(checkerTrue).toBeCalledTimes(2);
+    expect(checkerTrue).lastCalledWith(payload);
+    expect(converter).toBeCalledTimes(1);
+    expect(converter).lastCalledWith(payload);
+    expect(callEffect).toBeCalledTimes(2);
+    expect(callEffect).lastCalledWith(payload);
 
     obj.effectPatternFalse(payload);
 
-    expect(converter).toHaveBeenCalledTimes(1);
-    expect(callEffect).toHaveBeenCalledTimes(2);
+    expect(converter).toBeCalledTimes(1);
+    expect(callEffect).toBeCalledTimes(2);
 
     obj.effectPatternTrue(payload);
 
-    expect(converter).toHaveBeenCalledTimes(2);
-    expect(converter).toHaveBeenLastCalledWith(payload);
-    expect(callEffect).toHaveBeenCalledTimes(3);
-    expect(callEffect).toHaveBeenLastCalledWith(payload);
+    expect(converter).toBeCalledTimes(2);
+    expect(converter).lastCalledWith(payload);
+    expect(callEffect).toBeCalledTimes(3);
+    expect(callEffect).lastCalledWith(payload);
 
     obj.effectPatternPropFalse(payload);
 
-    expect(checkerFalse).toHaveBeenCalledTimes(2);
-    expect(checkerFalse).toHaveBeenLastCalledWith(payload, someProperty);
-    expect(converter).toHaveBeenCalledTimes(2);
-    expect(converter).toHaveBeenLastCalledWith(payload);
-    expect(callEffect).toHaveBeenCalledTimes(3);
-    expect(callEffect).toHaveBeenLastCalledWith(payload);
+    expect(checkerFalse).toBeCalledTimes(2);
+    expect(checkerFalse).lastCalledWith(payload, someProperty);
+    expect(converter).toBeCalledTimes(2);
+    expect(converter).lastCalledWith(payload);
+    expect(callEffect).toBeCalledTimes(3);
+    expect(callEffect).lastCalledWith(payload);
 
     obj.effectPatternPropTrue(payload);
 
-    expect(checkerTrue).toHaveBeenCalledTimes(3);
-    expect(checkerTrue).toHaveBeenLastCalledWith(payload, someProperty);
-    expect(converter).toHaveBeenCalledTimes(3);
-    expect(converter).toHaveBeenLastCalledWith(payload);
-    expect(callEffect).toHaveBeenCalledTimes(4);
-    expect(callEffect).toHaveBeenLastCalledWith(payload);
+    expect(checkerTrue).toBeCalledTimes(3);
+    expect(checkerTrue).lastCalledWith(payload, someProperty);
+    expect(converter).toBeCalledTimes(3);
+    expect(converter).lastCalledWith(payload);
+    expect(callEffect).toBeCalledTimes(4);
+    expect(callEffect).lastCalledWith(payload);
   });
 
   it('use whenPayload in class with other decorators', () => {
@@ -318,15 +318,15 @@ describe('whenPayload', () => {
 
     obj.effectOne(payload);
 
-    expect(checkerTrue).toHaveBeenCalledTimes(2);
-    expect(callEffect).toHaveBeenCalledTimes(1);
-    expect(callEffect).toHaveBeenLastCalledWith(payload);
+    expect(checkerTrue).toBeCalledTimes(2);
+    expect(callEffect).toBeCalledTimes(1);
+    expect(callEffect).lastCalledWith(payload);
 
     obj.effectTwo(payload);
 
-    expect(checkerTrue).toHaveBeenCalledTimes(3);
-    expect(checkerFalse).toHaveBeenCalledTimes(1);
-    expect(callEffect).toHaveBeenCalledTimes(1);
-    expect(callEffect).toHaveBeenLastCalledWith(payload);
+    expect(checkerTrue).toBeCalledTimes(3);
+    expect(checkerFalse).toBeCalledTimes(1);
+    expect(callEffect).toBeCalledTimes(1);
+    expect(callEffect).lastCalledWith(payload);
   });
 });

@@ -13,15 +13,15 @@ describe('whenState', () => {
     const valueFunc = jest.fn().mockImplementation(v => v);
 
     expect(stateChecker(payload, valueFunc, store, [checkerFalse])).toBeUndefined();
-    expect(valueFunc).toHaveBeenCalledTimes(0);
-    expect(checkerFalse).toHaveBeenCalledTimes(1);
-    expect(checkerFalse).toHaveBeenLastCalledWith(store, payload);
+    expect(valueFunc).toBeCalledTimes(0);
+    expect(checkerFalse).toBeCalledTimes(1);
+    expect(checkerFalse).lastCalledWith(store, payload);
 
     expect(stateChecker(payload, valueFunc, store, [checkerTrue])).toEqual(payload);
-    expect(valueFunc).toHaveBeenCalledTimes(1);
-    expect(valueFunc).toHaveBeenLastCalledWith(payload);
-    expect(checkerTrue).toHaveBeenCalledTimes(1);
-    expect(checkerTrue).toHaveBeenLastCalledWith(store, payload);
+    expect(valueFunc).toBeCalledTimes(1);
+    expect(valueFunc).lastCalledWith(payload);
+    expect(checkerTrue).toBeCalledTimes(1);
+    expect(checkerTrue).lastCalledWith(store, payload);
   });
 
   it('call stateChecker with checker pattern', () => {
@@ -44,44 +44,36 @@ describe('whenState', () => {
     const valueFunc = jest.fn().mockImplementation(v => v);
 
     expect(stateChecker(payload, valueFunc, store, [checkerObjLikePayload])).toBeUndefined();
-    expect(valueFunc).toHaveBeenCalledTimes(0);
+    expect(valueFunc).toBeCalledTimes(0);
 
     expect(stateChecker(payload, valueFunc, store, [checkerEmptyObj])).toEqual(payload);
-    expect(valueFunc).toHaveBeenCalledTimes(1);
-    expect(valueFunc).toHaveBeenLastCalledWith(payload);
+    expect(valueFunc).toBeCalledTimes(1);
+    expect(valueFunc).lastCalledWith(payload);
 
     expect(
       stateChecker(payload, valueFunc, checkerObjLikePayload, [checkerObjLikePayload])
     ).toEqual(payload);
-    expect(valueFunc).toHaveBeenCalledTimes(2);
-    expect(valueFunc).toHaveBeenLastCalledWith(payload);
+    expect(valueFunc).toBeCalledTimes(2);
+    expect(valueFunc).lastCalledWith(payload);
 
     expect(
       stateChecker(payload, valueFunc, checkerObjLikeWithCheckerFalse, [
         checkerObjLikeWithCheckerFalse,
       ])
     ).toBeUndefined();
-    expect(checkerFalse).toHaveBeenCalledTimes(1);
-    expect(checkerFalse).toHaveBeenLastCalledWith(
-      checkerObjLikeWithCheckerFalse,
-      payload,
-      someProperty
-    );
-    expect(valueFunc).toHaveBeenCalledTimes(2);
+    expect(checkerFalse).toBeCalledTimes(1);
+    expect(checkerFalse).lastCalledWith(checkerObjLikeWithCheckerFalse, payload, someProperty);
+    expect(valueFunc).toBeCalledTimes(2);
 
     expect(
       stateChecker(payload, valueFunc, checkerObjLikeWithCheckerTrue, [
         checkerObjLikeWithCheckerTrue,
       ])
     ).toEqual(payload);
-    expect(checkerTrue).toHaveBeenCalledTimes(1);
-    expect(checkerTrue).toHaveBeenLastCalledWith(
-      checkerObjLikeWithCheckerTrue,
-      payload,
-      someProperty
-    );
-    expect(valueFunc).toHaveBeenCalledTimes(3);
-    expect(valueFunc).toHaveBeenLastCalledWith(payload);
+    expect(checkerTrue).toBeCalledTimes(1);
+    expect(checkerTrue).lastCalledWith(checkerObjLikeWithCheckerTrue, payload, someProperty);
+    expect(valueFunc).toBeCalledTimes(3);
+    expect(valueFunc).lastCalledWith(payload);
   });
 
   it('initializer', () => {
@@ -95,8 +87,8 @@ describe('whenState', () => {
 
     initializer(store, someFunc, someProperty, someFunc, stateChecker)(payload);
 
-    expect(stateChecker).toHaveBeenCalledTimes(1);
-    expect(stateChecker).toHaveBeenLastCalledWith(payload, someFunc, store, someFunc);
+    expect(stateChecker).toBeCalledTimes(1);
+    expect(stateChecker).lastCalledWith(payload, someFunc, store, someFunc);
   });
 
   it('call whenState with correct arg', () => {
@@ -160,39 +152,39 @@ describe('whenState', () => {
 
     obj.effectFalse(payload);
 
-    expect(checkerFalse).toHaveBeenCalledTimes(1);
-    expect(checkerFalse).toHaveBeenLastCalledWith(obj, payload);
-    expect(callEffect).toHaveBeenCalledTimes(0);
+    expect(checkerFalse).toBeCalledTimes(1);
+    expect(checkerFalse).lastCalledWith(obj, payload);
+    expect(callEffect).toBeCalledTimes(0);
 
     obj.effectTrue(payload);
 
-    expect(checkerTrue).toHaveBeenCalledTimes(1);
-    expect(checkerTrue).toHaveBeenLastCalledWith(obj, payload);
-    expect(callEffect).toHaveBeenCalledTimes(1);
-    expect(callEffect).toHaveBeenLastCalledWith(payload);
+    expect(checkerTrue).toBeCalledTimes(1);
+    expect(checkerTrue).lastCalledWith(obj, payload);
+    expect(callEffect).toBeCalledTimes(1);
+    expect(callEffect).lastCalledWith(payload);
 
     obj.effectPatternFalse(payload);
 
-    expect(callEffect).toHaveBeenCalledTimes(1);
+    expect(callEffect).toBeCalledTimes(1);
 
     obj.effectPatternTrue(payload);
 
-    expect(callEffect).toHaveBeenCalledTimes(2);
-    expect(callEffect).toHaveBeenLastCalledWith(payload);
+    expect(callEffect).toBeCalledTimes(2);
+    expect(callEffect).lastCalledWith(payload);
 
     obj.effectPatternPropFalse(payload);
 
-    expect(checkerFalse).toHaveBeenCalledTimes(2);
-    expect(checkerFalse).toHaveBeenLastCalledWith(obj, payload, storeProp);
-    expect(callEffect).toHaveBeenCalledTimes(2);
-    expect(callEffect).toHaveBeenLastCalledWith(payload);
+    expect(checkerFalse).toBeCalledTimes(2);
+    expect(checkerFalse).lastCalledWith(obj, payload, storeProp);
+    expect(callEffect).toBeCalledTimes(2);
+    expect(callEffect).lastCalledWith(payload);
 
     obj.effectPatternPropTrue(payload);
 
-    expect(checkerTrue).toHaveBeenCalledTimes(2);
-    expect(checkerTrue).toHaveBeenLastCalledWith(obj, payload, storeProp);
-    expect(callEffect).toHaveBeenCalledTimes(3);
-    expect(callEffect).toHaveBeenLastCalledWith(payload);
+    expect(checkerTrue).toBeCalledTimes(2);
+    expect(checkerTrue).lastCalledWith(obj, payload, storeProp);
+    expect(callEffect).toBeCalledTimes(3);
+    expect(callEffect).lastCalledWith(payload);
   });
 
   it('use whenState in class with other decorators', () => {
@@ -226,13 +218,13 @@ describe('whenState', () => {
 
     objFalse.effect(payload);
 
-    expect(callEffect).toHaveBeenCalledTimes(0);
+    expect(callEffect).toBeCalledTimes(0);
 
     const objTrue = new SomeClassTrue();
 
     objTrue.effect(payload);
 
-    expect(callEffect).toHaveBeenCalledTimes(1);
-    expect(callEffect).toHaveBeenLastCalledWith(payload);
+    expect(callEffect).toBeCalledTimes(1);
+    expect(callEffect).lastCalledWith(payload);
   });
 });

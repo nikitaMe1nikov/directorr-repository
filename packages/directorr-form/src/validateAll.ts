@@ -6,11 +6,12 @@ import {
 } from '@nimel/directorr';
 import { ObjectSchema, ValidationError } from 'yup';
 import FormStoreBase from './FormStore';
-import { ValidateOptions, SomeFunc } from './types';
-import { isLikeYUPSchema, calcValues } from './validate';
+import { ValidateOptions, SomeFunc, ValidateSchemaAll } from './types';
+import { calcValues } from './validate';
+import createSchemaContext from './createSchemaContext';
+import { useWithEffects } from './messages';
 
-const MODULE_NAME = 'validateAll';
-const DEFAULT_VALIDATE_OPTIONS = { strict: true, abortEarly: false };
+export const MODULE_NAME = 'validateAll';
 
 export function validateSchema(
   payload: any = {},
@@ -18,7 +19,7 @@ export function validateSchema(
   store: any,
   [schema, options, fields]: [ObjectSchema<any>, ValidateOptions, string[]]
 ) {
-  if (isLikeAction(payload)) throw new Error(`${MODULE_NAME}: use only with effect decorator`);
+  if (isLikeAction(payload)) throw new Error(useWithEffects(MODULE_NAME));
 
   let resultPayload = payload;
   const values = calcValues(fields, store);
@@ -38,17 +39,16 @@ export function validateSchema(
   return valueFunc(resultPayload);
 }
 
-export function initializer(initObject: any, value: any, property: string, ctx: any) {
+export function initializer(
+  initObject: any,
+  value: any,
+  property: string,
+  ctx: any,
+  validate: ValidateSchemaAll = validateSchema
+) {
   if (!isFunction(value)) throw new Error(callWithPropNotEquallFunc(MODULE_NAME, property));
 
-  return (payload: any) => validateSchema(payload, value, initObject, ctx);
-}
-
-export function createSchemaContext(moduleName: string, schema: ObjectSchema<any>, options = {}) {
-  if (!isLikeYUPSchema(schema))
-    throw new Error(`${moduleName}: call with arg=${schema} not like yup - ObjectSchema`);
-
-  return [schema, { ...DEFAULT_VALIDATE_OPTIONS, ...options }, Object.keys(schema.fields)];
+  return (payload: any) => validate(payload, value, initObject, ctx);
 }
 
 const validateAll = createBuilderPropertyDecorator<ObjectSchema, ValidateOptions>(

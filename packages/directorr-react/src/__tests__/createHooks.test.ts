@@ -16,7 +16,7 @@ describe('createHooks', () => {
     expect(DirectorrContext).toEqual(context);
     expect(DirectorrProvider).toEqual(context.Provider);
     expect(useLocalStore).toEqual(useLocalStoreImport);
-    expect(useStore).toHaveBeenCalledTimes(1);
-    expect(useStore).toHaveBeenLastCalledWith(context);
+    expect(useStore).toBeCalledTimes(1);
+    expect(useStore).lastCalledWith(context);
   });
 });

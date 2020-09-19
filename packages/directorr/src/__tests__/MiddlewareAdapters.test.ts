@@ -12,13 +12,13 @@ describe('MiddlewareAdapters', () => {
 
     obj.run(action);
 
-    expect(middleware).toHaveBeenCalledTimes(1);
-    expect(middleware).toHaveBeenLastCalledWith(action, obj.next, directorr);
+    expect(middleware).toBeCalledTimes(1);
+    expect(middleware).lastCalledWith(action, obj.next, directorr);
 
     obj.next(action);
 
-    expect(runNextMiddleware).toHaveBeenCalledTimes(1);
-    expect(runNextMiddleware).toHaveBeenLastCalledWith(index, action);
+    expect(runNextMiddleware).toBeCalledTimes(1);
+    expect(runNextMiddleware).lastCalledWith(index, action);
   });
 
   it('ReduxMiddlewareAdapter', () => {
@@ -35,12 +35,12 @@ describe('MiddlewareAdapters', () => {
 
     obj.run(action);
 
-    expect(middlewareLogic).toHaveBeenCalledTimes(1);
-    expect(middlewareLogic).toHaveBeenLastCalledWith(store, obj.next, action);
+    expect(middlewareLogic).toBeCalledTimes(1);
+    expect(middlewareLogic).lastCalledWith(store, obj.next, action);
 
     obj.next(action);
 
-    expect(runNextMiddleware).toHaveBeenCalledTimes(1);
-    expect(runNextMiddleware).toHaveBeenLastCalledWith(index, action);
+    expect(runNextMiddleware).toBeCalledTimes(1);
+    expect(runNextMiddleware).lastCalledWith(index, action);
   });
 });

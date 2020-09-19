@@ -15,14 +15,14 @@ describe('utils', () => {
 
     store[DISPATCH_EFFECTS_FIELD_NAME](createAction(HISTORY_ACTIONS.POP, { pattern }));
 
-    expect(effect).toHaveBeenCalledTimes(1);
-    expect(effect).toHaveBeenLastCalledWith({ pattern, match: true });
+    expect(effect).toBeCalledTimes(1);
+    expect(effect).lastCalledWith({ pattern, match: true });
 
     store[DISPATCH_EFFECTS_FIELD_NAME](
       createAction(HISTORY_ACTIONS.POP, { pattern: someDiffrentPattern })
     );
 
-    expect(effect).toHaveBeenCalledTimes(2);
-    expect(effect).toHaveBeenLastCalledWith({ pattern: someDiffrentPattern });
+    expect(effect).toBeCalledTimes(2);
+    expect(effect).lastCalledWith({ pattern: someDiffrentPattern });
   });
 });

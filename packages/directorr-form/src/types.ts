@@ -1,8 +1,17 @@
-import { ValidateOptions as ValidateOptionsYup } from 'yup';
+import { ValidateOptions as ValidateOptionsYup, ObjectSchema } from 'yup';
 
-export type ValidateOptions = ValidateOptionsYup & {
+export type ValidateOptions = ValidateOptionsYup;
+
+export type ValidateOptionsAll = ValidateOptions & {
   payloadProp: string;
 };
+
+export type ValidateSchemaAll = (
+  payload: any,
+  valueFunc: SomeFunc,
+  store: any,
+  [schema, options, fields]: [ObjectSchema<any>, ValidateOptionsAll, string[]]
+) => any;
 
 export const enum Status {
   default,

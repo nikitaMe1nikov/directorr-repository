@@ -28,16 +28,16 @@ describe('action', () => {
 
     expect(runDispatcher(args, actionType, valueFuncWithEmptyReturn, store)).toEqual(null);
 
-    expect(valueFuncWithEmptyReturn).toHaveBeenCalledTimes(1);
-    expect(valueFuncWithEmptyReturn).toHaveBeenLastCalledWith(...args);
-    expect(store[DISPATCH_ACTION_FIELD_NAME]).toHaveBeenCalledTimes(0);
+    expect(valueFuncWithEmptyReturn).toBeCalledTimes(1);
+    expect(valueFuncWithEmptyReturn).lastCalledWith(...args);
+    expect(store[DISPATCH_ACTION_FIELD_NAME]).toBeCalledTimes(0);
 
     expect(runDispatcher(args, actionType, valueFuncWithFullReturn, store)).toEqual(someValue);
 
-    expect(valueFuncWithFullReturn).toHaveBeenCalledTimes(1);
-    expect(valueFuncWithFullReturn).toHaveBeenLastCalledWith(...args);
-    expect(store[DISPATCH_ACTION_FIELD_NAME]).toHaveBeenCalledTimes(1);
-    expect(store[DISPATCH_ACTION_FIELD_NAME]).toHaveBeenLastCalledWith(someAction);
+    expect(valueFuncWithFullReturn).toBeCalledTimes(1);
+    expect(valueFuncWithFullReturn).lastCalledWith(...args);
+    expect(store[DISPATCH_ACTION_FIELD_NAME]).toBeCalledTimes(1);
+    expect(store[DISPATCH_ACTION_FIELD_NAME]).lastCalledWith(someAction);
   });
 
   it('initializer', () => {
@@ -52,10 +52,10 @@ describe('action', () => {
 
     initializer(store, someFunc, someProperty, actionType, dispatcher, addFieds)(...args);
 
-    expect(addFieds).toHaveBeenCalledTimes(1);
-    expect(addFieds).toHaveBeenLastCalledWith(store);
-    expect(dispatcher).toHaveBeenCalledTimes(1);
-    expect(dispatcher).toHaveBeenLastCalledWith(args, actionType, someFunc, store);
+    expect(addFieds).toBeCalledTimes(1);
+    expect(addFieds).lastCalledWith(store);
+    expect(dispatcher).toBeCalledTimes(1);
+    expect(dispatcher).lastCalledWith(args, actionType, someFunc, store);
   });
 
   it('call action with wrong arg', () => {
@@ -93,8 +93,8 @@ describe('action', () => {
 
     obj.actionOne(someValue);
 
-    expect(dispatchEffects).toHaveBeenCalledTimes(1);
-    expect(dispatchEffects).toHaveBeenLastCalledWith(
+    expect(dispatchEffects).toBeCalledTimes(1);
+    expect(dispatchEffects).lastCalledWith(
       createAction(createActionType(actionType, ACTION_TYPE_DIVIDER), someValue)
     );
 
@@ -102,12 +102,12 @@ describe('action', () => {
 
     obj.actionTwo(someValue);
 
-    expect(dispatchEffects).toHaveBeenCalledTimes(2);
+    expect(dispatchEffects).toBeCalledTimes(2);
     expect(dispatchEffects).toHaveBeenNthCalledWith(
       1,
       createAction(createActionType(actionType2, ACTION_TYPE_DIVIDER), someValue)
     );
-    expect(dispatchEffects).toHaveBeenLastCalledWith(
+    expect(dispatchEffects).lastCalledWith(
       createAction(createActionType(actionType, ACTION_TYPE_DIVIDER), someValue)
     );
 
@@ -115,8 +115,8 @@ describe('action', () => {
 
     obj.actionThree(someValue);
 
-    expect(dispatchEffects).toHaveBeenCalledTimes(1);
-    expect(dispatchEffects).toHaveBeenLastCalledWith(
+    expect(dispatchEffects).toBeCalledTimes(1);
+    expect(dispatchEffects).lastCalledWith(
       createAction(
         createActionType([actionType, SomeClassThree.name], ACTION_TYPE_DIVIDER),
         someValue

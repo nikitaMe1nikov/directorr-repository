@@ -19,8 +19,8 @@ describe('createBuilderPropertyDecorator', () => {
       createContext
     );
 
-    expect(createBuilderDecorator).toHaveBeenCalledTimes(1);
-    expect(createBuilderDecorator).toHaveBeenLastCalledWith(
+    expect(createBuilderDecorator).toBeCalledTimes(1);
+    expect(createBuilderDecorator).lastCalledWith(
       moduleName,
       decorator,
       initializer,

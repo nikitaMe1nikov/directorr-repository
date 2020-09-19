@@ -23,7 +23,7 @@ describe('createBuilderHook', () => {
 
     hook(SomeStore, initOptions);
 
-    expect(hookBuild).toHaveBeenCalledTimes(1);
-    expect(hookBuild).toHaveBeenLastCalledWith(context, SomeStore, initOptions);
+    expect(hookBuild).toBeCalledTimes(1);
+    expect(hookBuild).lastCalledWith(context, SomeStore, initOptions);
   });
 });

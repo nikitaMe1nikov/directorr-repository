@@ -66,8 +66,8 @@ describe('Directorr', () => {
 
     director.addStore(Store, initOptions);
 
-    expect(director.addStoreDependency).toHaveBeenCalledTimes(1);
-    expect(director.addStoreDependency).toHaveBeenLastCalledWith(Store, GLOBAL_DEP, initOptions);
+    expect(director.addStoreDependency).toBeCalledTimes(1);
+    expect(director.addStoreDependency).lastCalledWith(Store, GLOBAL_DEP, initOptions);
   });
 
   it('addStores', () => {
@@ -76,9 +76,9 @@ describe('Directorr', () => {
 
     director.addStores(Store, StoreWithInjectedStores);
 
-    expect(director.addStore).toHaveBeenCalledTimes(2);
-    expect(director.addStore).toHaveBeenCalledWith(Store);
-    expect(director.addStore).toHaveBeenCalledWith(StoreWithInjectedStores);
+    expect(director.addStore).toBeCalledTimes(2);
+    expect(director.addStore).toBeCalledWith(Store);
+    expect(director.addStore).toBeCalledWith(StoreWithInjectedStores);
   });
 
   it('removeStore', () => {
@@ -88,8 +88,8 @@ describe('Directorr', () => {
 
     director.removeStore(Store);
 
-    expect(director.removeStoreDependency).toHaveBeenCalledTimes(1);
-    expect(director.removeStoreDependency).toHaveBeenLastCalledWith(Store, GLOBAL_DEP);
+    expect(director.removeStoreDependency).toBeCalledTimes(1);
+    expect(director.removeStoreDependency).lastCalledWith(Store, GLOBAL_DEP);
   });
 
   it('getStore', () => {
@@ -113,14 +113,14 @@ describe('Directorr', () => {
     defineProperty(director, 'initStore', createValueDescriptor(initStore));
 
     expect(director.addStoreDependency(Store, DEP, initOptions)).toEqual(store);
-    expect(initStore).toHaveBeenCalledTimes(1);
-    expect(initStore).toHaveBeenLastCalledWith(Store, initOptions);
+    expect(initStore).toBeCalledTimes(1);
+    expect(initStore).lastCalledWith(Store, initOptions);
     expect(store[DEPENDENCY_FIELD_NAME]).toHaveLength(1);
     expect(store[DEPENDENCY_FIELD_NAME]).toContain(DEP);
 
     expect(director.addStoreDependency(StoreTwo, DEP, initOptions)).toEqual(store);
-    expect(initStore).toHaveBeenCalledTimes(2);
-    expect(initStore).toHaveBeenLastCalledWith(StoreTwo, initOptions);
+    expect(initStore).toBeCalledTimes(2);
+    expect(initStore).lastCalledWith(StoreTwo, initOptions);
     expect(store[DEPENDENCY_FIELD_NAME]).toHaveLength(2);
     expect(store[DEPENDENCY_FIELD_NAME]).toEqual([DEP, DEP]);
   });
@@ -140,8 +140,8 @@ describe('Directorr', () => {
 
     expect(director.getStore(Store)).toEqual(store);
 
-    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenCalledTimes(1);
-    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenLastCalledWith(
+    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(1);
+    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).lastCalledWith(
       createAction(DIRECTORR_INIT_STORE_ACTION, { StoreConstructor: Store, initOptions })
     );
 
@@ -182,7 +182,7 @@ describe('Directorr', () => {
       StoreWithInjectedStores,
       StoreWithInjectedStoresTwo,
     ]);
-    expect(injectedStore[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenCalledTimes(3);
+    expect(injectedStore[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(3);
     expect(injectedStore[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenNthCalledWith(
       1,
       createAction(DIRECTORR_INIT_STORE_ACTION, {
@@ -204,7 +204,7 @@ describe('Directorr', () => {
       })
     );
 
-    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenCalledTimes(2);
+    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(2);
     expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenNthCalledWith(
       1,
       createAction(DIRECTORR_INIT_STORE_ACTION, {
@@ -220,8 +220,8 @@ describe('Directorr', () => {
       })
     );
 
-    expect(storeTwo[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenCalledTimes(1);
-    expect(storeTwo[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenCalledWith(
+    expect(storeTwo[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(1);
+    expect(storeTwo[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledWith(
       createAction(DIRECTORR_INIT_STORE_ACTION, {
         StoreConstructor: StoreWithInjectedStoresTwo,
         initOptions,
@@ -275,8 +275,8 @@ describe('Directorr', () => {
     expect(store).toBeInstanceOf(StoreWithAfterware);
     expect(director.getStore(StoreWithAfterware)).toEqual(store);
 
-    expect(StoreWithAfterware.afterware).toHaveBeenCalledTimes(1);
-    expect(StoreWithAfterware.afterware).toHaveBeenLastCalledWith(
+    expect(StoreWithAfterware.afterware).toBeCalledTimes(1);
+    expect(StoreWithAfterware.afterware).lastCalledWith(
       createAction(DIRECTORR_INIT_STORE_ACTION, {
         StoreConstructor: StoreWithAfterware,
       }),
@@ -310,8 +310,8 @@ describe('Directorr', () => {
     expect(store).toBeInstanceOf(Store);
     expect(director.getStore(Store)).toEqual(store);
 
-    expect(config.mergeStateToStore).toHaveBeenCalledTimes(1);
-    expect(config.mergeStateToStore).toHaveBeenCalledWith(initStoresState[Store.name], store);
+    expect(config.mergeStateToStore).toBeCalledTimes(1);
+    expect(config.mergeStateToStore).toBeCalledWith(initStoresState[Store.name], store);
 
     expect(store).toMatchObject(initStoresState[Store.name]);
   });
@@ -347,9 +347,9 @@ describe('Directorr', () => {
 
     director.mergeStateToStore(initStoresState);
 
-    expect(config.mergeStateToStore).toHaveBeenCalledTimes(2);
-    expect(config.mergeStateToStore).toHaveBeenCalledWith(initStoresState[Store.name], storeOne);
-    expect(config.mergeStateToStore).toHaveBeenCalledWith(initStoresState[StoreTwo.name], storeTwo);
+    expect(config.mergeStateToStore).toBeCalledTimes(2);
+    expect(config.mergeStateToStore).toBeCalledWith(initStoresState[Store.name], storeOne);
+    expect(config.mergeStateToStore).toBeCalledWith(initStoresState[StoreTwo.name], storeTwo);
 
     expect(storeOne).toMatchObject(initStoresState[Store.name]);
     expect(storeTwo).toMatchObject(initStoresState[StoreTwo.name]);
@@ -369,21 +369,21 @@ describe('Directorr', () => {
 
     director.removeStoreDependency(StoreTwo, DEP);
 
-    expect(destroyStore).toHaveBeenCalledTimes(0);
+    expect(destroyStore).toBeCalledTimes(0);
 
     director.removeStoreDependency(Store, wrongDep);
 
-    expect(destroyStore).toHaveBeenCalledTimes(0);
+    expect(destroyStore).toBeCalledTimes(0);
 
     director.removeStoreDependency(Store, DEP);
 
     expect(store[DEPENDENCY_FIELD_NAME]).toHaveLength(1);
-    expect(destroyStore).toHaveBeenCalledTimes(0);
+    expect(destroyStore).toBeCalledTimes(0);
 
     director.removeStoreDependency(Store, DEP);
 
     expect(store[DEPENDENCY_FIELD_NAME]).toHaveLength(0);
-    expect(destroyStore).toHaveBeenCalledTimes(1);
+    expect(destroyStore).toBeCalledTimes(1);
   });
 
   it('destroyStore', async () => {
@@ -427,7 +427,7 @@ describe('Directorr', () => {
     expect(director.getStore(StoreWithInjectedStoresTwo)).toBeUndefined();
     expect(director.getStore(StoreInjected)).toBeUndefined();
 
-    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenCalledTimes(3);
+    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(3);
     expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenNthCalledWith(
       3,
       createAction(DIRECTORR_DESTROY_STORE_ACTION, {
@@ -435,7 +435,7 @@ describe('Directorr', () => {
       })
     );
 
-    expect(storeTwo[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenCalledTimes(4);
+    expect(storeTwo[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(4);
     expect(storeTwo[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenNthCalledWith(
       2,
       createAction(DIRECTORR_DESTROY_STORE_ACTION, {
@@ -455,7 +455,7 @@ describe('Directorr', () => {
       })
     );
 
-    expect(injectedStore[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenCalledTimes(5);
+    expect(injectedStore[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(5);
     expect(injectedStore[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenNthCalledWith(
       4,
       createAction(DIRECTORR_DESTROY_STORE_ACTION, {
@@ -535,7 +535,7 @@ describe('Directorr', () => {
     expect(store).toBeInstanceOf(StoreWithAfterware);
     expect(director.getStore(StoreWithAfterware)).toEqual(store);
 
-    expect(StoreWithAfterware.afterware).toHaveBeenCalledTimes(1);
+    expect(StoreWithAfterware.afterware).toBeCalledTimes(1);
     expect(director).toMatchObject({
       afterwares: [StoreWithAfterware.afterware],
     });
@@ -554,15 +554,15 @@ describe('Directorr', () => {
     const unsub = director.subscribe(subscribeHandler);
     director.dispatch(action);
 
-    expect(subscribeHandler).toHaveBeenCalledTimes(1);
-    expect(subscribeHandler).toHaveBeenCalledWith(director.stores);
+    expect(subscribeHandler).toBeCalledTimes(1);
+    expect(subscribeHandler).toBeCalledWith(director.stores);
 
     unsub();
 
     director.dispatch(action);
 
-    expect(subscribeHandler).toHaveBeenCalledTimes(1);
-    expect(subscribeHandler).toHaveBeenCalledWith(director.stores);
+    expect(subscribeHandler).toBeCalledTimes(1);
+    expect(subscribeHandler).toBeCalledWith(director.stores);
   });
 
   it('waitAllStoresState with store isReady = true', async () => {
@@ -723,7 +723,7 @@ describe('Directorr', () => {
 
     await flushPromises();
 
-    expect(resolve).toHaveBeenCalledWith(director.getStore(StoreTrue));
+    expect(resolve).toBeCalledWith(director.getStore(StoreTrue));
     expect(reject).not.toHaveBeenCalled();
   });
 
@@ -757,7 +757,7 @@ describe('Directorr', () => {
 
     await flushPromises();
 
-    expect(resolve).toHaveBeenCalledWith(store);
+    expect(resolve).toBeCalledWith(store);
     expect(reject).not.toHaveBeenCalled();
   });
 
@@ -777,18 +777,18 @@ describe('Directorr', () => {
     director.addReduxMiddlewares(middlewareOne);
     director.dispatch(action);
 
-    expect(middlewareOneLogic).toHaveBeenCalledTimes(1);
-    expect(middlewareOneLogic).toHaveBeenLastCalledWith(director.reduxStores, action);
-    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenCalledTimes(2);
-    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenLastCalledWith(action);
+    expect(middlewareOneLogic).toBeCalledTimes(1);
+    expect(middlewareOneLogic).lastCalledWith(director.reduxStores, action);
+    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(2);
+    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).lastCalledWith(action);
 
     director.addReduxMiddlewares(middlewareTwo);
     director.dispatch(action);
 
-    expect(middlewareTwoLogic).toHaveBeenCalledTimes(1);
-    expect(middlewareTwoLogic).toHaveBeenLastCalledWith(director.reduxStores, action);
-    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenCalledTimes(2);
-    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenLastCalledWith(action);
+    expect(middlewareTwoLogic).toBeCalledTimes(1);
+    expect(middlewareTwoLogic).lastCalledWith(director.reduxStores, action);
+    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(2);
+    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).lastCalledWith(action);
   });
 
   it('addMiddlewares', () => {
@@ -807,17 +807,17 @@ describe('Directorr', () => {
     director.addMiddlewares(middlewareOne);
     director.dispatch(action);
 
-    expect(middlewareOneLogic).toHaveBeenCalledTimes(1);
-    expect(middlewareOneLogic).toHaveBeenLastCalledWith(action, director);
-    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenCalledTimes(2);
-    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenLastCalledWith(action);
+    expect(middlewareOneLogic).toBeCalledTimes(1);
+    expect(middlewareOneLogic).lastCalledWith(action, director);
+    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(2);
+    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).lastCalledWith(action);
 
     director.addMiddlewares(middlewareTwo);
     director.dispatch(action);
 
-    expect(middlewareTwoLogic).toHaveBeenCalledTimes(1);
-    expect(middlewareTwoLogic).toHaveBeenLastCalledWith(action, director);
-    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenCalledTimes(2);
+    expect(middlewareTwoLogic).toBeCalledTimes(1);
+    expect(middlewareTwoLogic).lastCalledWith(action, director);
+    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(2);
   });
 
   it('addMiddlewares with already added middleware', () => {
@@ -828,7 +828,7 @@ describe('Directorr', () => {
     director.addMiddlewares(middleware);
     director.dispatch(action);
 
-    expect(middleware).toHaveBeenCalledTimes(1);
+    expect(middleware).toBeCalledTimes(1);
   });
 
   it('dispatchType', () => {
@@ -839,8 +839,8 @@ describe('Directorr', () => {
 
     director.dispatchType(actionType, someValue);
 
-    expect(dispatch).toHaveBeenCalledTimes(1);
-    expect(dispatch).toHaveBeenCalledWith(action);
+    expect(dispatch).toBeCalledTimes(1);
+    expect(dispatch).toBeCalledWith(action);
   });
 
   it('dispatch logic', () => {
@@ -871,12 +871,12 @@ describe('Directorr', () => {
 
     store[DISPATCH_ACTION_FIELD_NAME](actionTwo);
 
-    expect(middlewareLogic).toHaveBeenCalledTimes(3);
+    expect(middlewareLogic).toBeCalledTimes(3);
     expect(middlewareLogic).toHaveBeenNthCalledWith(1, initStoreAction, director);
     expect(middlewareLogic).toHaveBeenNthCalledWith(2, action, director);
     expect(middlewareLogic).toHaveBeenNthCalledWith(3, actionTwo, director);
 
-    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenCalledTimes(3);
+    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(3);
     expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenNthCalledWith(1, initStoreAction);
     expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenNthCalledWith(2, action);
     expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenNthCalledWith(3, actionTwo);
@@ -928,12 +928,12 @@ describe('Directorr', () => {
     });
     dispatch(action);
 
-    expect(next).toHaveBeenCalledTimes(1);
-    expect(next).toHaveBeenCalledWith(stores);
+    expect(next).toBeCalledTimes(1);
+    expect(next).toBeCalledWith(stores);
 
     unsubscribe();
     dispatch(action);
 
-    expect(next).toHaveBeenCalledTimes(1);
+    expect(next).toBeCalledTimes(1);
   });
 });

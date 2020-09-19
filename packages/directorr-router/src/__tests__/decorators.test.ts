@@ -15,13 +15,13 @@ describe('utils', () => {
 
     store[DISPATCH_EFFECTS_FIELD_NAME](createAction(HISTORY_ACTIONS.POP, { path: pattern }));
 
-    expect(effect).toHaveBeenCalledTimes(1);
-    expect(effect).toHaveBeenLastCalledWith({ path: pattern, match: {} });
+    expect(effect).toBeCalledTimes(1);
+    expect(effect).lastCalledWith({ path: pattern, match: {} });
 
     store[DISPATCH_EFFECTS_FIELD_NAME](createAction(HISTORY_ACTIONS.POP, { path: someDiffrent }));
 
-    expect(effect).toHaveBeenCalledTimes(2);
-    expect(effect).toHaveBeenLastCalledWith({ path: someDiffrent });
+    expect(effect).toBeCalledTimes(2);
+    expect(effect).lastCalledWith({ path: someDiffrent });
   });
 
   it('historyChange with HISTORY_ACTIONS.PUSH', () => {
@@ -36,13 +36,13 @@ describe('utils', () => {
 
     store[DISPATCH_EFFECTS_FIELD_NAME](createAction(HISTORY_ACTIONS.PUSH, { path: pattern }));
 
-    expect(effect).toHaveBeenCalledTimes(1);
-    expect(effect).toHaveBeenLastCalledWith({ path: pattern, match: {} });
+    expect(effect).toBeCalledTimes(1);
+    expect(effect).lastCalledWith({ path: pattern, match: {} });
 
     store[DISPATCH_EFFECTS_FIELD_NAME](createAction(HISTORY_ACTIONS.PUSH, { path: someDiffrent }));
 
-    expect(effect).toHaveBeenCalledTimes(2);
-    expect(effect).toHaveBeenLastCalledWith({ path: someDiffrent });
+    expect(effect).toBeCalledTimes(2);
+    expect(effect).lastCalledWith({ path: someDiffrent });
   });
 
   it('historyChange with HISTORY_ACTIONS.REPLACE', () => {
@@ -57,15 +57,15 @@ describe('utils', () => {
 
     store[DISPATCH_EFFECTS_FIELD_NAME](createAction(HISTORY_ACTIONS.REPLACE, { path: pattern }));
 
-    expect(effect).toHaveBeenCalledTimes(1);
-    expect(effect).toHaveBeenLastCalledWith({ path: pattern, match: {} });
+    expect(effect).toBeCalledTimes(1);
+    expect(effect).lastCalledWith({ path: pattern, match: {} });
 
     store[DISPATCH_EFFECTS_FIELD_NAME](
       createAction(HISTORY_ACTIONS.REPLACE, { path: someDiffrent })
     );
 
-    expect(effect).toHaveBeenCalledTimes(2);
-    expect(effect).toHaveBeenLastCalledWith({ path: someDiffrent });
+    expect(effect).toBeCalledTimes(2);
+    expect(effect).lastCalledWith({ path: someDiffrent });
   });
 
   it('historyChange use in class with params', () => {
@@ -81,7 +81,7 @@ describe('utils', () => {
 
     store[DISPATCH_EFFECTS_FIELD_NAME](createAction(HISTORY_ACTIONS.POP, { path: pathWithParams }));
 
-    expect(effect).toHaveBeenCalledTimes(1);
-    expect(effect).toHaveBeenLastCalledWith({ path: pathWithParams, match: { params: { id } } });
+    expect(effect).toBeCalledTimes(1);
+    expect(effect).lastCalledWith({ path: pathWithParams, match: { params: { id } } });
   });
 });

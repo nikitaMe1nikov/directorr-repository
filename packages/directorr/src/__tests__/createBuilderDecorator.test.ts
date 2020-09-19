@@ -16,11 +16,11 @@ describe('createBuilderDecorator', () => {
       someDescriptor
     );
 
-    expect(createContext).toHaveBeenCalledTimes(1);
-    expect(createContext).toHaveBeenLastCalledWith(moduleName, someValue, someValue);
+    expect(createContext).toBeCalledTimes(1);
+    expect(createContext).lastCalledWith(moduleName, someValue, someValue);
 
-    expect(decorator).toHaveBeenCalledTimes(1);
-    expect(decorator).toHaveBeenLastCalledWith(
+    expect(decorator).toBeCalledTimes(1);
+    expect(decorator).lastCalledWith(
       someValue,
       someProperty,
       someDescriptor,

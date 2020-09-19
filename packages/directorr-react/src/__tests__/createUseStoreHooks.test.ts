@@ -60,14 +60,10 @@ describe('createUseStoreHooks', () => {
     expect(store).toEqual(storeInstance);
     expect(store).toBeInstanceOf(SomeStore);
 
-    expect(directorr.addStoreDependency).toHaveBeenCalledTimes(1);
-    expect(directorr.addStoreDependency).toHaveBeenLastCalledWith(
-      SomeStore,
-      USE_HOOKS,
-      initOptions
-    );
-    expect(directorr.removeStoreDependency).toHaveBeenCalledTimes(1);
-    expect(directorr.removeStoreDependency).toHaveBeenLastCalledWith(SomeStore, USE_HOOKS);
+    expect(directorr.addStoreDependency).toBeCalledTimes(1);
+    expect(directorr.addStoreDependency).lastCalledWith(SomeStore, USE_HOOKS, initOptions);
+    expect(directorr.removeStoreDependency).toBeCalledTimes(1);
+    expect(directorr.removeStoreDependency).lastCalledWith(SomeStore, USE_HOOKS);
   });
 
   it('useStore return store when rerender', () => {
@@ -88,11 +84,7 @@ describe('createUseStoreHooks', () => {
 
     rerender();
 
-    expect(directorr.addStoreDependency).toHaveBeenCalledTimes(1);
-    expect(directorr.addStoreDependency).toHaveBeenLastCalledWith(
-      SomeStore,
-      USE_HOOKS,
-      initOptions
-    );
+    expect(directorr.addStoreDependency).toBeCalledTimes(1);
+    expect(directorr.addStoreDependency).lastCalledWith(SomeStore, USE_HOOKS, initOptions);
   });
 });

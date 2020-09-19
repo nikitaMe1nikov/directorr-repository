@@ -2,9 +2,7 @@ import { DIRECTORR_INIT_STORE_ACTION } from '../utils';
 
 export const someValue = { someValue: 'someValue' };
 export const someValue2 = { someValue2: 'someValue2' };
-export function someFunc() {
-  /* emty func */
-}
+export function someFunc() {}
 export const actionType = 'actionType1';
 export const actionType2 = 'actionType2';
 export const actionTypeArray = ['actionType1', 'actionType2'];

@@ -30,8 +30,8 @@ describe('effect', () => {
 
     expect(initializer(store, someFunc, someProperty, actionType, addFields)).toEqual(someFunc);
 
-    expect(addFields).toHaveBeenCalledTimes(1);
-    expect(addFields).toHaveBeenLastCalledWith(store);
+    expect(addFields).toBeCalledTimes(1);
+    expect(addFields).lastCalledWith(store);
 
     expect(store[EFFECTS_FIELD_NAME].get(actionType)).toEqual([someProperty]);
 
@@ -71,16 +71,16 @@ describe('effect', () => {
       createAction(createActionType(actionType, ACTION_TYPE_DIVIDER), someValue)
     );
 
-    expect(callEffectOne).toHaveBeenCalledTimes(1);
-    expect(callEffectOne).toHaveBeenLastCalledWith(someValue);
+    expect(callEffectOne).toBeCalledTimes(1);
+    expect(callEffectOne).lastCalledWith(someValue);
 
     (obj as any)[DISPATCH_ACTION_FIELD_NAME](
       createAction(createActionType(actionType2, ACTION_TYPE_DIVIDER), someValue2)
     );
 
-    expect(callEffectOne).toHaveBeenCalledTimes(2);
-    expect(callEffectOne).toHaveBeenLastCalledWith(someValue2);
-    expect(callEffectTwo).toHaveBeenCalledTimes(1);
-    expect(callEffectTwo).toHaveBeenLastCalledWith(someValue2);
+    expect(callEffectOne).toBeCalledTimes(2);
+    expect(callEffectOne).lastCalledWith(someValue2);
+    expect(callEffectTwo).toBeCalledTimes(1);
+    expect(callEffectTwo).lastCalledWith(someValue2);
   });
 });

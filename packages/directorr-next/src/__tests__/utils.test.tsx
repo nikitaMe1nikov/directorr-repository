@@ -14,6 +14,6 @@ describe('utils', () => {
 
     reloadWindow();
 
-    expect(window.location.reload).toHaveBeenCalledTimes(1);
+    expect(window.location.reload).toBeCalledTimes(1);
   });
 });

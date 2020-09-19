@@ -28,13 +28,11 @@ describe('baseActionDecorators', () => {
 
     obj.action(someValue);
 
-    expect(action).toHaveBeenCalledTimes(1);
-    expect(action).toHaveBeenLastCalledWith(someValue);
+    expect(action).toBeCalledTimes(1);
+    expect(action).lastCalledWith(someValue);
 
-    expect(dispatch).toHaveBeenCalledTimes(1);
-    expect(dispatch).toHaveBeenLastCalledWith(
-      config.createAction(DIRECTORR_RELOAD_STORE_ACTION, someValue)
-    );
+    expect(dispatch).toBeCalledTimes(1);
+    expect(dispatch).lastCalledWith(config.createAction(DIRECTORR_RELOAD_STORE_ACTION, someValue));
   });
 
   it('whenReload', () => {
@@ -50,8 +48,8 @@ describe('baseActionDecorators', () => {
 
     (obj as any)[DISPATCH_ACTION_FIELD_NAME](action);
 
-    expect(effect).toHaveBeenCalledTimes(1);
-    expect(effect).toHaveBeenLastCalledWith(someValue);
+    expect(effect).toBeCalledTimes(1);
+    expect(effect).lastCalledWith(someValue);
   });
 
   it('whenInit', () => {
@@ -71,8 +69,8 @@ describe('baseActionDecorators', () => {
 
     (obj as any)[DISPATCH_ACTION_FIELD_NAME](action);
 
-    expect(effect).toHaveBeenCalledTimes(1);
-    expect(effect).toHaveBeenLastCalledWith(someValue);
+    expect(effect).toBeCalledTimes(1);
+    expect(effect).lastCalledWith(someValue);
   });
 
   it('whenDestroy', () => {
@@ -91,7 +89,7 @@ describe('baseActionDecorators', () => {
 
     (obj as any)[DISPATCH_ACTION_FIELD_NAME](action);
 
-    expect(effect).toHaveBeenCalledTimes(1);
-    expect(effect).toHaveBeenLastCalledWith(action.payload);
+    expect(effect).toBeCalledTimes(1);
+    expect(effect).lastCalledWith(action.payload);
   });
 });

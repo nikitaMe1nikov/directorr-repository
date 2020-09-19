@@ -36,12 +36,7 @@ describe('decorator', () => {
       buildDescriptor
     );
 
-    expect(buildDescriptor).toHaveBeenCalledTimes(1);
-    expect(buildDescriptor).toHaveBeenLastCalledWith(
-      someDescriptor,
-      someProperty,
-      someFunc,
-      context
-    );
+    expect(buildDescriptor).toBeCalledTimes(1);
+    expect(buildDescriptor).lastCalledWith(someDescriptor, someProperty, someFunc, context);
   });
 });

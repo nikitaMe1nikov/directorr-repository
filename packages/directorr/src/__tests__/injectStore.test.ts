@@ -56,8 +56,8 @@ describe('injectStore', () => {
 
     resultDecorator(someDecorator, someProperty);
 
-    expect(someDecorator).toHaveBeenCalledTimes(1);
-    expect(someDecorator).toHaveBeenLastCalledWith(SomeClass, MODULE_NAME);
+    expect(someDecorator).toBeCalledTimes(1);
+    expect(someDecorator).lastCalledWith(SomeClass, MODULE_NAME);
   });
 
   it('injectStore set injected stores field in class', () => {

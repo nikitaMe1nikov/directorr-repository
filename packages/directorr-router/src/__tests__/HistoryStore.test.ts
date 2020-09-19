@@ -17,8 +17,8 @@ describe('HistoryStore', () => {
     const { pathname: path, search, state } = history.location;
     const store = new HistoryStore(history);
 
-    expect(history.listen).toHaveBeenCalledTimes(1);
-    expect(history.listen).toHaveBeenLastCalledWith(store.dispatchAction);
+    expect(history.listen).toBeCalledTimes(1);
+    expect(history.listen).lastCalledWith(store.dispatchAction);
     expect(store).toMatchObject({
       path,
       state,
@@ -55,7 +55,7 @@ describe('HistoryStore', () => {
       createAction(DIRECTORR_DESTROY_STORE_ACTION, { StoreConstructor: HistoryStore })
     );
 
-    expect(store.unsubHistory).toHaveBeenCalledTimes(1);
+    expect(store.unsubHistory).toBeCalledTimes(1);
   });
 
   it('set state', () => {
@@ -123,15 +123,15 @@ describe('HistoryStore', () => {
     store.subscribe(handler);
     store.dispatchAction(task);
 
-    expect(handler).toHaveBeenCalledTimes(1);
-    expect(handler).toHaveBeenLastCalledWith(task);
+    expect(handler).toBeCalledTimes(1);
+    expect(handler).lastCalledWith(task);
 
     store.unsubscribe(handler);
 
     store.dispatchAction(task);
 
-    expect(handler).toHaveBeenCalledTimes(1);
-    expect(handler).toHaveBeenLastCalledWith(task);
+    expect(handler).toBeCalledTimes(1);
+    expect(handler).lastCalledWith(task);
   });
 
   it('toJSON', () => {

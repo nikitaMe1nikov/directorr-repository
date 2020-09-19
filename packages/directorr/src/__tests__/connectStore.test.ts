@@ -37,11 +37,11 @@ describe('connectStore', () => {
 
     dispatchProxyAction(action, innerStoreOne, outerStore, connectStoreProperty);
 
-    expect(innerStoreOne[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenCalledTimes(1);
-    expect(innerStoreOne[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenLastCalledWith(action);
+    expect(innerStoreOne[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(1);
+    expect(innerStoreOne[DISPATCH_EFFECTS_FIELD_NAME]).lastCalledWith(action);
 
-    expect(outerStore[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenCalledTimes(1);
-    expect(outerStore[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenLastCalledWith(
+    expect(outerStore[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(1);
+    expect(outerStore[DISPATCH_EFFECTS_FIELD_NAME]).lastCalledWith(
       createAction(createActionType([InnerStoreNameOne.name, action.type], ACTION_TYPE_DIVIDER), {
         ...action.payload,
         connectStoreProperty,
@@ -50,11 +50,11 @@ describe('connectStore', () => {
 
     dispatchProxyAction(action, innerStoreTwo, outerStore, connectStoreProperty, prefixActionType);
 
-    expect(innerStoreTwo[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenCalledTimes(1);
-    expect(innerStoreTwo[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenLastCalledWith(action);
+    expect(innerStoreTwo[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(1);
+    expect(innerStoreTwo[DISPATCH_EFFECTS_FIELD_NAME]).lastCalledWith(action);
 
-    expect(outerStore[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenCalledTimes(2);
-    expect(outerStore[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenLastCalledWith(
+    expect(outerStore[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(2);
+    expect(outerStore[DISPATCH_EFFECTS_FIELD_NAME]).lastCalledWith(
       createAction(
         createActionType(
           [prefixActionType, InnerStoreNameTwo.storeName, action.type],
@@ -84,8 +84,8 @@ describe('connectStore', () => {
 
     innerStoreOne[DISPATCH_ACTION_FIELD_NAME](action);
 
-    expect(dispatchActionOne).toHaveBeenCalledTimes(1);
-    expect(dispatchActionOne).toHaveBeenLastCalledWith(
+    expect(dispatchActionOne).toBeCalledTimes(1);
+    expect(dispatchActionOne).lastCalledWith(
       action,
       innerStoreOne,
       outerStore,
@@ -101,8 +101,8 @@ describe('connectStore', () => {
 
     innerStoreTwo[DISPATCH_ACTION_FIELD_NAME](action);
 
-    expect(dispatchActionTwo).toHaveBeenCalledTimes(1);
-    expect(dispatchActionTwo).toHaveBeenLastCalledWith(
+    expect(dispatchActionTwo).toBeCalledTimes(1);
+    expect(dispatchActionTwo).lastCalledWith(
       action,
       innerStoreTwo,
       outerStore,
@@ -124,9 +124,9 @@ describe('connectStore', () => {
       initializer(store, someValue, someProperty, actionType, addDispatchAction, addFields)
     ).toEqual(someValue);
 
-    expect(addDispatchAction).toHaveBeenCalledTimes(1);
-    expect(addDispatchAction).toHaveBeenLastCalledWith(someValue, store, someProperty, actionType);
-    expect(addFields).toHaveBeenCalledTimes(1);
+    expect(addDispatchAction).toBeCalledTimes(1);
+    expect(addDispatchAction).lastCalledWith(someValue, store, someProperty, actionType);
+    expect(addFields).toBeCalledTimes(1);
   });
 
   it('use connectStore in class', () => {
@@ -154,11 +154,11 @@ describe('connectStore', () => {
     defineProperty(obj, DISPATCH_EFFECTS_FIELD_NAME, createValueDescriptor(dispatchEffects));
     someConnectStore[DISPATCH_ACTION_FIELD_NAME](connectStoreAction);
 
-    expect(dispatchEffectsConnectStore).toHaveBeenCalledTimes(1);
-    expect(dispatchEffectsConnectStore).toHaveBeenLastCalledWith(connectStoreAction);
+    expect(dispatchEffectsConnectStore).toBeCalledTimes(1);
+    expect(dispatchEffectsConnectStore).lastCalledWith(connectStoreAction);
 
-    expect(dispatchEffects).toHaveBeenCalledTimes(1);
-    expect(dispatchEffects).toHaveBeenLastCalledWith(action);
+    expect(dispatchEffects).toBeCalledTimes(1);
+    expect(dispatchEffects).lastCalledWith(action);
   });
 
   it('use connectStore in class with prefix', () => {
@@ -186,10 +186,10 @@ describe('connectStore', () => {
     defineProperty(obj, DISPATCH_EFFECTS_FIELD_NAME, createValueDescriptor(dispatchEffects));
     someConnectStore[DISPATCH_ACTION_FIELD_NAME](connectStoreAction);
 
-    expect(dispatchEffectsConnectStore).toHaveBeenCalledTimes(1);
-    expect(dispatchEffectsConnectStore).toHaveBeenLastCalledWith(connectStoreAction);
+    expect(dispatchEffectsConnectStore).toBeCalledTimes(1);
+    expect(dispatchEffectsConnectStore).lastCalledWith(connectStoreAction);
 
-    expect(dispatchEffects).toHaveBeenCalledTimes(1);
-    expect(dispatchEffects).toHaveBeenLastCalledWith(action);
+    expect(dispatchEffects).toBeCalledTimes(1);
+    expect(dispatchEffects).lastCalledWith(action);
   });
 });

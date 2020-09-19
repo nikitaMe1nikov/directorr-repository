@@ -31,18 +31,6 @@ export default class FormStore {
   @observable isVisited = false;
   @observable isFocused = false;
 
-  @computed get isDefault() {
-    return this.status === Status.default;
-  }
-
-  @computed get isValid() {
-    return this.status === Status.invalid;
-  }
-
-  @computed get isInvalid() {
-    return this.status === Status.invalid;
-  }
-
   constructor({
     value = EMPTY_STRING,
     status = Status.default,
@@ -54,6 +42,18 @@ export default class FormStore {
     this.value = value;
     this.status = status;
     this.message = message;
+  }
+
+  @computed get isDefault() {
+    return this.status === Status.default;
+  }
+
+  @computed get isValid() {
+    return this.status === Status.valid;
+  }
+
+  @computed get isInvalid() {
+    return this.status === Status.invalid;
   }
 
   @actionChangeValue

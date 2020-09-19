@@ -38,8 +38,8 @@ describe('NextHistoryStore', () => {
     const router = (new RouterMock() as unknown) as SingletonRouter;
     const store = new NextHistoryStore(router);
 
-    expect(router.events.on).toHaveBeenCalledTimes(1);
-    expect(router.events.on).toHaveBeenLastCalledWith(ROUTER_EVENT, store.dispatchAction);
+    expect(router.events.on).toBeCalledTimes(1);
+    expect(router.events.on).lastCalledWith(ROUTER_EVENT, store.dispatchAction);
     expect(store).toMatchObject({
       path: router.router?.asPath,
       pattern: router.router?.pathname,
@@ -78,8 +78,8 @@ describe('NextHistoryStore', () => {
       createAction(DIRECTORR_DESTROY_STORE_ACTION, { StoreConstructor: NextHistoryStore })
     );
 
-    expect(router.events.off).toHaveBeenCalledTimes(1);
-    expect(router.events.off).toHaveBeenLastCalledWith(ROUTER_EVENT, store.dispatchAction);
+    expect(router.events.off).toBeCalledTimes(1);
+    expect(router.events.off).lastCalledWith(ROUTER_EVENT, store.dispatchAction);
   });
 
   it('set state', () => {
@@ -115,8 +115,8 @@ describe('NextHistoryStore', () => {
 
     store.push(path, queryObject);
 
-    expect(router.push).toHaveBeenCalledTimes(1);
-    expect(router.push).toHaveBeenLastCalledWith({ pathname: path, query: queryObject });
+    expect(router.push).toBeCalledTimes(1);
+    expect(router.push).lastCalledWith({ pathname: path, query: queryObject });
   });
 
   it('replace', () => {
@@ -127,8 +127,8 @@ describe('NextHistoryStore', () => {
 
     store.replace(path, queryObject);
 
-    expect(router.replace).toHaveBeenCalledTimes(1);
-    expect(router.replace).toHaveBeenLastCalledWith({ pathname: path, query: queryObject });
+    expect(router.replace).toBeCalledTimes(1);
+    expect(router.replace).lastCalledWith({ pathname: path, query: queryObject });
   });
 
   it('back', () => {
@@ -137,7 +137,7 @@ describe('NextHistoryStore', () => {
 
     store.back();
 
-    expect(router.back).toHaveBeenCalledTimes(1);
+    expect(router.back).toBeCalledTimes(1);
   });
 
   it('reload', () => {
@@ -146,7 +146,7 @@ describe('NextHistoryStore', () => {
 
     store.reload();
 
-    expect(reloadWindow).toHaveBeenCalledTimes(1);
+    expect(reloadWindow).toBeCalledTimes(1);
   });
 
   it('dispatchAction without inner router', () => {

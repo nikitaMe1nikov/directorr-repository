@@ -6,22 +6,15 @@ import {
 } from '@nimel/directorr';
 import { ObjectSchema } from 'yup';
 import FormStore from './FormStore';
-import { ValidateOptions, SomeFunc } from './types';
+import { propNotExistInClass, propInClassNotLikeFormStore, useWithEffects } from './messages';
+import createSchemaContext from './createSchemaContext';
+import { ValidateOptionsAll, SomeFunc, ValidateSchemaAll } from './types';
 
-const MODULE_NAME = 'validate';
-const DEFAULT_VALIDATE_OPTIONS = {
-  abortEarly: true,
-  strict: true,
-  payloadProp: 'connectStoreProperty',
-};
+export const MODULE_NAME = 'validate';
 const VALUE_PROP_NAME = 'value';
 
 export function isLikeFormStore(store: any) {
   return !!(VALUE_PROP_NAME in store && store.changeStatusToInvalid && store.changeStatusToValid);
-}
-
-export function isLikeYUPSchema(schema: any) {
-  return !!schema?.fields;
 }
 
 export function calcValues(fields: string[], store: any) {
@@ -31,11 +24,10 @@ export function calcValues(fields: string[], store: any) {
     prop = fields[i];
     formStore = store[prop];
 
-    if (!formStore)
-      throw new Error(`${MODULE_NAME}: formStore in prop=${prop} not exist in class=${store}`);
+    if (!formStore) throw new Error(propNotExistInClass(MODULE_NAME, prop, store));
 
     if (!isLikeFormStore(formStore))
-      throw new Error(`${MODULE_NAME}: formStore in prop=${prop} not like FormStore=${formStore}`);
+      throw new TypeError(propInClassNotLikeFormStore(MODULE_NAME, prop, formStore));
 
     result[prop] = formStore.value || undefined;
   }
@@ -47,17 +39,14 @@ export function validateSchema(
   payload: any = {},
   valueFunc: SomeFunc,
   store: any,
-  [schema, options, fields]: [ObjectSchema<any>, ValidateOptions, string[]]
+  [schema, options, fields]: [ObjectSchema<any>, ValidateOptionsAll, string[]]
 ) {
-  if (isLikeAction(payload)) throw new Error(`${MODULE_NAME}: use only with effect decorator`);
+  if (isLikeAction(payload)) throw new Error(useWithEffects(MODULE_NAME));
 
   let resultPayload = payload;
   const payloadProp = resultPayload[options.payloadProp];
 
-  if (!payloadProp)
-    throw new Error(
-      `${MODULE_NAME}: payloadProp=${options.payloadProp} not exist in payload=${payloadProp}`
-    );
+  if (!payloadProp) return;
 
   const values = calcValues(fields, store);
 
@@ -74,20 +63,19 @@ export function validateSchema(
   return valueFunc(resultPayload);
 }
 
-export function initializer(initObject: any, value: any, property: string, ctx: any) {
-  if (!isFunction(value)) throw new Error(callWithPropNotEquallFunc(MODULE_NAME, property));
+export function initializer(
+  initObject: any,
+  value: any,
+  property: string,
+  ctx: any,
+  validate: ValidateSchemaAll = validateSchema
+) {
+  if (!isFunction(value)) throw new TypeError(callWithPropNotEquallFunc(MODULE_NAME, property));
 
-  return (payload: any) => validateSchema(payload, value, initObject, ctx);
+  return (payload: any) => validate(payload, value, initObject, ctx);
 }
 
-export function createSchemaContext(moduleName: string, schema: ObjectSchema<any>, options = {}) {
-  if (!isLikeYUPSchema(schema))
-    throw new Error(`${moduleName}: call with arg=${schema} not like yup ObjectSchema`);
-
-  return [schema, { ...DEFAULT_VALIDATE_OPTIONS, ...options }, Object.keys(schema.fields)];
-}
-
-const validate = createBuilderPropertyDecorator<ObjectSchema, ValidateOptions>(
+const validate = createBuilderPropertyDecorator<ObjectSchema, ValidateOptionsAll>(
   MODULE_NAME,
   initializer,
   createSchemaContext
