@@ -31,7 +31,12 @@
     "build": "node ../../scripts/build.js",
     "check-ts": "tsc --noEmit",
     "lint": "eslint \"./**/*.{tsx,ts}\" --fix",
-    "test:all": "yarn run check-ts && yarn run lint"
+    "test-coverage": "jest --coverage  --rootDir='.' --config '../../jest.typescript.config.js'",
+    "test:all": "yarn run check-ts && yarn run lint && yarn run test-babel && yarn run test-typescript",
+    "test-babel": "jest --rootDir='.' --config '../../jest.babel.config.js'",
+    "test-babel:w": "jest --rootDir='.' --config '../../jest.babel.config.js' --watchAll",
+    "test-typescript": "jest --rootDir='.' --config '../../jest.typescript.config.js'",
+    "test-typescript:w": "jest --rootDir='.' --config '../../jest.typescript.config.js' --watchAll"
   },
   "peerDependencies": {
     "@nimel/directorr": "^1.0.0-rc.1"
