@@ -3,6 +3,7 @@ import {
   isFunction,
   callWithPropNotEquallFunc,
   isLikeAction,
+  EMPTY_OBJECT,
 } from '@nimel/directorr';
 import { ObjectSchema } from 'yup';
 import FormStore from './FormStore';
@@ -36,7 +37,7 @@ export function calcValues(fields: string[], store: any) {
 }
 
 export function validateSchema(
-  payload: any = {},
+  payload: any = EMPTY_OBJECT,
   valueFunc: SomeFunc,
   store: any,
   [schema, options, fields]: [ObjectSchema<any>, ValidateOptionsAll, string[]]

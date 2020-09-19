@@ -3,6 +3,7 @@ import {
   isFunction,
   callWithPropNotEquallFunc,
   isLikeAction,
+  EMPTY_OBJECT,
 } from '@nimel/directorr';
 import { ObjectSchema, ValidationError } from 'yup';
 import FormStoreBase from './FormStore';
@@ -14,7 +15,7 @@ import { useWithEffects } from './messages';
 export const MODULE_NAME = 'validateAll';
 
 export function validateSchema(
-  payload: any = {},
+  payload: any = EMPTY_OBJECT,
   valueFunc: SomeFunc,
   store: any,
   [schema, options, fields]: [ObjectSchema<any>, ValidateOptions, string[]]
