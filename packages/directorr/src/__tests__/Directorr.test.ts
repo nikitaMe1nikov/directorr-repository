@@ -11,7 +11,7 @@ import {
   DIRECTORR_INIT_STORE_ACTION,
   INJECTED_FROM_FIELD_NAME,
   DIRECTORR_DESTROY_STORE_ACTION,
-  emptyFunc,
+  EMPTY_FUNC,
 } from '../utils';
 import config from '../config';
 import { haveCycleInjectedStore, callWithNotAction, notObserver } from '../messages';
@@ -915,13 +915,13 @@ describe('Directorr', () => {
     expect(reduxStores.getState()).toEqual(stores);
     expect(reduxStores.dispatch).toEqual(dispatch);
     expect(reduxStores.subscribe).toEqual(subscribe);
-    expect(reduxStores.replaceReducer).toEqual(emptyFunc);
+    expect(reduxStores.replaceReducer).toEqual(EMPTY_FUNC);
 
     const observable = reduxStores[Symbol.observable]();
 
     expect(observable[Symbol.observable]()).toEqual(observable);
     expect(() => observable.subscribe(null as any)).toThrowError(notObserver());
-    expect(observable.subscribe({})).toMatchObject({ unsubscribe: emptyFunc });
+    expect(observable.subscribe({})).toMatchObject({ unsubscribe: EMPTY_FUNC });
 
     const { unsubscribe } = observable.subscribe({
       next,

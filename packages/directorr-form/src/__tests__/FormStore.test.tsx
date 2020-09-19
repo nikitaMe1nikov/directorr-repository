@@ -1,5 +1,5 @@
 import FormStore from '../FormStore';
-import { EMPTY_STRING } from '../constants';
+import { EMPTY_STRING } from '@nimel/directorr';
 import { someProperty } from '../__mocks__/mocks';
 import { Status } from '../types';
 import {

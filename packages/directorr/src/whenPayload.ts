@@ -1,4 +1,4 @@
-import { isFunction, returnArgFunc } from './utils';
+import { isFunction, RETURN_ARG_FUNC } from './utils';
 import { callWithPropNotEquallFunc } from './messages';
 import {
   CheckPayload,
@@ -18,7 +18,7 @@ export const MODULE_NAME = 'whenPayload';
 export function payloadChecker(
   payload: any,
   valueFunc: SomeFunction,
-  [checker, converter = returnArgFunc]: [CheckPayload, ConvertPayloadFunction?]
+  [checker, converter = RETURN_ARG_FUNC]: [CheckPayload, ConvertPayloadFunction?]
 ) {
   if (!payload) return valueFunc(converter(payload));
 

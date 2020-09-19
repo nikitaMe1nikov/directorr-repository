@@ -33,6 +33,9 @@ import {
   isPayloadHave,
   isStoreReady,
   isStoreError,
+  EMPTY_STRING,
+  EMPTY_OBJECT,
+  EMPTY_FUNC,
 } from './utils';
 import { callWithPropNotEquallFunc } from './messages';
 import DirectorrMock from './__mocks__/DirectorrMock';
@@ -73,4 +76,7 @@ export {
   INJECTED_STORES_FIELD_NAME,
   INJECTED_FROM_FIELD_NAME,
   DirectorrMock,
+  EMPTY_STRING,
+  EMPTY_OBJECT,
+  EMPTY_FUNC,
 };

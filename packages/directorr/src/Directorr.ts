@@ -9,7 +9,7 @@ import {
   DEPENDENCY_FIELD_NAME,
   defineProperty,
   createValueDescriptor,
-  emptyFunc,
+  EMPTY_FUNC,
   DIRECTORR_INIT_STORE_ACTION,
   DIRECTORR_DESTROY_STORE_ACTION,
   isLikeAction,
@@ -346,7 +346,7 @@ class Directorr implements DirectorrInterface {
     getState: () => this.stores,
     dispatch: this.dispatch,
     subscribe: this.subscribe,
-    replaceReducer: emptyFunc,
+    replaceReducer: EMPTY_FUNC,
     [Symbol.observable]: () => {
       const { subscribe } = this;
 
@@ -357,7 +357,7 @@ class Directorr implements DirectorrInterface {
           }
 
           return {
-            unsubscribe: observer.next ? subscribe(stores => observer.next(stores)) : emptyFunc,
+            unsubscribe: observer.next ? subscribe(stores => observer.next(stores)) : EMPTY_FUNC,
           };
         },
         [Symbol.observable]() {

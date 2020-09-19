@@ -5,8 +5,7 @@ import {
   callDecoratorWithNotConvertPayload,
 } from '../messages';
 import { someValue, someValue2, someFunc, someProperty } from '../__mocks__/mocks';
-
-const emptyFunc = () => {};
+import { EMPTY_FUNC } from '../utils';
 
 describe('whenPayload', () => {
   it('call payloadChecker with payload = undefined', () => {
@@ -179,9 +178,9 @@ describe('whenPayload', () => {
 
   it('call whenPayload with correct arg', () => {
     expect(() => whenPayload({})).not.toThrow();
-    expect(() => whenPayload(emptyFunc)).not.toThrow();
-    expect(() => whenPayload(emptyFunc, emptyFunc)).not.toThrow();
-    expect(() => whenPayload({}, emptyFunc)).not.toThrow();
+    expect(() => whenPayload(EMPTY_FUNC)).not.toThrow();
+    expect(() => whenPayload(EMPTY_FUNC, EMPTY_FUNC)).not.toThrow();
+    expect(() => whenPayload({}, EMPTY_FUNC)).not.toThrow();
   });
 
   it('call whenPayload with wrong arg', () => {

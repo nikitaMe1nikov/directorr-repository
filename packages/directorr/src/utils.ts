@@ -21,7 +21,7 @@ import {
   DirectorrInterface,
   DirectorrStoreClassConstructor,
 } from './types';
-import { notFindStoreName, errorWhenWrongEnv } from './messages';
+import { notFindStoreName } from './messages';
 
 export const EFFECTS_FIELD_NAME = Symbol.for('dirrector: effects');
 
@@ -37,13 +37,13 @@ export const INJECTED_FROM_FIELD_NAME = Symbol.for('dirrector: injected from sto
 
 export const DEPENDENCY_FIELD_NAME = Symbol.for('dirrector: external dependency');
 
-export const emptyFunc = () => {};
+export const EMPTY_FUNC = () => {};
 
-export const returnArgFunc = (a: any) => a;
+export const RETURN_ARG_FUNC = (a: any) => a;
 
 export const EMPTY_STRING = '';
 
-export const EMPTY_OBJECT = {};
+export const EMPTY_OBJECT = Object.freeze({});
 
 export const DIRECTORR_INIT_STORE_ACTION = '@@DIRECTORR.INIT_STORE_ACTION';
 
@@ -67,8 +67,8 @@ export const DESCRIPTOR: PropertyDescriptor = {
 export const PROPERTY_DESCRIPTOR: PropertyDescriptor = {
   enumerable: false,
   configurable: true,
-  get: emptyFunc,
-  set: emptyFunc,
+  get: EMPTY_FUNC,
+  set: EMPTY_FUNC,
 };
 
 export function createValueDescriptor(value?: any): PropertyDescriptor {
@@ -78,8 +78,8 @@ export function createValueDescriptor(value?: any): PropertyDescriptor {
 }
 
 export function createPropertyDescriptor(
-  get: GetFunction = emptyFunc,
-  set: SetFunction = emptyFunc
+  get: GetFunction = EMPTY_FUNC,
+  set: SetFunction = EMPTY_FUNC
 ): PropertyDescriptor {
   PROPERTY_DESCRIPTOR.get = get;
   PROPERTY_DESCRIPTOR.set = set;
@@ -111,12 +111,6 @@ export function isFunction(v: any): boolean {
 
 export function hasOwnProperty(target: any, prop: string | symbol) {
   return hasOwnPropertyFromPrototype.call(target, prop);
-}
-
-export function checkEnv() {
-  if (typeof Symbol === 'undefined' || typeof Map === 'undefined') {
-    throw new Error(errorWhenWrongEnv());
-  }
 }
 
 export function isLikeActionType(actionType?: ActionType): boolean {

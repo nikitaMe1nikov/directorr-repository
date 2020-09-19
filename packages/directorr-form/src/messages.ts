@@ -9,9 +9,3 @@ export const propNotExistInClass = (moduleName: string, prop: string, store: any
 
 export const propInClassNotLikeFormStore = (moduleName: string, prop: string, formStore: any) =>
   `${moduleName}: formStore in prop=${prop} not like FormStore=${formStore}`;
-
-// export const payloadPropNotExistInPayload = (
-//   moduleName: string,
-//   payloadPropFromOptions: string,
-//   payload: any
-// ) => `${moduleName}: payloadProp=${payloadPropFromOptions} not exist in payload=${payload}`;

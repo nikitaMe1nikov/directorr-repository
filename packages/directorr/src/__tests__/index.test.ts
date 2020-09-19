@@ -33,6 +33,9 @@ import {
   INJECTED_STORES_FIELD_NAME,
   INJECTED_FROM_FIELD_NAME,
   DirectorrMock,
+  EMPTY_STRING,
+  EMPTY_OBJECT,
+  EMPTY_FUNC,
 } from '../index';
 
 describe('index', () => {
@@ -71,5 +74,8 @@ describe('index', () => {
     expect(INJECTED_STORES_FIELD_NAME).not.toBeUndefined();
     expect(INJECTED_FROM_FIELD_NAME).not.toBeUndefined();
     expect(DirectorrMock).not.toBeUndefined();
+    expect(EMPTY_STRING).not.toBeUndefined();
+    expect(EMPTY_OBJECT).not.toBeUndefined();
+    expect(EMPTY_FUNC).not.toBeUndefined();
   });
 });

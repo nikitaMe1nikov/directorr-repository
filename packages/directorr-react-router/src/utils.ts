@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { Directorr } from '@nimel/directorr';
+import { Directorr, EMPTY_OBJECT } from '@nimel/directorr';
 import { Action, matchPath } from '@nimel/directorr-router';
 import { Route, Animation, RouteComponentType, RouteComponent } from './types';
 
@@ -9,7 +9,6 @@ export const PERSISTED = {
   NEVER: 'NEVER',
 };
 
-export const EMPTY_OBJECT = Object.freeze({});
 export const EMPTY_REACT_COMPONENT = () => null;
 
 export const context = createContext<Directorr>((null as unknown) as Directorr);

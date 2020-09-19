@@ -6,7 +6,7 @@ import {
   INJECTED_STORES_FIELD_NAME,
   INJECTED_FROM_FIELD_NAME,
   DEPENDENCY_FIELD_NAME,
-  emptyFunc,
+  EMPTY_FUNC,
   ACTION_TYPE_DIVIDER,
   isFunction,
   isObject,
@@ -191,8 +191,8 @@ describe('utils', () => {
     expect(PROPERTY_DESCRIPTOR).toEqual({
       enumerable: false,
       configurable: true,
-      get: emptyFunc,
-      set: emptyFunc,
+      get: EMPTY_FUNC,
+      set: EMPTY_FUNC,
     });
   });
 
@@ -201,8 +201,8 @@ describe('utils', () => {
   });
 
   it('createPropertyDescriptor', () => {
-    expect(createPropertyDescriptor().get).toEqual(emptyFunc);
-    expect(createPropertyDescriptor().set).toEqual(emptyFunc);
+    expect(createPropertyDescriptor().get).toEqual(EMPTY_FUNC);
+    expect(createPropertyDescriptor().set).toEqual(EMPTY_FUNC);
     expect(createPropertyDescriptor(someFunc, someFunc).get).toEqual(someFunc);
     expect(createPropertyDescriptor(someFunc, someFunc).set).toEqual(someFunc);
   });
@@ -262,12 +262,12 @@ describe('utils', () => {
 
   it('isBabelDecorator', () => {
     expect(isBabelDecorator({})).toBeFalsy();
-    expect(isBabelDecorator({ initializer: emptyFunc })).toBeTruthy();
+    expect(isBabelDecorator({ initializer: EMPTY_FUNC })).toBeTruthy();
   });
 
   it('isTypescriptDecorator', () => {
     expect(isTypescriptDecorator({})).toBeTruthy();
-    expect(isTypescriptDecorator({ initializer: emptyFunc })).toBeFalsy();
+    expect(isTypescriptDecorator({ initializer: EMPTY_FUNC })).toBeFalsy();
   });
 
   it('createBabelDescriptor', () => {

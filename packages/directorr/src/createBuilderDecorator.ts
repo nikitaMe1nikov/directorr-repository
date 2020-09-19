@@ -1,11 +1,11 @@
-import { returnArgFunc } from './utils';
+import { RETURN_ARG_FUNC } from './utils';
 import { BabelDescriptor, Initializer, Decorator, CreateContext } from './types';
 
 export const createBuilderDecorator = (
   moduleName: string,
   decorator: Decorator,
   initializer: Initializer,
-  createContext: CreateContext = returnArgFunc
+  createContext: CreateContext = RETURN_ARG_FUNC
 ) => (arg1?: any, arg2?: any) => {
   const context = createContext(moduleName, arg1, arg2);
 

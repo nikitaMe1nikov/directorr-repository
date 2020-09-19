@@ -1,4 +1,5 @@
 import { observable, computed } from 'mobx';
+import { EMPTY_OBJECT, EMPTY_STRING } from '@nimel/directorr';
 import {
   Status,
   FormStoreOptions,
@@ -6,7 +7,6 @@ import {
   FormFocusPayload,
   FormChangeStatusPayload,
 } from './types';
-import { EMPTY_OBJECT, EMPTY_STRING } from './constants';
 import {
   actionChangeValue,
   effectChangeValue,
