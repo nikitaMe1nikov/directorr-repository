@@ -32,6 +32,7 @@
     "build": "node ../../scripts/build.js",
     "check-ts": "tsc --noEmit",
     "lint": "eslint \"./**/*.{tsx,ts}\" --fix",
+    "test-coverage": "echo 'skip'",
     "test:all": "yarn run check-ts && yarn run lint"
   },
   "peerDependencies": {

@@ -8,6 +8,7 @@
     "build": "echo 'skip'",
     "check-ts": "tsc --noEmit",
     "lint": "eslint \"./**/*.{tsx,ts}\" --fix",
+    "test-coverage": "echo 'skip'",
     "test:all": "yarn run check-ts && yarn run lint",
     "start": "webpack-dev-server --config webpack.dev.js"
   },
