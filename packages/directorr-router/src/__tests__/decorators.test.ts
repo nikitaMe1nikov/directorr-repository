@@ -2,7 +2,7 @@ import { historyChange } from '../decorators';
 import { HISTORY_ACTIONS } from '../actionTypes';
 import { createAction, DISPATCH_EFFECTS_FIELD_NAME } from '@nimel/directorr';
 
-describe('utils', () => {
+describe('decorators', () => {
   it('historyChange with HISTORY_ACTIONS.POP', () => {
     const effect = jest.fn();
     const pattern = '/';

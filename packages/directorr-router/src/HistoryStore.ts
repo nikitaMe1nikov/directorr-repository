@@ -1,4 +1,4 @@
-import { whenInit, whenDestroy } from '@nimel/directorr';
+import { whenInit, whenDestroy, EMPTY_FUNC } from '@nimel/directorr';
 import { createBrowserHistory } from 'history';
 import qs from 'query-string';
 import {
@@ -24,8 +24,9 @@ import {
   effectHistoryPush,
   effectHistoryReplace,
   effectRouterState,
+  actionRouterCancelBlock,
 } from './decorators';
-import { calcPath } from './utils';
+import { calcPath, reloadWindow } from './utils';
 import {
   Action,
   Blocker,
@@ -45,11 +46,11 @@ export default class HistoryStore {
   path: string;
   state?: LocationState;
   queryObject?: QueryObject;
-  unsubHistory = () => {};
+  unsubHistory = EMPTY_FUNC;
   action: Action;
   private history: History;
   private handlersStack: HistoryRouterHandler[] = [];
-  private blockState: BlockState = [() => {}, () => {}];
+  private blockState: BlockState = [EMPTY_FUNC, EMPTY_FUNC];
 
   constructor(history = createBrowserHistory()) {
     this.history = history;
@@ -90,29 +91,6 @@ export default class HistoryStore {
     this.unsubHistory();
   };
 
-  @actionRouterPush
-  push = (path: string, queryObject?: QueryObject, state?: LocationState) => ({
-    path,
-    queryObject,
-    state,
-  });
-
-  @actionRouterReplace
-  replace = (path: string, queryObject?: QueryObject, state?: LocationState) => ({
-    path,
-    queryObject,
-    state,
-  });
-
-  @actionRouterBack
-  back = () => {};
-
-  @actionRouterReload
-  reload = () => {};
-
-  @effectRouterReload
-  toReload = () => window.location.reload();
-
   @actionHistoryPush
   toHistoryPush = (payload: HistoryActionPayload) => payload;
 
@@ -132,6 +110,29 @@ export default class HistoryStore {
     this.action = action;
   };
 
+  @actionRouterPush
+  push = (path: string, queryObject?: QueryObject, state?: LocationState) => ({
+    path,
+    queryObject,
+    state,
+  });
+
+  @actionRouterReplace
+  replace = (path: string, queryObject?: QueryObject, state?: LocationState) => ({
+    path,
+    queryObject,
+    state,
+  });
+
+  @actionRouterBack
+  back = EMPTY_FUNC;
+
+  @actionRouterReload
+  reload = EMPTY_FUNC;
+
+  @effectRouterReload
+  toReload = () => reloadWindow();
+
   @effectRouterPush
   toPush = ({ path, queryObject, state }: RouterActionPayload) =>
     this.history.push(calcPath(path, queryObject), state);
@@ -150,7 +151,7 @@ export default class HistoryStore {
   toGoTo = ({ index }: RouterGoToActionPayload) => this.history.go(index);
 
   @actionRouterForward
-  forward = () => {};
+  forward = EMPTY_FUNC;
 
   @effectRouterForward
   toForward = () => this.history.forward();
@@ -162,6 +163,9 @@ export default class HistoryStore {
   toBlock = ({ blocker }: RouterBlockActionPayload) => {
     this.blockState = [blocker, this.history.block(blocker)];
   };
+
+  @actionRouterCancelBlock
+  cancelBlock = (blocker: Blocker) => ({ blocker });
 
   @effectRouterCancelBlock
   toCancelBlock = ({ blocker }: RouterBlockActionPayload) => {
@@ -197,5 +201,5 @@ export default class HistoryStore {
     }
   };
 
-  toJSON() {}
+  toJSON = EMPTY_FUNC;
 }
