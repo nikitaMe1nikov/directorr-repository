@@ -1,18 +1,26 @@
-import { injectStore, whenInit, whenDestroy } from '@nimel/directorr';
-import { HistoryStore } from '@nimel/directorr-router';
+import { injectStore } from '@nimel/directorr';
+import {
+  HistoryStore,
+  effectHistoryPop,
+  effectHistoryPush,
+  effectHistoryReplace,
+  HistoryActionPayload,
+} from '@nimel/directorr-router';
 import { RouterHandler, RouterTask } from './types';
 
 export default class RouterStore {
-  private historyQueue: RouterTask[] = [];
-  private handlersStack: RouterHandler[] = [];
+  historyQueue: RouterTask[] = [];
+  handlersStack: RouterHandler[] = [];
 
   @injectStore(HistoryStore) historyStore: HistoryStore;
 
-  @whenInit
-  toInit = () => this.historyStore.subscribe(this.whenChangeHistory);
+  get path() {
+    return this.historyStore.path;
+  }
 
-  @whenDestroy
-  toDestroy = () => this.historyStore.unsubscribe(this.whenChangeHistory);
+  get action() {
+    return this.historyStore.action;
+  }
 
   subscribe = (handler: RouterHandler) => this.handlersStack.push(handler);
 
@@ -21,7 +29,10 @@ export default class RouterStore {
     if (index !== -1) this.handlersStack.splice(index, 1);
   };
 
-  whenChangeHistory = (task: RouterTask) => {
+  @effectHistoryPop
+  @effectHistoryPush
+  @effectHistoryReplace
+  whenChangeHistory = (task: HistoryActionPayload) => {
     this.historyQueue.push(task);
 
     if (this.historyQueue.length === 1) this.findNextTask();
@@ -33,10 +44,10 @@ export default class RouterStore {
       handlersStack,
     } = this;
 
-    const routersTookTask: RouterTask[] = [];
+    const routersTookTask: Promise<any>[] = [];
 
-    for (let i = 0, l = handlersStack.length, task; i < l; ++i) {
-      task = handlersStack[i](newRouterState);
+    for (const handler of handlersStack.concat()) {
+      const task = handler(newRouterState);
 
       if (task) {
         routersTookTask.push(task);

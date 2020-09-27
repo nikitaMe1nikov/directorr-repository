@@ -1,13 +1,11 @@
-import React, { CSSProperties, ReactNode } from 'react';
-import { createConnector } from '@nimel/directorr-react';
+import React, { ReactNode, ComponentType } from 'react';
+import { connector } from '@nimel/directorr-react';
+import { EMPTY_FUNC, EMPTY_STRING } from '@nimel/directorr';
 import { Action } from '@nimel/directorr-router';
 import ComponentWrapper from './ComponentWrapper';
 import {
   findRouteAndComponent,
-  setTitle,
-  context,
   calcAnimationFromAction,
-  PERSISTED,
   EMPTY_REACT_COMPONENT,
   styleInjector,
 } from './utils';
@@ -15,124 +13,38 @@ import RouterStore from './RouterStore';
 import {
   Route,
   RouterTask,
-  RouteComponentType,
   Animation,
   Persisted,
   RouterHandler,
   RouteRedirect,
   RouteComponent,
 } from './types';
+import {
+  ANIMATIONS,
+  containerStyle,
+  childStyle,
+  hideStyle,
+  disableInteractionStyle,
+} from './constants';
 
-const container: CSSProperties = {
-  position: 'relative',
-  height: '100%',
-  width: '100%',
-};
+export const MODULE_NAME = 'Router';
 
-const child: CSSProperties = {
-  position: 'absolute',
-  height: '100%',
-  width: '100%',
-};
-
-const hide: CSSProperties = {
-  display: 'none',
-};
-
-const animation: CSSProperties = {
-  animationDelay: '16ms',
-  animationDuration: `${16 * 6}ms`,
-  animationFillMode: 'both',
-  animationTimingFunction: 'cubic-bezier(0.4, 0.0, 0.6, 1)',
-  willChange: 'opacity',
-};
-
-const animationNone: CSSProperties = {
-  animationName: 'router_anim_none',
-  animationDuration: '16ms',
-  willChange: 'opacity',
-};
-
-const animationLeave: CSSProperties = {
-  animationName: 'router_opacity_leave',
-};
-
-const animationEnter: CSSProperties = {
-  animationName: 'router_opacity_enter',
-};
-
-const disableInteraction: CSSProperties = {
-  pointerEvents: 'none',
-  userSelect: 'none',
-};
-
-export const ANIMATIONS = {
-  NONE: {
-    prev: {
-      ...disableInteraction,
-      ...animationNone,
-    },
-    next: {
-      ...disableInteraction,
-      ...animationNone,
-    },
-    keyFrames: `
-      @keyframes router_anim_none {
-        100% {
-          opacity: 1;
-        }
-      }
-    `,
-  },
-  FADE: {
-    prev: {
-      ...disableInteraction,
-      ...animation,
-      ...animationLeave,
-    },
-    next: {
-      ...disableInteraction,
-      ...animation,
-      ...animationEnter,
-    },
-    keyFrames: `
-      @keyframes router_opacity_leave {
-        0% {
-          opacity: 1;
-        }
-
-        100% {
-          opacity: 0;
-        }
-      }
-
-      @keyframes router_opacity_enter {
-        0% {
-          opacity: 0;
-        }
-
-        100% {
-          opacity: 1;
-        }
-      }
-    `,
-  },
-};
-
-interface RouterProps {
+type RouterProps = {
   routes: Route[];
-  RouterStore: RouterStore;
-  startAnimationDelay: number;
+  startAnimationDelay?: number;
   className?: string;
-  animation: Animation;
-  persisted: Persisted;
-  disableAnimationWhenNotShowRoute: boolean;
-}
+  animation?: Animation;
+  persisted?: Persisted;
+  disableAnimationWhenNotShowRoute?: boolean;
+};
+
+type RouterPropsWithDefault = RouterProps &
+  typeof Router.defaultProps & { routerStore: RouterStore };
 
 interface RouterState {
-  component: RouteComponentType;
+  component: ComponentType;
   redirect?: string;
-  route: Route;
+  route?: Route;
   pathKey: string;
   isShowComponent: boolean;
   animation: Animation;
@@ -143,65 +55,51 @@ interface RouterState {
 export class Router extends React.PureComponent<RouterProps> {
   static defaultProps = {
     animation: ANIMATIONS.NONE,
-    persisted: PERSISTED.SMART,
+    persisted: Persisted.SMART,
     disableAnimationWhenNotShowRoute: true,
     startAnimationDelay: 0,
   };
 
-  routesMap: Map<string, ReactNode>;
-  endRouteTransition: () => void;
-  routerHandler: RouterHandler;
-  promiseResolve: (r: any) => void;
   prevRouteState: RouterState;
   nextRouteState: RouterState;
   animationID: any;
+  routesMap: Map<string, ReactNode>;
+  promiseResolve: (arg: any) => void;
+  endRouteTransition: () => void = EMPTY_FUNC;
+  routerHandler: RouterHandler;
+  props: RouterPropsWithDefault;
 
   constructor(props: RouterProps) {
     super(props);
 
-    const { routes, RouterStore, animation, persisted } = props;
     this.routesMap = new Map();
     this.promiseResolve = resolve => (this.endRouteTransition = resolve);
+    this.routerHandler = ({ path, action }: RouterTask) => {
+      const { routes, startAnimationDelay, routerStore, animation, persisted } = this.props;
+      const { component, route } = findRouteAndComponent(routes, path);
 
-    this.routerHandler = ({ location, action }: RouterTask) => {
-      const { routes, RouterStore, startAnimationDelay } = this.props;
-      const { pathname } = location;
-
-      const { component, route } = findRouteAndComponent(routes, pathname);
-
-      if (!route) {
+      if (!route || !component) {
         this.prevRouteState.isShowComponent = false;
         this.nextRouteState.isShowComponent = false;
         return;
       }
 
-      if (!component)
-        throw new Error(
-          `${this.constructor.name}: no necessary component for a path=${pathname} with routes=${routes}`
-        );
-
-      if (!(route as RouteRedirect).redirect && !component)
-        throw new Error(
-          `${this.constructor.name}: no necessary redirect for a path=${pathname} with routes=${routes}`
-        );
-
       if ((route as RouteRedirect).redirect) {
-        RouterStore.historyStore.push((route as RouteRedirect).redirect);
+        routerStore.historyStore.push((route as RouteRedirect).redirect);
         return;
       }
 
-      if (route.path === this.prevRouteState.route.path) {
+      if (route.path === this.prevRouteState.route?.path) {
+        this.prevRouteState.isShowComponent = true;
         return;
-      }
-
-      if (component.TITLE) {
-        setTitle(component.TITLE);
       }
 
       this.nextRouteState = {
         component,
         route,
         animation: this.calcAnimation(
+          this.prevRouteState.isShowComponent,
+          this.nextRouteState.isShowComponent,
           action,
           this.prevRouteState.animation,
           (route as RouteComponent).animation || animation
@@ -214,31 +112,31 @@ export class Router extends React.PureComponent<RouterProps> {
 
       styleInjector(this.nextRouteState.animation);
 
-      this.animationID = setTimeout(this.routeTransition1, startAnimationDelay);
+      this.animationID = setTimeout(this.routeTransitionOne, startAnimationDelay);
 
       return new Promise(this.promiseResolve);
     };
 
-    RouterStore.subscribe(this.routerHandler);
+    const { routes, animation, persisted, routerStore } = this.props;
 
-    if (!routes) throw new Error(`${this.constructor.name}: not set prop routes=${routes}`);
+    routerStore.subscribe(this.routerHandler);
 
-    const { action, path: pathname } = RouterStore.historyStore;
-    const { component, route } = findRouteAndComponent(routes, pathname);
+    const { action, path } = routerStore;
+    const { component, route } = findRouteAndComponent(routes, path);
 
-    if (!route) {
+    if (!route || !component) {
+      this.prevRouteState = {
+        component: EMPTY_REACT_COMPONENT,
+        pathKey: EMPTY_STRING,
+        isShowComponent: false,
+        animation: animation,
+        persisted,
+        action,
+      };
+      this.nextRouteState = this.prevRouteState;
+
       return;
     }
-
-    if (!component)
-      throw new Error(
-        `${this.constructor.name}: no necessary component for a path=${pathname} with routes=${routes}`
-      );
-
-    if (!(route as RouteRedirect).redirect && !component)
-      throw new Error(
-        `${this.constructor.name}: no necessary redirect for a path=${pathname} with routes=${routes}`
-      );
 
     if ((route as RouteRedirect).redirect) {
       this.prevRouteState = {
@@ -250,18 +148,15 @@ export class Router extends React.PureComponent<RouterProps> {
         persisted,
         action,
       };
+      this.nextRouteState = this.prevRouteState;
 
-      RouterStore.historyStore.push((route as RouteRedirect).redirect);
+      routerStore.historyStore.push((route as RouteRedirect).redirect);
       return;
-    }
-
-    if (component.TITLE) {
-      setTitle(component.TITLE);
     }
 
     this.routesMap.set(
       route.path,
-      <div key={route.path} style={child}>
+      <div key={route.path} style={childStyle}>
         <ComponentWrapper component={component} />
       </div>
     );
@@ -282,14 +177,20 @@ export class Router extends React.PureComponent<RouterProps> {
 
   componentWillUnmount() {
     clearTimeout(this.animationID);
-    this.props.RouterStore.unsubscribe(this.routerHandler);
+    this.props.routerStore.unsubscribe(this.routerHandler);
   }
 
-  calcAnimation(action: Action, prevAnimation: Animation, nextAnimation: Animation) {
+  calcAnimation(
+    isShowPrevComponent: boolean,
+    isShowNextComponent: boolean,
+    action: Action,
+    prevAnimation: Animation,
+    nextAnimation: Animation
+  ) {
     if (
       this.props.disableAnimationWhenNotShowRoute &&
-      !this.prevRouteState.isShowComponent &&
-      !this.nextRouteState.isShowComponent
+      !isShowPrevComponent &&
+      !isShowNextComponent
     ) {
       return ANIMATIONS.NONE;
     }
@@ -297,7 +198,7 @@ export class Router extends React.PureComponent<RouterProps> {
     return calcAnimationFromAction(action, prevAnimation, nextAnimation);
   }
 
-  routeTransition1 = () => {
+  routeTransitionOne = () => {
     const { component: prevComponent, pathKey: prevPathKey } = this.prevRouteState;
     const { animation } = this.nextRouteState;
 
@@ -306,11 +207,11 @@ export class Router extends React.PureComponent<RouterProps> {
       <div
         key={prevPathKey}
         style={{
-          ...child,
-          ...disableInteraction,
+          ...childStyle,
+          ...disableInteractionStyle,
           ...animation.prev,
         }}
-        onAnimationEnd={this.routeTransition2}
+        onAnimationEnd={this.routeTransitionTwo}
       >
         <ComponentWrapper component={prevComponent} />
       </div>
@@ -319,19 +220,19 @@ export class Router extends React.PureComponent<RouterProps> {
     this.forceUpdate();
   };
 
-  routeTransition2 = () => {
+  routeTransitionTwo = () => {
     const { component: prevComponent, persisted, pathKey: prevPathKey } = this.prevRouteState;
     const { action } = this.nextRouteState;
 
     if (
-      persisted === PERSISTED.NEVER ||
-      (action !== Action.PUSH && persisted === PERSISTED.SMART)
+      persisted === Persisted.NEVER ||
+      (action !== Action.PUSH && persisted === Persisted.SMART)
     ) {
       this.routesMap.delete(prevPathKey);
     } else {
       this.routesMap.set(
         prevPathKey,
-        <div key={prevPathKey} style={{ ...child, ...hide, ...disableInteraction }}>
+        <div key={prevPathKey} style={{ ...childStyle, ...hideStyle, ...disableInteractionStyle }}>
           <ComponentWrapper component={prevComponent} />
         </div>
       );
@@ -347,8 +248,8 @@ export class Router extends React.PureComponent<RouterProps> {
       nextPathKey,
       <div
         key={nextPathKey}
-        style={{ ...child, ...disableInteraction, ...nextAnimation.next }}
-        onAnimationEnd={this.routeTransition3}
+        style={{ ...childStyle, ...disableInteractionStyle, ...nextAnimation.next }}
+        onAnimationEnd={this.routeTransitionThree}
       >
         <ComponentWrapper component={nextComponent} />
       </div>
@@ -357,16 +258,12 @@ export class Router extends React.PureComponent<RouterProps> {
     this.forceUpdate();
   };
 
-  routeTransition3 = () => {
+  routeTransitionThree = () => {
     const { component: nextComponent, pathKey: nextPathKey } = this.nextRouteState;
-
-    if (nextComponent.TITLE) {
-      setTitle(nextComponent.TITLE);
-    }
 
     this.routesMap.set(
       nextPathKey,
-      <div key={nextPathKey} style={child}>
+      <div key={nextPathKey} style={childStyle}>
         <ComponentWrapper component={nextComponent} />
       </div>
     );
@@ -380,11 +277,11 @@ export class Router extends React.PureComponent<RouterProps> {
 
   render() {
     return (
-      <div style={container} className={this.props.className}>
-        {Array.from(this.routesMap.values())}
+      <div style={containerStyle} className={this.props.className}>
+        {[...this.routesMap.values()]}
       </div>
     );
   }
 }
 
-export default createConnector(context, RouterStore)(Router);
+export default connector(RouterStore)(Router);

@@ -32,22 +32,26 @@
     "build": "node ../../scripts/build.js",
     "check-ts": "tsc --noEmit",
     "lint": "eslint \"./**/*.{tsx,ts}\" --fix",
-    "test-coverage": "echo 'skip'",
-    "test:all": "yarn run check-ts && yarn run lint"
+    "test-coverage": "jest --coverage  --rootDir='.' --config '../../jest.typescript.config.js'",
+    "test:all": "yarn run check-ts && yarn run lint && yarn run test-typescript && yarn run test-babel",
+    "test-babel": "jest --rootDir='.' --config '../../jest.babel.config.js'",
+    "test-babel:w": "jest --rootDir='.' --config '../../jest.babel.config.js' --watchAll",
+    "test-typescript": "jest --rootDir='.' --config '../../jest.typescript.config.js'",
+    "test-typescript:w": "jest --rootDir='.' --config '../../jest.typescript.config.js' --watchAll"
   },
   "peerDependencies": {
     "@nimel/directorr": "^1.0.0-rc.1",
-    "react": ">=16.10.0",
-    "react-dom": ">=16.10.0"
+    "@nimel/directorr-react": "^1.0.0-rc.1",
+    "react": ">=16.10.0"
   },
   "dependencies": {
-    "@nimel/directorr-react": "^1.0.0-rc.1",
     "@nimel/directorr-router": "^1.0.0-rc.1"
   },
   "devDependencies": {
     "@nimel/directorr": "^1.0.0-rc.1",
+    "@nimel/directorr-react": "1.0.0-rc.1",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-test-renderer": "^16.13.1"
   },
   "author": "Nikita Melnikov",
   "license": "MIT",

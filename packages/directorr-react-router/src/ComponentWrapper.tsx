@@ -1,8 +1,6 @@
-import React, { FC, memo } from 'react';
+import React, { FC, memo, ComponentType } from 'react';
 
-import { RouteComponentType } from './types';
-
-const ComponentWrapper: FC<{ component: RouteComponentType }> = ({ component: SomeComponent }) => (
+const ComponentWrapper: FC<{ component: ComponentType<any> }> = ({ component: SomeComponent }) => (
   <SomeComponent />
 );
 

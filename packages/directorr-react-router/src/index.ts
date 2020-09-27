@@ -1,7 +1,7 @@
-import { generatePath } from '@nimel/directorr-router';
-import Router, { ANIMATIONS } from './Router';
+import { generatePath, historyChange, HistoryStore, ANY_PATH } from '@nimel/directorr-router';
+import Router from './Router';
 import RouterStore from './RouterStore';
-import { RouterProvider, PERSISTED } from './utils';
+import { ANIMATIONS } from './constants';
 export * from './types';
 
-export { Router, RouterStore, RouterProvider, ANIMATIONS, PERSISTED, generatePath };
+export { Router, RouterStore, ANIMATIONS, generatePath, historyChange, HistoryStore, ANY_PATH };
