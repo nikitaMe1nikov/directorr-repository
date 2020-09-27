@@ -6,13 +6,10 @@ const postcssInlineSvg = require('postcss-inline-svg');
 const postcssSimpleVars = require('postcss-simple-vars');
 const postcssPresetEnv = require('postcss-preset-env');
 
-
 module.exports = {
   mode: 'development',
   entry: {
-    main: [
-      './src/index.tsx',
-    ],
+    main: ['./src/index.tsx'],
   },
   output: {
     filename: '[name].js',
