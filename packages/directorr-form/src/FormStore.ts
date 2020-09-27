@@ -61,7 +61,7 @@ export default class FormStore {
 
   @effectChangeValue
   toChangeValue = ({ value }: FormValuePayload) => {
-    if (!this.isChanged) this.isChanged = true;
+    this.isChanged = true;
 
     this.value = value;
   };
