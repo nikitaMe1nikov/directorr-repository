@@ -32,8 +32,7 @@ function useStore<C>(
 
   useEffect(
     () => () => {
-      if (store.current)
-        dir.removeStoreDependency(StoreConstructor as DirectorrStoreClassConstructor, USE_HOOKS);
+      dir.removeStoreDependency(StoreConstructor as DirectorrStoreClassConstructor, USE_HOOKS);
     },
     []
   );

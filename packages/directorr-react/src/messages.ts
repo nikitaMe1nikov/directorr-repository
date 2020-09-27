@@ -1,13 +1,8 @@
-import { MessageFunc } from './types';
-
-export const whenNotFoundStore: MessageFunc = (moduleName, StoreConstructor) =>
-  `${moduleName}: for some reason, not found store with constuctor=${StoreConstructor.name}`;
-
-export const whenContextNotLikeDirrector: MessageFunc = (moduleName, context) =>
+export const whenContextNotLikeDirrector = (moduleName: string, context: any) =>
   `${moduleName}: for some reason, context=${context} not like Dirrector instance`;
 
-export const whenNotReactContext: MessageFunc = (moduleName, context) =>
+export const whenNotReactContext = (moduleName: string, context: any) =>
   `${moduleName}: call with arg=${context} not like react context`;
 
-export const whenNotStoreConstructor: MessageFunc = (moduleName, StoreConstructor) =>
+export const whenNotStoreConstructor = (moduleName: string, StoreConstructor: any) =>
   `${moduleName}: call with arg=${StoreConstructor} not like object constuctor`;

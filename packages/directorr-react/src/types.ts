@@ -6,5 +6,3 @@ export type HookToBuild<C = any> = (
   StoreConstructor: DirectorrStoreClassConstructor<C>,
   initOptions?: any
 ) => C;
-
-export type MessageFunc = (sourceName: string, arg: any, errorMessage?: any) => string;

@@ -1,17 +1,20 @@
+import { createContext } from 'react';
+import { Directorr } from '@nimel/directorr';
 import createConnector from './createConnector';
 import createUseStoreHooks from './createUseStoreHooks';
-import createUseTempStoreHooks from './createUseStoreHooks';
-import createHooks from './createHooks';
+import useLocalStore from './useLocalStore';
 
-const { DirectorrContext, DirectorrProvider, useStore, useLocalStore } = createHooks();
+const DirectorrContext = createContext<Directorr>((null as unknown) as Directorr);
+const DirectorrProvider = DirectorrContext.Provider;
+const useStore = createUseStoreHooks(DirectorrContext);
+const connector = createConnector(useStore);
 
 export {
   createConnector,
   createUseStoreHooks,
-  createUseTempStoreHooks,
-  createHooks,
   DirectorrContext,
   DirectorrProvider,
   useStore,
   useLocalStore,
+  connector,
 };

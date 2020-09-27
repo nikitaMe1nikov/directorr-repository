@@ -1,46 +1,34 @@
-import { createElement, useContext, Context, ComponentClass, FunctionComponent } from 'react';
+import { createElement, ComponentClass, FunctionComponent } from 'react';
 import hoistStatics from 'hoist-non-react-statics';
-import { DirectorrStoreClassConstructor, Directorr } from '@nimel/directorr';
-import {
-  whenNotFoundStore,
-  whenNotStoreConstructor,
-  whenContextNotLikeDirrector,
-} from './messages';
-import { isFunction, isDirrectorInstance } from './utils';
+import { DirectorrStoreClassConstructor } from '@nimel/directorr';
+import createUseStoreHooks from './createUseStoreHooks';
 
-export const MODULE_NAME = 'createConnector';
-
-export function getStoreName(StoreConstructor: DirectorrStoreClassConstructor) {
-  return StoreConstructor.storeName || StoreConstructor.name;
+export function lowercaseFirstLetter(str: string) {
+  return str.charAt(0).toLowerCase() + str.slice(1);
 }
 
-export default function createConnector(
-  context: Context<Directorr>,
-  StoreConstructor: DirectorrStoreClassConstructor<any>
-) {
-  function connector(component: FunctionComponent<any> | ComponentClass<any, any>) {
-    function Connector(props: any) {
-      if (!isFunction(StoreConstructor))
-        throw new Error(whenNotStoreConstructor(MODULE_NAME, StoreConstructor));
+export function getStoreName(StoreConstructor: DirectorrStoreClassConstructor) {
+  return lowercaseFirstLetter(StoreConstructor.storeName || StoreConstructor.name);
+}
 
-      const dir: any = useContext(context);
+export default function createConnector(useStoreHook: ReturnType<typeof createUseStoreHooks>) {
+  return function connector(
+    StoreConstructor: DirectorrStoreClassConstructor<any>,
+    storeNameInProps: string = getStoreName(StoreConstructor)
+  ) {
+    return function connectorWrapper<P>(component: FunctionComponent<P> | ComponentClass<P, any>) {
+      function Connector(props: P) {
+        const store = useStoreHook(StoreConstructor);
 
-      if (!isDirrectorInstance(dir)) throw new Error(whenContextNotLikeDirrector(MODULE_NAME, dir));
+        return createElement(component, {
+          ...props,
+          [storeNameInProps]: store,
+        });
+      }
 
-      const store = dir.getStore(StoreConstructor);
+      hoistStatics(Connector, component);
 
-      if (!store) throw new Error(whenNotFoundStore(MODULE_NAME, StoreConstructor));
-
-      return createElement(component, {
-        ...props,
-        [getStoreName(StoreConstructor)]: store,
-      });
-    }
-
-    hoistStatics(Connector, component);
-
-    return Connector;
-  }
-
-  return connector;
+      return Connector as FunctionComponent<P>;
+    };
+  };
 }
