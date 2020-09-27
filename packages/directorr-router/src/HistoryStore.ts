@@ -193,10 +193,10 @@ export default class HistoryStore {
         this.toHistoryReplace(routerPayload);
         break;
       default:
-        return this.toHistoryPush(routerPayload);
+        this.toHistoryPush(routerPayload);
     }
 
-    for (const handler of this.handlersStack) {
+    for (const handler of this.handlersStack.concat()) {
       handler(task);
     }
   };

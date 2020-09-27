@@ -308,7 +308,7 @@ describe('HistoryStore', () => {
   it('subscribe logic', () => {
     const handler = jest.fn();
     const path = '/';
-    const task = {
+    const taskPop = {
       location: {
         pathname: path,
         search: '',
@@ -316,21 +316,70 @@ describe('HistoryStore', () => {
       },
       action: Action.POP,
     };
-    const history = createMemoryHistory({ initialEntries: [path] });
+    const taskPush = {
+      location: {
+        pathname: path,
+        search: '',
+        state: {},
+      },
+      action: Action.PUSH,
+    };
+    const taskReplace = {
+      location: {
+        pathname: path,
+        search: '',
+        state: {},
+      },
+      action: Action.REPLACE,
+    };
+    const history = createMemoryHistory();
     const store: any = new HistoryStore(history);
 
     store.subscribe(handler);
-    store.dispatchAction(task);
+    store.dispatchAction(taskPop);
 
     expect(handler).toBeCalledTimes(1);
-    expect(handler).lastCalledWith(task);
+    expect(handler).lastCalledWith(taskPop);
+
+    store.dispatchAction(taskPush);
+
+    expect(handler).toBeCalledTimes(2);
+    expect(handler).lastCalledWith(taskPush);
+
+    store.dispatchAction(taskReplace);
+
+    expect(handler).toBeCalledTimes(3);
+    expect(handler).lastCalledWith(taskReplace);
 
     store.unsubscribe(handler);
 
-    store.dispatchAction(task);
+    store.dispatchAction(taskPop);
 
+    expect(handler).toBeCalledTimes(3);
+  });
+
+  it('unsubscribe when subscribe handler call', () => {
+    const taskPop = {
+      location: {
+        pathname: '/path',
+        search: '',
+        state: {},
+      },
+      action: Action.POP,
+    };
+    const history = createMemoryHistory();
+    const store: any = new HistoryStore(history);
+    const handlerUnsub = jest.fn().mockImplementation(() => store.unsubscribe(handlerUnsub));
+    const handler = jest.fn();
+
+    store.subscribe(handlerUnsub);
+    store.subscribe(handler);
+    store.dispatchAction(taskPop);
+
+    expect(handlerUnsub).toBeCalledTimes(1);
+    expect(handlerUnsub).lastCalledWith(taskPop);
     expect(handler).toBeCalledTimes(1);
-    expect(handler).lastCalledWith(task);
+    expect(handler).lastCalledWith(taskPop);
   });
 
   it('toJSON', () => {
