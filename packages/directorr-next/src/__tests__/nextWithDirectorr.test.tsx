@@ -49,10 +49,10 @@ describe('nextWithDirectorr', () => {
     const router: any = {};
     const initialState: any = {};
 
-    expect(createMemoDirectorr(makeDirectorr, ctx, router, initialState)).toEqual(someValue);
+    expect(createMemoDirectorr(makeDirectorr, ctx, router, initialState)).toBe(someValue);
     expect(makeDirectorr).toBeCalledTimes(1);
     expect(makeDirectorr).lastCalledWith(ctx, router, initialState);
-    expect(createMemoDirectorr.memoDirectorr).toEqual(null);
+    expect(createMemoDirectorr.memoDirectorr).toBe(null);
   });
 
   it('createMemoDirectorr in browser', () => {
@@ -63,15 +63,15 @@ describe('nextWithDirectorr', () => {
     const router: any = {};
     const initialState: any = {};
 
-    expect(createMemoDirectorr(makeDirectorr, ctx, router, initialState)).toEqual(someValue);
+    expect(createMemoDirectorr(makeDirectorr, ctx, router, initialState)).toBe(someValue);
     expect(makeDirectorr).toBeCalledTimes(1);
     expect(makeDirectorr).lastCalledWith(undefined, undefined, initialState);
-    expect(createMemoDirectorr.memoDirectorr).toEqual(someValue);
+    expect(createMemoDirectorr.memoDirectorr).toBe(someValue);
 
-    expect(createMemoDirectorr(makeDirectorr, ctx, router, initialState)).toEqual(someValue);
+    expect(createMemoDirectorr(makeDirectorr, ctx, router, initialState)).toBe(someValue);
     expect(makeDirectorr).toBeCalledTimes(1);
     expect(makeDirectorr).lastCalledWith(undefined, undefined, initialState);
-    expect(createMemoDirectorr.memoDirectorr).toEqual(someValue);
+    expect(createMemoDirectorr.memoDirectorr).toBe(someValue);
   });
 
   it('toJSON', () => {
@@ -92,7 +92,7 @@ describe('nextWithDirectorr', () => {
     const provider = wrapper.find(DirectorrProvider);
 
     expect(someComponent).toHaveLength(1);
-    expect(someComponent.props()).toEqual(props);
+    expect(someComponent.props()).toStrictEqual(props);
     expect(provider).toHaveLength(1);
     expect(provider.props()).toMatchObject({ value: someValue });
     expect(createDirectorr).toBeCalledTimes(1);
@@ -117,7 +117,7 @@ describe('nextWithDirectorr', () => {
     const provider = wrapper.find(DirectorrProvider);
 
     expect(someComponent).toHaveLength(1);
-    expect(someComponent.props()).toEqual(browserProps);
+    expect(someComponent.props()).toStrictEqual(browserProps);
     expect(provider).toHaveLength(1);
     expect(provider.props()).toMatchObject({ value: directorr });
     expect(createDirectorr).toBeCalledTimes(0);
@@ -153,7 +153,7 @@ describe('nextWithDirectorr', () => {
 
     await flushPromises();
 
-    expect(initialProps).toEqual({
+    expect(initialProps).toStrictEqual({
       directorrWrapper: {
         directorr,
         toJSON,
@@ -161,11 +161,12 @@ describe('nextWithDirectorr', () => {
       initialProps: {
         pageProps: {},
       },
+      initialState: undefined,
     });
 
     expect(createDirectorr).toBeCalledTimes(1);
     expect(createDirectorr).lastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
-    expect(appCtx.directorr).toEqual(directorr);
+    expect(appCtx.directorr).toBe(directorr);
 
     expect(directorr.findStoreState).toBeCalledTimes(1);
     expect(directorr.findStoreState).lastCalledWith(isStoreError);
@@ -200,7 +201,7 @@ describe('nextWithDirectorr', () => {
 
     await flushPromises();
 
-    expect(initialProps).toEqual({
+    expect(initialProps).toStrictEqual({
       directorrWrapper: {
         directorr,
         toJSON,
@@ -208,11 +209,12 @@ describe('nextWithDirectorr', () => {
       initialProps: {
         pageProps: {},
       },
+      initialState: undefined,
     });
 
     expect(createDirectorr).toBeCalledTimes(1);
     expect(createDirectorr).lastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
-    expect(appCtx.directorr).toEqual(directorr);
+    expect(appCtx.directorr).toBe(directorr);
 
     expect(ComponentWithStatic.whenServerLoadDirectorr).toBeCalledTimes(1);
     expect(ComponentWithStatic.whenServerLoadDirectorr).lastCalledWith(directorr, appCtx);
@@ -255,7 +257,7 @@ describe('nextWithDirectorr', () => {
 
     await flushPromises();
 
-    expect(initialProps).toEqual({
+    expect(initialProps).toStrictEqual({
       directorrWrapper: {
         directorr,
         toJSON,
@@ -263,11 +265,12 @@ describe('nextWithDirectorr', () => {
       initialProps: {
         pageProps: {},
       },
+      initialState: undefined,
     });
 
     expect(createDirectorr).toBeCalledTimes(1);
     expect(createDirectorr).lastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
-    expect(appCtx.directorr).toEqual(directorr);
+    expect(appCtx.directorr).toBe(directorr);
 
     expect(ComponentWithStatic.whenServerLoadDirectorr).toBeCalledTimes(1);
     expect(ComponentWithStatic.whenServerLoadDirectorr).lastCalledWith(directorr, appCtx);
@@ -309,7 +312,7 @@ describe('nextWithDirectorr', () => {
 
     await flushPromises();
 
-    expect(initialProps).toEqual({
+    expect(initialProps).toStrictEqual({
       directorrWrapper: {
         directorr,
         toJSON,
@@ -317,11 +320,12 @@ describe('nextWithDirectorr', () => {
       initialProps: {
         pageProps: {},
       },
+      initialState: undefined,
     });
 
     expect(createDirectorr).toBeCalledTimes(1);
     expect(createDirectorr).lastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
-    expect(appCtx.directorr).toEqual(directorr);
+    expect(appCtx.directorr).toBe(directorr);
 
     expect(ComponentWithStatic.whenServerLoadDirectorr).toBeCalledTimes(1);
     expect(ComponentWithStatic.whenServerLoadDirectorr).lastCalledWith(directorr, appCtx);
@@ -365,7 +369,7 @@ describe('nextWithDirectorr', () => {
 
     await flushPromises();
 
-    expect(initialProps).toEqual({
+    expect(initialProps).toStrictEqual({
       directorrWrapper: {
         directorr,
         toJSON,
@@ -373,11 +377,12 @@ describe('nextWithDirectorr', () => {
       initialProps: {
         pageProps: {},
       },
+      initialState: undefined,
     });
 
     expect(createDirectorr).toBeCalledTimes(1);
     expect(createDirectorr).lastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
-    expect(appCtx.directorr).toEqual(directorr);
+    expect(appCtx.directorr).toBe(directorr);
 
     expect(ComponentWithStatic.whenServerLoadDirectorr).toBeCalledTimes(0);
     expect(ComponentWithStatic.whenServerDirectorrReady).toBeCalledTimes(0);

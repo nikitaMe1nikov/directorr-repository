@@ -25,8 +25,8 @@ describe('utils', () => {
       id: '12',
     };
 
-    expect(generatePath(root)).toEqual(root);
-    expect(generatePath(`${path}/${idParam}`)).toEqual(path);
-    expect(generatePath(`${path}/${idParam}`, params)).toEqual(`${path}/${params.id}`);
+    expect(generatePath(root)).toBe(root);
+    expect(generatePath(`${path}/${idParam}`)).toBe(path);
+    expect(generatePath(`${path}/${idParam}`, params)).toBe(`${path}/${params.id}`);
   });
 });

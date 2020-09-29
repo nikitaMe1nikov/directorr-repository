@@ -53,12 +53,13 @@ describe('NextHistoryStore', () => {
     const pattern = 'pattern';
     const router = (new RouterMock() as unknown) as SingletonRouter;
     const store: any = new NextHistoryStore(router);
+    const { asPath, query, pathname } = (router as any).router;
 
     store[DISPATCH_EFFECTS_FIELD_NAME](
       createAction(DIRECTORR_INIT_STORE_ACTION, { StoreConstructor: NextHistoryStore })
     );
 
-    expect(store).toMatchObject({});
+    expect(store).toMatchObject({ pattern: pathname, path: asPath, queryObject: query });
 
     store[DISPATCH_EFFECTS_FIELD_NAME](
       createAction(DIRECTORR_INIT_STORE_ACTION, {
