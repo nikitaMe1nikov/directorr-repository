@@ -11,21 +11,17 @@ describe('utils', () => {
       { path: '/somePath', component },
     ];
 
-    expect(findRouteAndComponent(routes, path)).toEqual({ component, route: routes[0] });
-    expect(findRouteAndComponent(routes, otherPath)).toEqual({});
+    expect(findRouteAndComponent(routes, path)).toStrictEqual({ component, route: routes[0] });
+    expect(findRouteAndComponent(routes, otherPath)).toStrictEqual({});
   });
 
   it('calcAnimationFromAction', () => {
     const prevAnimation: any = {};
     const nextAnimation: any = {};
 
-    expect(calcAnimationFromAction(Action.POP, prevAnimation, nextAnimation)).toEqual(
-      prevAnimation
-    );
-    expect(calcAnimationFromAction(Action.PUSH, prevAnimation, nextAnimation)).toEqual(
-      nextAnimation
-    );
-    expect(calcAnimationFromAction(Action.REPLACE, prevAnimation, nextAnimation)).toEqual(
+    expect(calcAnimationFromAction(Action.POP, prevAnimation, nextAnimation)).toBe(prevAnimation);
+    expect(calcAnimationFromAction(Action.PUSH, prevAnimation, nextAnimation)).toBe(nextAnimation);
+    expect(calcAnimationFromAction(Action.REPLACE, prevAnimation, nextAnimation)).toBe(
       nextAnimation
     );
   });

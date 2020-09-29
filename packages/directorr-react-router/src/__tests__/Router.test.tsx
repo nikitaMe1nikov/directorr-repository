@@ -49,8 +49,8 @@ describe('Router', () => {
       directorr
     );
 
-    expect(wrapper.children().prop(className)).toEqual(className);
-    expect(wrapper.children().prop('style')).toEqual(containerStyle);
+    expect(wrapper.children().prop(className)).toBe(className);
+    expect(wrapper.children().prop('style')).toStrictEqual(containerStyle);
   });
 
   it('render with routes', () => {
@@ -157,7 +157,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual({
+    expect(wrapper.prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...animation.prev,
@@ -167,7 +167,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual({
+    expect(wrapper.prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...animation.next,
@@ -177,7 +177,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual(childStyle);
+    expect(wrapper.prop('style')).toStrictEqual(childStyle);
 
     expect(wrapper.find(ComponentWrapper)).toHaveLength(1);
     expect(wrapper.find(OneComponent)).toHaveLength(0);
@@ -217,7 +217,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual({
+    expect(wrapper.prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...animation.prev,
@@ -227,12 +227,12 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children();
 
-    expect(wrapper.childAt(0).prop('style')).toEqual({
+    expect(wrapper.childAt(0).prop('style')).toStrictEqual({
       ...childStyle,
       ...hideStyle,
       ...disableInteractionStyle,
     });
-    expect(wrapper.childAt(1).prop('style')).toEqual({
+    expect(wrapper.childAt(1).prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...animation.next,
@@ -242,12 +242,12 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children();
 
-    expect(wrapper.childAt(0).prop('style')).toEqual({
+    expect(wrapper.childAt(0).prop('style')).toStrictEqual({
       ...childStyle,
       ...hideStyle,
       ...disableInteractionStyle,
     });
-    expect(wrapper.childAt(1).prop('style')).toEqual(childStyle);
+    expect(wrapper.childAt(1).prop('style')).toStrictEqual(childStyle);
 
     expect(wrapper.find(ComponentWrapper)).toHaveLength(2);
     expect(wrapper.find(OneComponent)).toHaveLength(1);
@@ -263,7 +263,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children();
 
-    expect(wrapper.childAt(1).prop('style')).toEqual({
+    expect(wrapper.childAt(1).prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...animation.prev,
@@ -273,7 +273,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual({
+    expect(wrapper.prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...animation.next,
@@ -283,7 +283,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual(childStyle);
+    expect(wrapper.prop('style')).toStrictEqual(childStyle);
     expect(wrapper.find(ComponentWrapper)).toHaveLength(1);
     expect(wrapper.find(OneComponent)).toHaveLength(1);
     expect(wrapper.find(TwoComponent)).toHaveLength(0);
@@ -322,7 +322,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual({
+    expect(wrapper.prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...animation.prev,
@@ -332,12 +332,12 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children();
 
-    expect(wrapper.childAt(0).prop('style')).toEqual({
+    expect(wrapper.childAt(0).prop('style')).toStrictEqual({
       ...childStyle,
       ...hideStyle,
       ...disableInteractionStyle,
     });
-    expect(wrapper.childAt(1).prop('style')).toEqual({
+    expect(wrapper.childAt(1).prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...animation.next,
@@ -347,12 +347,12 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children();
 
-    expect(wrapper.childAt(0).prop('style')).toEqual({
+    expect(wrapper.childAt(0).prop('style')).toStrictEqual({
       ...childStyle,
       ...hideStyle,
       ...disableInteractionStyle,
     });
-    expect(wrapper.childAt(1).prop('style')).toEqual(childStyle);
+    expect(wrapper.childAt(1).prop('style')).toStrictEqual(childStyle);
 
     expect(wrapper.find(ComponentWrapper)).toHaveLength(2);
     expect(wrapper.find(OneComponent)).toHaveLength(1);
@@ -396,7 +396,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual({
+    expect(wrapper.prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...animationRoute.prev,
@@ -406,12 +406,12 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children();
 
-    expect(wrapper.childAt(0).prop('style')).toEqual({
+    expect(wrapper.childAt(0).prop('style')).toStrictEqual({
       ...childStyle,
       ...hideStyle,
       ...disableInteractionStyle,
     });
-    expect(wrapper.childAt(1).prop('style')).toEqual({
+    expect(wrapper.childAt(1).prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...animationRoute.next,
@@ -421,12 +421,12 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children();
 
-    expect(wrapper.childAt(0).prop('style')).toEqual({
+    expect(wrapper.childAt(0).prop('style')).toStrictEqual({
       ...childStyle,
       ...hideStyle,
       ...disableInteractionStyle,
     });
-    expect(wrapper.childAt(1).prop('style')).toEqual(childStyle);
+    expect(wrapper.childAt(1).prop('style')).toStrictEqual(childStyle);
 
     expect(wrapper.find(ComponentWrapper)).toHaveLength(2);
     expect(wrapper.find(OneComponent)).toHaveLength(1);
@@ -442,7 +442,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children();
 
-    expect(wrapper.childAt(1).prop('style')).toEqual({
+    expect(wrapper.childAt(1).prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...animationRoute.prev,
@@ -452,7 +452,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual({
+    expect(wrapper.prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...animationRoute.next,
@@ -462,7 +462,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual(childStyle);
+    expect(wrapper.prop('style')).toStrictEqual(childStyle);
 
     expect(wrapper.find(ComponentWrapper)).toHaveLength(1);
     expect(wrapper.find(OneComponent)).toHaveLength(1);
@@ -506,7 +506,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual({
+    expect(wrapper.prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...animationRoute.prev,
@@ -516,12 +516,12 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children();
 
-    expect(wrapper.childAt(0).prop('style')).toEqual({
+    expect(wrapper.childAt(0).prop('style')).toStrictEqual({
       ...childStyle,
       ...hideStyle,
       ...disableInteractionStyle,
     });
-    expect(wrapper.childAt(1).prop('style')).toEqual({
+    expect(wrapper.childAt(1).prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...animationRoute.next,
@@ -531,12 +531,12 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children();
 
-    expect(wrapper.childAt(0).prop('style')).toEqual({
+    expect(wrapper.childAt(0).prop('style')).toStrictEqual({
       ...childStyle,
       ...hideStyle,
       ...disableInteractionStyle,
     });
-    expect(wrapper.childAt(1).prop('style')).toEqual(childStyle);
+    expect(wrapper.childAt(1).prop('style')).toStrictEqual(childStyle);
 
     expect(wrapper.find(ComponentWrapper)).toHaveLength(2);
     expect(wrapper.find(OneComponent)).toHaveLength(1);
@@ -552,7 +552,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children();
 
-    expect(wrapper.childAt(1).prop('style')).toEqual({
+    expect(wrapper.childAt(1).prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...animation.prev,
@@ -562,7 +562,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual({
+    expect(wrapper.prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...animation.next,
@@ -572,7 +572,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual(childStyle);
+    expect(wrapper.prop('style')).toStrictEqual(childStyle);
 
     expect(wrapper.find(ComponentWrapper)).toHaveLength(1);
     expect(wrapper.find(OneComponent)).toHaveLength(1);
@@ -605,7 +605,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual({
+    expect(wrapper.prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...ANIMATIONS.NONE.prev,
@@ -615,7 +615,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual({
+    expect(wrapper.prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...ANIMATIONS.NONE.next,
@@ -625,7 +625,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual(childStyle);
+    expect(wrapper.prop('style')).toStrictEqual(childStyle);
 
     expect(wrapper.find(ComponentWrapper)).toHaveLength(1);
     expect(wrapper.find(OneComponent)).toHaveLength(0);
@@ -661,7 +661,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual(childStyle);
+    expect(wrapper.prop('style')).toStrictEqual(childStyle);
     expect(wrapper.find(ComponentWrapper)).toHaveLength(1);
     expect(wrapper.find(OneComponent)).toHaveLength(1);
     expect(wrapper.find(TwoComponent)).toHaveLength(0);
@@ -707,7 +707,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual({
+    expect(wrapper.prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...animation.prev,
@@ -717,7 +717,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual({
+    expect(wrapper.prop('style')).toStrictEqual({
       ...childStyle,
       ...disableInteractionStyle,
       ...animation.next,
@@ -727,7 +727,7 @@ describe('Router', () => {
 
     wrapper = wrapper.update().children().children().children();
 
-    expect(wrapper.prop('style')).toEqual(childStyle);
+    expect(wrapper.prop('style')).toStrictEqual(childStyle);
 
     expect(wrapper.find(ComponentWrapper)).toHaveLength(1);
     expect(wrapper.find(OneComponent)).toHaveLength(0);

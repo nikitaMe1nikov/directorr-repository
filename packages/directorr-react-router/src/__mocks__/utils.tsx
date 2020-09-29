@@ -15,7 +15,7 @@ class HistoryStoreWithHistory extends HistoryStore {
 export function createDirectorr(history: History) {
   HistoryStoreWithHistory.storeInitOptions = history;
   const directorr = new Directorr();
-  directorr.addStore(HistoryStoreWithHistory);
+  directorr.addStores(HistoryStoreWithHistory);
   return directorr;
 }
 
