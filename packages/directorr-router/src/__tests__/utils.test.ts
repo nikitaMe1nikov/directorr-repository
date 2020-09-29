@@ -18,27 +18,27 @@ describe('utils', () => {
     const keyThree = 'keyThree';
     const valueThree = {};
 
-    expect(cache.size).toEqual(0);
+    expect(cache.size).toBe(0);
 
     cache.set(keyOne, valueOne);
 
-    expect(cache.size).toEqual(1);
+    expect(cache.size).toBe(1);
     expect(cache.has(keyOne)).toBeTruthy();
-    expect(cache.get(keyOne)).toEqual(valueOne);
+    expect(cache.get(keyOne)).toBe(valueOne);
 
     cache.set(keyTwo, valueTwo);
 
-    expect(cache.size).toEqual(2);
+    expect(cache.size).toBe(2);
     expect(cache.has(keyOne)).toBeTruthy();
     expect(cache.has(keyTwo)).toBeTruthy();
-    expect(cache.get(keyTwo)).toEqual(valueTwo);
+    expect(cache.get(keyTwo)).toBe(valueTwo);
 
     cache.set(keyThree, valueThree);
 
     expect(cache.has(keyOne)).toBeFalsy();
     expect(cache.has(keyTwo)).toBeTruthy();
     expect(cache.has(keyThree)).toBeTruthy();
-    expect(cache.get(keyThree)).toEqual(valueThree);
+    expect(cache.get(keyThree)).toBe(valueThree);
   });
 
   it('matchPath', () => {
@@ -52,10 +52,10 @@ describe('utils', () => {
 
     expect(matchPath(pathname, urlPatternOther)).toBeUndefined();
 
-    expect(matchPath(urlPatternSameInner, `${pathname}/${ANY_PATH}`)?.patterns[0]).toEqual(
+    expect(matchPath(urlPatternSameInner, `${pathname}/${ANY_PATH}`)?.patterns[0]).toBe(
       urlPatternSameInner
     );
-    expect(matchPath(urlPatternSameInner, `${pathname}/${ANY_PATH}`)?.keys).toEqual([
+    expect(matchPath(urlPatternSameInner, `${pathname}/${ANY_PATH}`)?.keys).toStrictEqual([
       {
         modifier: '',
         name: 0,
@@ -65,11 +65,11 @@ describe('utils', () => {
       },
     ]);
 
-    expect(matchPath(pathname, urlPatternSame)?.patterns[0]).toEqual(pathname);
-    expect(matchPath(pathname, urlPatternSame)?.keys).toEqual([]);
+    expect(matchPath(pathname, urlPatternSame)?.patterns[0]).toBe(pathname);
+    expect(matchPath(pathname, urlPatternSame)?.keys).toStrictEqual([]);
 
-    expect(matchPath(pathnameWithId, urlPatternSameWith)?.patterns[0]).toEqual(pathnameWithId);
-    expect(matchPath(pathnameWithId, urlPatternSameWith)?.keys).toEqual([
+    expect(matchPath(pathnameWithId, urlPatternSameWith)?.patterns[0]).toBe(pathnameWithId);
+    expect(matchPath(pathnameWithId, urlPatternSameWith)?.keys).toStrictEqual([
       {
         modifier: '',
         name: 'id',
@@ -86,7 +86,7 @@ describe('utils', () => {
     const patterns = ['', someValue];
     const keys: any = [{ name }, {}];
 
-    expect(calcParams(patterns, keys)).toEqual({
+    expect(calcParams(patterns, keys)).toStrictEqual({
       [name]: someValue,
     });
   });
@@ -98,8 +98,8 @@ describe('utils', () => {
       propTwo: 'two',
     };
 
-    expect(calcPath(path)).toEqual(path);
-    expect(calcPath(path, queryObject)).toEqual(`${path}?propOne=one&propTwo=two`);
+    expect(calcPath(path)).toBe(path);
+    expect(calcPath(path, queryObject)).toBe(`${path}?propOne=one&propTwo=two`);
   });
 
   it('generatePath', () => {
@@ -110,10 +110,10 @@ describe('utils', () => {
       id: '12',
     };
 
-    expect(generatePath(root)).toEqual(root);
-    expect(generatePath()).toEqual(root);
-    expect(generatePath(`${path}/${idParam}`, params)).toEqual(`${path}/${params.id}`);
-    expect(generatePath(`${path}/${idParam}`, params)).toEqual(`${path}/${params.id}`);
+    expect(generatePath(root)).toBe(root);
+    expect(generatePath()).toBe(root);
+    expect(generatePath(`${path}/${idParam}`, params)).toBe(`${path}/${params.id}`);
+    expect(generatePath(`${path}/${idParam}`, params)).toBe(`${path}/${params.id}`);
   });
 
   it('reloadWindow', () => {

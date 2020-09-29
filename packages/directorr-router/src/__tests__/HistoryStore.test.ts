@@ -109,7 +109,7 @@ describe('HistoryStore', () => {
     const history = createMemoryHistory();
     const store: any = new HistoryStore(history);
 
-    expect(store.toHistoryPush({})).toEqual({});
+    expect(store.toHistoryPush({})).toStrictEqual({});
     expect(store).toMatchObject({
       path: undefined,
       queryObject: undefined,
@@ -117,7 +117,7 @@ describe('HistoryStore', () => {
       action: undefined,
     });
 
-    expect(store.toHistoryPush(payload)).toEqual(payload);
+    expect(store.toHistoryPush(payload)).toBe(payload);
     expect(store).toMatchObject(payload);
   });
 
@@ -144,7 +144,7 @@ describe('HistoryStore', () => {
       action: undefined,
     });
 
-    expect(store.toHistoryPop(payload)).toEqual(payload);
+    expect(store.toHistoryPop(payload)).toBe(payload);
     expect(store).toMatchObject(payload);
   });
 
@@ -163,7 +163,7 @@ describe('HistoryStore', () => {
     const history = createMemoryHistory();
     const store: any = new HistoryStore(history);
 
-    expect(store.toHistoryReplace({})).toEqual({});
+    expect(store.toHistoryReplace({})).toStrictEqual({});
     expect(store).toMatchObject({
       path: undefined,
       queryObject: undefined,
@@ -171,7 +171,7 @@ describe('HistoryStore', () => {
       action: undefined,
     });
 
-    expect(store.toHistoryReplace(payload)).toEqual(payload);
+    expect(store.toHistoryReplace(payload)).toBe(payload);
     expect(store).toMatchObject(payload);
   });
 
@@ -184,11 +184,11 @@ describe('HistoryStore', () => {
     const store: any = new HistoryStore(history);
     jest.spyOn(history, 'push');
 
-    expect(store.push(path)).toEqual({ path, queryObject: undefined, state: undefined });
+    expect(store.push(path)).toStrictEqual({ path, queryObject: undefined, state: undefined });
     expect(history.push).toBeCalledTimes(1);
     expect(history.push).lastCalledWith(path, undefined);
 
-    expect(store.push(path, queryObject, state)).toEqual({ path, queryObject, state });
+    expect(store.push(path, queryObject, state)).toStrictEqual({ path, queryObject, state });
     expect(history.push).toBeCalledTimes(2);
     expect(history.push).lastCalledWith(`${path}?id=${id}`, state);
   });
@@ -202,11 +202,11 @@ describe('HistoryStore', () => {
     const store: any = new HistoryStore(history);
     jest.spyOn(history, 'replace');
 
-    expect(store.replace(path)).toEqual({ path, queryObject: undefined, state: undefined });
+    expect(store.replace(path)).toStrictEqual({ path, queryObject: undefined, state: undefined });
     expect(history.replace).toBeCalledTimes(1);
     expect(history.replace).lastCalledWith(path, undefined);
 
-    expect(store.replace(path, queryObject, state)).toEqual({ path, queryObject, state });
+    expect(store.replace(path, queryObject, state)).toStrictEqual({ path, queryObject, state });
     expect(history.replace).toBeCalledTimes(2);
     expect(history.replace).lastCalledWith(`${path}?id=${id}`, state);
   });
@@ -237,7 +237,7 @@ describe('HistoryStore', () => {
     const store: any = new HistoryStore(history);
     jest.spyOn(history, 'go');
 
-    expect(store.goTo(index)).toEqual({ index });
+    expect(store.goTo(index)).toStrictEqual({ index });
     expect(history.go).toBeCalledTimes(1);
     expect(history.go).lastCalledWith(index);
   });
@@ -257,8 +257,8 @@ describe('HistoryStore', () => {
     const store: any = new HistoryStore(history);
     jest.spyOn(history, 'block').mockImplementation(handler);
 
-    expect(store.block(blocker)).toEqual({ blocker });
-    expect(store.blockState).toEqual([blocker, blocker]);
+    expect(store.block(blocker)).toStrictEqual({ blocker });
+    expect(store.blockState).toStrictEqual([blocker, blocker]);
     expect(history.block).toBeCalledTimes(1);
     expect(history.block).lastCalledWith(blocker);
   });
@@ -271,14 +271,14 @@ describe('HistoryStore', () => {
     const store: any = new HistoryStore(history);
     jest.spyOn(history, 'block').mockImplementation(handler);
 
-    expect(store.block(blocker)).toEqual({ blocker });
-    expect(store.blockState).toEqual([blocker, blocker]);
+    expect(store.block(blocker)).toStrictEqual({ blocker });
+    expect(store.blockState).toStrictEqual([blocker, blocker]);
     expect(blocker).toBeCalledTimes(0);
 
-    expect(store.cancelBlock(someFunc)).toEqual({ blocker: someFunc });
+    expect(store.cancelBlock(someFunc)).toStrictEqual({ blocker: someFunc });
     expect(blocker).toBeCalledTimes(0);
 
-    expect(store.cancelBlock(blocker)).toEqual({ blocker });
+    expect(store.cancelBlock(blocker)).toStrictEqual({ blocker });
     expect(blocker).toBeCalledTimes(1);
   });
 
