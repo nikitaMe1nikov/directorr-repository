@@ -7,7 +7,7 @@ export function lowercaseFirstLetter(str: string) {
   return str.charAt(0).toLowerCase() + str.slice(1);
 }
 
-export function getStoreName(StoreConstructor: DirectorrStoreClassConstructor) {
+export function getStoreName(StoreConstructor: DirectorrStoreClassConstructor<any>) {
   return lowercaseFirstLetter(StoreConstructor.storeName || StoreConstructor.name);
 }
 

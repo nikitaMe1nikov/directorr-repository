@@ -44,7 +44,6 @@ describe('createUseStoreHooks', () => {
 
   it('useStore return store', () => {
     class SomeStore {}
-    const storeInstance = new SomeStore();
     const directorr = new DirectorrMock();
     const context = createContext(directorr);
     const useStore = createUseStoreHooks(context);
@@ -57,7 +56,7 @@ describe('createUseStoreHooks', () => {
 
     unmount();
 
-    expect(store).toEqual(storeInstance);
+    expect(store).toBe(directorr.getStore(SomeStore));
     expect(store).toBeInstanceOf(SomeStore);
 
     expect(directorr.addStoreDependency).toBeCalledTimes(1);
@@ -68,7 +67,6 @@ describe('createUseStoreHooks', () => {
 
   it('useStore return store when rerender', () => {
     class SomeStore {}
-    const storeInstance = new SomeStore();
     const directorr = new DirectorrMock();
     const context = createContext(directorr);
     const useStore = createUseStoreHooks(context);
@@ -79,7 +77,7 @@ describe('createUseStoreHooks', () => {
       rerender,
     } = renderHook(() => useStore(SomeStore, initOptions));
 
-    expect(store).toEqual(storeInstance);
+    expect(store).toBe(directorr.getStore(SomeStore));
     expect(store).toBeInstanceOf(SomeStore);
 
     rerender();

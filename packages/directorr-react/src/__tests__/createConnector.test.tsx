@@ -21,8 +21,8 @@ describe('createConnector', () => {
     const str = 'SomeWord';
     const strLow = 'someWord';
 
-    expect(lowercaseFirstLetter(str)).toEqual(strLow);
-    expect(lowercaseFirstLetter(strLow)).toEqual(strLow);
+    expect(lowercaseFirstLetter(str)).toBe(strLow);
+    expect(lowercaseFirstLetter(strLow)).toBe(strLow);
   });
 
   it('getStoreName', () => {
@@ -30,25 +30,25 @@ describe('createConnector', () => {
       static storeName = 'storeName';
     }
 
-    expect(getStoreName(SomeStore)).toEqual('someStore');
-    expect(getStoreName(SomeStoreWithStatic)).toEqual(SomeStoreWithStatic.storeName);
+    expect(getStoreName(SomeStore)).toBe('someStore');
+    expect(getStoreName(SomeStoreWithStatic)).toBe(SomeStoreWithStatic.storeName);
   });
 
   it('render with store SomeStore', () => {
     const directorr = new DirectorrMock();
-    const store = directorr.addStores([SomeStore]);
+    const store = directorr.addStore(SomeStore);
     const useStoreHook = jest.fn().mockReturnValue(store);
     const Connector = createConnector(useStoreHook)(SomeStore)(SomeComponent);
     const someProps = {
       someProp: 'someProp',
     };
 
-    expect((Connector as any).someStaticProp).toEqual(SomeComponent.someStaticProp);
+    expect((Connector as any).someStaticProp).toBe(SomeComponent.someStaticProp);
 
     const connector = shallow(<Connector {...someProps} />);
 
     expect(useStoreHook).lastCalledWith(SomeStore);
-    expect(connector.find(SomeComponent).props()).toEqual({
+    expect(connector.find(SomeComponent).props()).toStrictEqual({
       ...someProps,
       [getStoreName(SomeStore)]: store,
     });
