@@ -66,6 +66,7 @@
     "fs-extra": "^8.1.0",
     "husky": "^4.3.0",
     "jest": "^26.4.2",
+    "jest-enzyme": "^7.1.2",
     "lint-staged": "^10.0.7",
     "oao": "^2.0.0",
     "prettier": "^2.1.1",
