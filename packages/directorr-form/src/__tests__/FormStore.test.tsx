@@ -30,6 +30,9 @@ describe('FormStore', () => {
       isDefault: true,
       isValid: false,
       isInvalid: false,
+      isChanged: false,
+      isVisited: false,
+      isFocused: false,
     });
   });
 

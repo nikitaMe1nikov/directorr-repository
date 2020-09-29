@@ -30,12 +30,12 @@ describe('createSchemaContext', () => {
       callWithWrongSchema(moduleName, someValue)
     );
 
-    expect(createSchemaContext(moduleName, schema)).toMatchObject([
+    expect(createSchemaContext(moduleName, schema)).toEqual([
       schema,
       DEFAULT_VALIDATE_OPTIONS,
       Object.keys(schema.fields),
     ]);
-    expect(createSchemaContext(moduleName, schema, options)).toMatchObject([
+    expect(createSchemaContext(moduleName, schema, options)).toEqual([
       schema,
       { ...DEFAULT_VALIDATE_OPTIONS, ...options },
       Object.keys(schema.fields),
