@@ -31,7 +31,7 @@ export const callWithPropNotEquallFunc: MessageFunc = (moduleName, property) =>
 export const useForPropNotEquallObject: MessageFunc = (moduleName, property) =>
   `${moduleName}: use decorator for prop=${property} equal object like value`;
 
-export const notFoundConstuctorInDirectorrStore: MessageFunc = (moduleName, StoreConstructor) =>
+export const notFoundDirectorrStore: MessageFunc = (moduleName, StoreConstructor) =>
   `${moduleName}: store with constuctor=${StoreConstructor.name} not add to Dirrector`;
 
 export const notFoundStoreInDirectorrStore: MessageFunc = (

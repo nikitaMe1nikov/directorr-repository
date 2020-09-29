@@ -26,13 +26,13 @@ describe('action', () => {
     };
     const args = [1];
 
-    expect(runDispatcher(args, actionType, valueFuncWithEmptyReturn, store)).toEqual(null);
+    expect(runDispatcher(args, actionType, valueFuncWithEmptyReturn, store)).toBe(null);
 
     expect(valueFuncWithEmptyReturn).toBeCalledTimes(1);
     expect(valueFuncWithEmptyReturn).lastCalledWith(...args);
     expect(store[DISPATCH_ACTION_FIELD_NAME]).toBeCalledTimes(0);
 
-    expect(runDispatcher(args, actionType, valueFuncWithFullReturn, store)).toEqual(someValue);
+    expect(runDispatcher(args, actionType, valueFuncWithFullReturn, store)).toBe(someValue);
 
     expect(valueFuncWithFullReturn).toBeCalledTimes(1);
     expect(valueFuncWithFullReturn).lastCalledWith(...args);

@@ -23,7 +23,6 @@ class Store {
 
   initProps: any;
   [DISPATCH_EFFECTS_FIELD_NAME] = jest.fn();
-  [INJECTED_FROM_FIELD_NAME] = [];
   propOne = 1;
   propTwo = { someValue };
 
@@ -36,24 +35,23 @@ class StoreTwo extends Store {}
 
 class StoreInjected {
   [DISPATCH_EFFECTS_FIELD_NAME] = jest.fn();
-  [INJECTED_FROM_FIELD_NAME] = [];
   [DEPENDENCY_FIELD_NAME] = [];
 }
 
 class StoreWithInjectedStores {
   static [INJECTED_STORES_FIELD_NAME] = [StoreInjected];
   [DISPATCH_EFFECTS_FIELD_NAME] = jest.fn();
-  [INJECTED_FROM_FIELD_NAME] = [];
   propOne = 1;
   propTwo = { someValue };
 }
 
-class StoreWithInjectedStoresTwo {
+class StoreWithInjectedStoresAndDepency {
   static [INJECTED_STORES_FIELD_NAME] = [StoreInjected];
   [DISPATCH_EFFECTS_FIELD_NAME] = jest.fn();
   [INJECTED_FROM_FIELD_NAME] = [];
+  [DEPENDENCY_FIELD_NAME] = [];
   propOne = 2;
-  propTwo = { someValue: 'StoreWithInjectedStoresTwo' };
+  propTwo = { someValue: 'StoreWithInjectedStoresAndDepency' };
 }
 
 const initOptions = {};
@@ -99,8 +97,8 @@ describe('Directorr', () => {
 
     defineProperty(director, 'stores', createValueDescriptor(stores));
 
-    expect(director.getStore(Store)).toEqual(store);
-    expect(director.getStore(StoreWithInjectedStores)).toEqual(undefined);
+    expect(director.getStore(Store)).toBe(store);
+    expect(director.getStore(StoreWithInjectedStores)).toBeUndefined();
   });
 
   it('addStoreDependency', () => {
@@ -112,17 +110,17 @@ describe('Directorr', () => {
 
     defineProperty(director, 'initStore', createValueDescriptor(initStore));
 
-    expect(director.addStoreDependency(Store, DEP, initOptions)).toEqual(store);
+    expect(director.addStoreDependency(Store, DEP, initOptions)).toBe(store);
     expect(initStore).toBeCalledTimes(1);
     expect(initStore).lastCalledWith(Store, initOptions);
     expect(store[DEPENDENCY_FIELD_NAME]).toHaveLength(1);
     expect(store[DEPENDENCY_FIELD_NAME]).toContain(DEP);
 
-    expect(director.addStoreDependency(StoreTwo, DEP, initOptions)).toEqual(store);
+    expect(director.addStoreDependency(StoreTwo, DEP, initOptions)).toBe(store);
     expect(initStore).toBeCalledTimes(2);
     expect(initStore).lastCalledWith(StoreTwo, initOptions);
     expect(store[DEPENDENCY_FIELD_NAME]).toHaveLength(2);
-    expect(store[DEPENDENCY_FIELD_NAME]).toEqual([DEP, DEP]);
+    expect(store[DEPENDENCY_FIELD_NAME]).toStrictEqual([DEP, DEP]);
   });
 
   it('initStore', async () => {
@@ -133,12 +131,12 @@ describe('Directorr', () => {
     await flushPromises();
 
     expect(store).toBeInstanceOf(Store);
-    expect(store.initProps).toEqual(Store.storeInitOptions);
-    expect(store[STORES_FIELD_NAME]).toEqual(director.stores);
-    expect(store[DISPATCH_ACTION_FIELD_NAME]).toEqual(director.dispatch);
+    expect(store.initProps).toBe(Store.storeInitOptions);
+    expect(store[STORES_FIELD_NAME]).toBe(director.stores);
+    expect(store[DISPATCH_ACTION_FIELD_NAME]).toBe(director.dispatch);
     expect(store[INJECTED_FROM_FIELD_NAME]).toHaveLength(0);
 
-    expect(director.getStore(Store)).toEqual(store);
+    expect(director.getStore(Store)).toBe(store);
 
     expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(1);
     expect(store[DISPATCH_EFFECTS_FIELD_NAME]).lastCalledWith(
@@ -147,7 +145,7 @@ describe('Directorr', () => {
 
     const storeNext = director.addStoreDependency(Store, DEP, initOptions);
 
-    expect(storeNext).toEqual(store);
+    expect(storeNext).toBe(store);
   });
 
   it('initStore with injected store', async () => {
@@ -158,30 +156,30 @@ describe('Directorr', () => {
     await flushPromises();
 
     expect(store).toBeInstanceOf(StoreWithInjectedStores);
-    expect(director.getStore(StoreWithInjectedStores)).toEqual(store);
-    expect(director.getStore(StoreWithInjectedStoresTwo)).toBeUndefined();
+    expect(director.getStore(StoreWithInjectedStores)).toBe(store);
+    expect(director.getStore(StoreWithInjectedStoresAndDepency)).toBeUndefined();
 
     const injectedStore = director.getStore(StoreInjected);
 
     expect(injectedStore).toBeInstanceOf(StoreInjected);
-    expect(director.getStore(StoreInjected)).toEqual(injectedStore);
+    expect(director.getStore(StoreInjected)).toBe(injectedStore);
     expect(injectedStore[INJECTED_FROM_FIELD_NAME]).toMatchObject([StoreWithInjectedStores]);
 
-    const storeTwo = director.addStoreDependency(StoreWithInjectedStoresTwo, DEP, initOptions);
+    const storeTwo = director.addStoreDependency(
+      StoreWithInjectedStoresAndDepency,
+      DEP,
+      initOptions
+    );
 
     await flushPromises();
 
-    expect(storeTwo).toBeInstanceOf(StoreWithInjectedStoresTwo);
-    expect(director.getStore(StoreWithInjectedStoresTwo)).toEqual(storeTwo);
+    expect(storeTwo).toBeInstanceOf(StoreWithInjectedStoresAndDepency);
+    expect(director.getStore(StoreWithInjectedStoresAndDepency)).toBe(storeTwo);
     expect(injectedStore[INJECTED_FROM_FIELD_NAME]).toMatchObject([
       StoreWithInjectedStores,
-      StoreWithInjectedStoresTwo,
+      StoreWithInjectedStoresAndDepency,
     ]);
 
-    expect(injectedStore[INJECTED_FROM_FIELD_NAME]).toEqual([
-      StoreWithInjectedStores,
-      StoreWithInjectedStoresTwo,
-    ]);
     expect(injectedStore[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(3);
     expect(injectedStore[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenNthCalledWith(
       1,
@@ -199,7 +197,7 @@ describe('Directorr', () => {
     expect(injectedStore[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenNthCalledWith(
       3,
       createAction(DIRECTORR_INIT_STORE_ACTION, {
-        StoreConstructor: StoreWithInjectedStoresTwo,
+        StoreConstructor: StoreWithInjectedStoresAndDepency,
         initOptions,
       })
     );
@@ -215,7 +213,7 @@ describe('Directorr', () => {
     expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenNthCalledWith(
       2,
       createAction(DIRECTORR_INIT_STORE_ACTION, {
-        StoreConstructor: StoreWithInjectedStoresTwo,
+        StoreConstructor: StoreWithInjectedStoresAndDepency,
         initOptions,
       })
     );
@@ -223,7 +221,7 @@ describe('Directorr', () => {
     expect(storeTwo[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(1);
     expect(storeTwo[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledWith(
       createAction(DIRECTORR_INIT_STORE_ACTION, {
-        StoreConstructor: StoreWithInjectedStoresTwo,
+        StoreConstructor: StoreWithInjectedStoresAndDepency,
         initOptions,
       })
     );
@@ -257,8 +255,8 @@ describe('Directorr', () => {
     const store = director.addStoreDependency(StoreOne, DEP, initOptions);
 
     expect(store).toBeInstanceOf(StoreOne);
-    expect(director.getStore(StoreOne)).toEqual(store);
-    expect(director.getStore(StoreTwo)).toEqual(store);
+    expect(director.getStore(StoreOne)).toBe(store);
+    expect(director.getStore(StoreTwo)).toBe(store);
   });
 
   it('initStore with afterware', async () => {
@@ -273,7 +271,7 @@ describe('Directorr', () => {
     await flushPromises();
 
     expect(store).toBeInstanceOf(StoreWithAfterware);
-    expect(director.getStore(StoreWithAfterware)).toEqual(store);
+    expect(director.getStore(StoreWithAfterware)).toBe(store);
 
     expect(StoreWithAfterware.afterware).toBeCalledTimes(1);
     expect(StoreWithAfterware.afterware).lastCalledWith(
@@ -308,7 +306,7 @@ describe('Directorr', () => {
     await flushPromises();
 
     expect(store).toBeInstanceOf(Store);
-    expect(director.getStore(Store)).toEqual(store);
+    expect(director.getStore(Store)).toBe(store);
 
     expect(config.mergeStateToStore).toBeCalledTimes(1);
     expect(config.mergeStateToStore).toBeCalledWith(initStoresState[Store.name], store);
@@ -396,35 +394,39 @@ describe('Directorr', () => {
     await flushPromises();
 
     expect(store).toBeInstanceOf(StoreWithInjectedStores);
-    expect(director.getStore(StoreWithInjectedStores)).toEqual(store);
-    expect(director.getStore(StoreWithInjectedStoresTwo)).toBeUndefined();
+    expect(director.getStore(StoreWithInjectedStores)).toBe(store);
+    expect(director.getStore(StoreWithInjectedStoresAndDepency)).toBeUndefined();
 
     const injectedStore = director.getStore(StoreInjected);
 
     expect(injectedStore).toBeInstanceOf(StoreInjected);
-    expect(director.getStore(StoreInjected)).toEqual(injectedStore);
+    expect(director.getStore(StoreInjected)).toBe(injectedStore);
 
     director.removeStoreDependency(Store, DEP);
 
-    expect(director.getStore(StoreWithInjectedStores)).toEqual(store);
-    expect(director.getStore(StoreInjected)).toEqual(injectedStore);
+    expect(director.getStore(StoreWithInjectedStores)).toBe(store);
+    expect(director.getStore(StoreInjected)).toBe(injectedStore);
 
-    const storeTwo = director.addStoreDependency(StoreWithInjectedStoresTwo, DEP, initOptions);
+    const storeTwo = director.addStoreDependency(
+      StoreWithInjectedStoresAndDepency,
+      DEP,
+      initOptions
+    );
 
     await flushPromises();
 
-    expect(storeTwo).toBeInstanceOf(StoreWithInjectedStoresTwo);
-    expect(director.getStore(StoreWithInjectedStoresTwo)).toEqual(storeTwo);
+    expect(storeTwo).toBeInstanceOf(StoreWithInjectedStoresAndDepency);
+    expect(director.getStore(StoreWithInjectedStoresAndDepency)).toBe(storeTwo);
 
     director.removeStoreDependency(StoreWithInjectedStores, DEP);
 
     expect(director.getStore(StoreWithInjectedStores)).toBeUndefined();
-    expect(director.getStore(StoreInjected)).toEqual(injectedStore);
+    expect(director.getStore(StoreInjected)).toBe(injectedStore);
 
-    director.removeStoreDependency(StoreWithInjectedStoresTwo, DEP);
+    director.removeStoreDependency(StoreWithInjectedStoresAndDepency, DEP);
 
     expect(director.getStore(StoreWithInjectedStores)).toBeUndefined();
-    expect(director.getStore(StoreWithInjectedStoresTwo)).toBeUndefined();
+    expect(director.getStore(StoreWithInjectedStoresAndDepency)).toBeUndefined();
     expect(director.getStore(StoreInjected)).toBeUndefined();
 
     expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(3);
@@ -451,7 +453,7 @@ describe('Directorr', () => {
     expect(storeTwo[DISPATCH_EFFECTS_FIELD_NAME]).toHaveBeenNthCalledWith(
       4,
       createAction(DIRECTORR_DESTROY_STORE_ACTION, {
-        StoreConstructor: StoreWithInjectedStoresTwo,
+        StoreConstructor: StoreWithInjectedStoresAndDepency,
       })
     );
 
@@ -490,11 +492,11 @@ describe('Directorr', () => {
     await flushPromises();
 
     expect(store).toBeInstanceOf(Store);
-    expect(director.getStore(Store)).toEqual(store);
+    expect(director.getStore(Store)).toBe(store);
 
     director.removeStoreDependency(Store, DEP);
 
-    expect(initStoresState).toEqual({
+    expect(initStoresState).toStrictEqual({
       someAnotherStoreName: {
         propOne: 'propOne someAnotherStoreName',
         propTwo: { someValue: 'someValue someAnotherStoreName' },
@@ -533,7 +535,7 @@ describe('Directorr', () => {
     await flushPromises();
 
     expect(store).toBeInstanceOf(StoreWithAfterware);
-    expect(director.getStore(StoreWithAfterware)).toEqual(store);
+    expect(director.getStore(StoreWithAfterware)).toBe(store);
 
     expect(StoreWithAfterware.afterware).toBeCalledTimes(1);
     expect(director).toMatchObject({
@@ -563,6 +565,31 @@ describe('Directorr', () => {
 
     expect(subscribeHandler).toBeCalledTimes(1);
     expect(subscribeHandler).toBeCalledWith(director.stores);
+
+    // double unsub
+    director.unsubscribe(subscribeHandler);
+
+    director.dispatch(action);
+
+    expect(subscribeHandler).toBeCalledTimes(1);
+    expect(subscribeHandler).toBeCalledWith(director.stores);
+  });
+
+  it('unsubscribe when subscribe handler call', () => {
+    const director = new Directorr();
+    const handlerUnsub = jest.fn();
+    const handler = jest.fn();
+
+    const unsub = director.subscribe(store => {
+      handlerUnsub(store);
+      unsub();
+    });
+    director.subscribe(handler);
+    director.dispatch(action);
+
+    expect(handlerUnsub).toBeCalledTimes(1);
+    expect(handlerUnsub).toBeCalledWith(director.stores);
+    expect(handler).toBeCalledTimes(1);
   });
 
   it('waitAllStoresState with store isReady = true', async () => {
@@ -625,6 +652,11 @@ describe('Directorr', () => {
     director.waitAllStoresState().then(resolve).catch(reject);
 
     await flushPromises();
+
+    expect(resolve).not.toHaveBeenCalled();
+    expect(reject).not.toHaveBeenCalled();
+
+    director.dispatch(action);
 
     expect(resolve).not.toHaveBeenCalled();
     expect(reject).not.toHaveBeenCalled();
@@ -694,6 +726,11 @@ describe('Directorr', () => {
     expect(resolve).not.toHaveBeenCalled();
     expect(reject).not.toHaveBeenCalled();
 
+    director.dispatch(action);
+
+    expect(resolve).not.toHaveBeenCalled();
+    expect(reject).not.toHaveBeenCalled();
+
     store.changeReady();
     director.dispatch(action);
 
@@ -748,6 +785,11 @@ describe('Directorr', () => {
     director.findStoreState().then(resolve).catch(reject);
 
     await flushPromises();
+
+    expect(resolve).not.toHaveBeenCalled();
+    expect(reject).not.toHaveBeenCalled();
+
+    director.dispatch(action);
 
     expect(resolve).not.toHaveBeenCalled();
     expect(reject).not.toHaveBeenCalled();
@@ -912,14 +954,14 @@ describe('Directorr', () => {
     const { reduxStores, stores, dispatch, subscribe } = new Directorr();
     const next = jest.fn();
 
-    expect(reduxStores.getState()).toEqual(stores);
-    expect(reduxStores.dispatch).toEqual(dispatch);
-    expect(reduxStores.subscribe).toEqual(subscribe);
-    expect(reduxStores.replaceReducer).toEqual(EMPTY_FUNC);
+    expect(reduxStores.getState()).toBe(stores);
+    expect(reduxStores.dispatch).toBe(dispatch);
+    expect(reduxStores.subscribe).toBe(subscribe);
+    expect(reduxStores.replaceReducer).toBe(EMPTY_FUNC);
 
     const observable = reduxStores[Symbol.observable]();
 
-    expect(observable[Symbol.observable]()).toEqual(observable);
+    expect(observable[Symbol.observable]()).toBe(observable);
     expect(() => observable.subscribe(null as any)).toThrowError(notObserver());
     expect(observable.subscribe({})).toMatchObject({ unsubscribe: EMPTY_FUNC });
 

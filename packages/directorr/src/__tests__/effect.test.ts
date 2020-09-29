@@ -28,16 +28,16 @@ describe('effect', () => {
       callWithPropNotEquallFunc(MODULE_NAME, someProperty)
     );
 
-    expect(initializer(store, someFunc, someProperty, actionType, addFields)).toEqual(someFunc);
+    expect(initializer(store, someFunc, someProperty, actionType, addFields)).toBe(someFunc);
 
     expect(addFields).toBeCalledTimes(1);
     expect(addFields).lastCalledWith(store);
 
-    expect(store[EFFECTS_FIELD_NAME].get(actionType)).toEqual([someProperty]);
+    expect(store[EFFECTS_FIELD_NAME].get(actionType)).toStrictEqual([someProperty]);
 
-    expect(initializer(store, someFunc, secondProp, actionType, addFields)).toEqual(someFunc);
+    expect(initializer(store, someFunc, secondProp, actionType, addFields)).toBe(someFunc);
 
-    expect(store[EFFECTS_FIELD_NAME].get(actionType)).toEqual([someProperty, secondProp]);
+    expect(store[EFFECTS_FIELD_NAME].get(actionType)).toStrictEqual([someProperty, secondProp]);
   });
 
   it('call effect with wrong arg', () => {

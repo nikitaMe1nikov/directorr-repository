@@ -17,17 +17,17 @@ describe('whenPayload', () => {
     const convertedObj = {};
     const converterToNewObj = jest.fn().mockImplementation(() => convertedObj);
 
-    expect(payloadChecker(payload, valueFunc, [checkerFalse])).toEqual(payload);
+    expect(payloadChecker(payload, valueFunc, [checkerFalse])).toBe(payload);
     expect(checkerFalse).toBeCalledTimes(0);
     expect(valueFunc).toBeCalledTimes(1);
 
-    expect(payloadChecker(payload, valueFunc, [checkerFalse, converter])).toEqual(payload);
+    expect(payloadChecker(payload, valueFunc, [checkerFalse, converter])).toBe(payload);
     expect(checkerFalse).toBeCalledTimes(0);
     expect(converter).toBeCalledTimes(1);
     expect(converter).lastCalledWith(payload);
     expect(valueFunc).toBeCalledTimes(2);
 
-    expect(payloadChecker(payload, valueFunc, [checkerFalse, converterToNewObj])).toEqual(
+    expect(payloadChecker(payload, valueFunc, [checkerFalse, converterToNewObj])).toBe(
       convertedObj
     );
     expect(checkerFalse).toBeCalledTimes(0);
@@ -46,7 +46,7 @@ describe('whenPayload', () => {
     const convertedObj = {};
     const converterToNewObj = jest.fn().mockImplementation(() => convertedObj);
 
-    expect(payloadChecker(payload, valueFunc, [checkerTrue])).toEqual(payload);
+    expect(payloadChecker(payload, valueFunc, [checkerTrue])).toBe(payload);
     expect(valueFunc).toBeCalledTimes(1);
     expect(valueFunc).lastCalledWith(payload);
     expect(checkerTrue).toBeCalledTimes(1);
@@ -57,9 +57,7 @@ describe('whenPayload', () => {
     expect(checkerFalse).toBeCalledTimes(1);
     expect(checkerFalse).lastCalledWith(payload);
 
-    expect(payloadChecker(payload, valueFunc, [checkerTrue, converterToNewObj])).toEqual(
-      convertedObj
-    );
+    expect(payloadChecker(payload, valueFunc, [checkerTrue, converterToNewObj])).toBe(convertedObj);
     expect(valueFunc).toBeCalledTimes(2);
     expect(valueFunc).lastCalledWith(convertedObj);
     expect(converterToNewObj).toBeCalledTimes(1);
@@ -78,11 +76,11 @@ describe('whenPayload', () => {
     const convertedObj = {};
     const converterToNewObj = jest.fn().mockImplementation(() => convertedObj);
 
-    expect(payloadChecker(payload, valueFunc, [checkerEmptyObj])).toEqual(payload);
+    expect(payloadChecker(payload, valueFunc, [checkerEmptyObj])).toBe(payload);
     expect(valueFunc).toBeCalledTimes(1);
     expect(valueFunc).lastCalledWith(payload);
 
-    expect(payloadChecker(payload, valueFunc, [checkerEmptyObj, converterToNewObj])).toEqual(
+    expect(payloadChecker(payload, valueFunc, [checkerEmptyObj, converterToNewObj])).toBe(
       convertedObj
     );
     expect(converterToNewObj).toBeCalledTimes(1);
@@ -93,7 +91,7 @@ describe('whenPayload', () => {
     expect(payloadChecker(payload, valueFunc, [checkerObjLike])).toBeUndefined();
     expect(valueFunc).toBeCalledTimes(2);
 
-    expect(payloadChecker(checkerObjLike, valueFunc, [checkerObjLike])).toEqual(checkerObjLike);
+    expect(payloadChecker(checkerObjLike, valueFunc, [checkerObjLike])).toBe(checkerObjLike);
     expect(valueFunc).toBeCalledTimes(3);
     expect(valueFunc).lastCalledWith(checkerObjLike);
   });
@@ -142,7 +140,7 @@ describe('whenPayload', () => {
 
     expect(
       payloadChecker(checkerObjLike, valueFunc, [checkerObjLikeWithCheckerTrue, converter])
-    ).toEqual(checkerObjLike);
+    ).toBe(checkerObjLike);
     expect(checkerTrue).toBeCalledTimes(1);
     expect(checkerTrue).lastCalledWith(checkerObjLike, someProperty);
     expect(converter).toBeCalledTimes(1);
@@ -152,7 +150,7 @@ describe('whenPayload', () => {
 
     expect(
       payloadChecker(checkerObjLike, valueFunc, [checkerObjLikeWithCheckerTrue, converterToNewObj])
-    ).toEqual(convertedObj);
+    ).toBe(convertedObj);
     expect(checkerTrue).toBeCalledTimes(2);
     expect(checkerTrue).lastCalledWith(checkerObjLike, someProperty);
     expect(converterToNewObj).toBeCalledTimes(1);

@@ -17,8 +17,6 @@ import {
   CheckObjectPattern,
   AfterwareMap,
   Afterware,
-  PayloadAfterware,
-  DirectorrInterface,
   DirectorrStoreClassConstructor,
 } from './types';
 import { notFindStoreName } from './messages';
@@ -384,13 +382,4 @@ export function isActionHave(
   }
 
   return false;
-}
-
-export function isPayloadHave(
-  checkPattern: CheckObjectPattern,
-  payloadAfterware: PayloadAfterware
-): PayloadAfterware {
-  return (dispatchType: DirectorrInterface['dispatchType'], payload: Action['payload']) => {
-    if (compareObjectWithPattern(checkPattern, payload)) payloadAfterware(dispatchType, payload);
-  };
 }

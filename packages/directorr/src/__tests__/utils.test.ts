@@ -38,6 +38,7 @@ import {
   calcActionType,
   isConverter,
   isTypescriptDecorator,
+  isActionHave,
 } from '../utils';
 import { notFindStoreName } from '../messages';
 import {
@@ -98,10 +99,10 @@ describe('utils', () => {
       static storeName = 'storeName';
     }
 
-    expect(getStoreName(SomeStore)).toEqual(SomeStore.name);
-    expect(getStoreName(SomeStoreStaticName)).toEqual(SomeStoreStaticName.storeName);
-    expect(getStoreName(new SomeStore())).toEqual(SomeStore.name);
-    expect(getStoreName(new SomeStoreStaticName())).toEqual(SomeStoreStaticName.storeName);
+    expect(getStoreName(SomeStore)).toBe(SomeStore.name);
+    expect(getStoreName(SomeStoreStaticName)).toBe(SomeStoreStaticName.storeName);
+    expect(getStoreName(new SomeStore())).toBe(SomeStore.name);
+    expect(getStoreName(new SomeStoreStaticName())).toBe(SomeStoreStaticName.storeName);
     expect(() => getStoreName(Object.create(null))).toThrowError(notFindStoreName());
   });
 
@@ -109,30 +110,30 @@ describe('utils', () => {
     class SomeStore {}
     const storeName = 'storeName';
 
-    expect(calcActionType(SomeStore)).toEqual(SomeStore.name);
-    expect(calcActionType(storeName)).toEqual(storeName);
+    expect(calcActionType(SomeStore)).toBe(SomeStore.name);
+    expect(calcActionType(storeName)).toBe(storeName);
   });
 
   it('createActionType', () => {
-    expect(createActionType(actionType, ACTION_TYPE_DIVIDER)).toEqual(actionType);
-    expect(createActionType(actionTypeArray, ACTION_TYPE_DIVIDER)).toEqual(
+    expect(createActionType(actionType, ACTION_TYPE_DIVIDER)).toBe(actionType);
+    expect(createActionType(actionTypeArray, ACTION_TYPE_DIVIDER)).toBe(
       actionTypeArray.join(ACTION_TYPE_DIVIDER)
     );
-    expect(createActionType(SomeClass, ACTION_TYPE_DIVIDER)).toEqual(SomeClass.name);
-    expect(createActionType([actionType, SomeClass], ACTION_TYPE_DIVIDER)).toEqual(
+    expect(createActionType(SomeClass, ACTION_TYPE_DIVIDER)).toBe(SomeClass.name);
+    expect(createActionType([actionType, SomeClass], ACTION_TYPE_DIVIDER)).toBe(
       [actionType, SomeClass.name].join(ACTION_TYPE_DIVIDER)
     );
-    expect(createActionType([[actionType, SomeClass], SomeClass], ACTION_TYPE_DIVIDER)).toEqual(
+    expect(createActionType([[actionType, SomeClass], SomeClass], ACTION_TYPE_DIVIDER)).toBe(
       [actionType, SomeClass.name, SomeClass.name].join(ACTION_TYPE_DIVIDER)
     );
   });
 
   it('batchFunction', () => {
-    expect(batchFunction(someFunc)).toEqual(someFunc);
+    expect(batchFunction(someFunc)).toBe(someFunc);
   });
 
   it('createAction', () => {
-    expect(createAction(actionType, someValue)).toEqual({
+    expect(createAction(actionType, someValue)).toStrictEqual({
       type: actionType,
       payload: someValue,
     });
@@ -179,7 +180,7 @@ describe('utils', () => {
   });
 
   it('DESCRIPTOR', () => {
-    expect(DESCRIPTOR).toEqual({
+    expect(DESCRIPTOR).toStrictEqual({
       writable: false,
       enumerable: false,
       configurable: true,
@@ -188,7 +189,7 @@ describe('utils', () => {
   });
 
   it('PROPERTY_DESCRIPTOR', () => {
-    expect(PROPERTY_DESCRIPTOR).toEqual({
+    expect(PROPERTY_DESCRIPTOR).toStrictEqual({
       enumerable: false,
       configurable: true,
       get: EMPTY_FUNC,
@@ -197,14 +198,14 @@ describe('utils', () => {
   });
 
   it('createValueDescriptor', () => {
-    expect(createValueDescriptor(someValue).value).toEqual(someValue);
+    expect(createValueDescriptor(someValue).value).toBe(someValue);
   });
 
   it('createPropertyDescriptor', () => {
-    expect(createPropertyDescriptor().get).toEqual(EMPTY_FUNC);
-    expect(createPropertyDescriptor().set).toEqual(EMPTY_FUNC);
-    expect(createPropertyDescriptor(someFunc, someFunc).get).toEqual(someFunc);
-    expect(createPropertyDescriptor(someFunc, someFunc).set).toEqual(someFunc);
+    expect(createPropertyDescriptor().get).toBe(EMPTY_FUNC);
+    expect(createPropertyDescriptor().set).toBe(EMPTY_FUNC);
+    expect(createPropertyDescriptor(someFunc, someFunc).get).toBe(someFunc);
+    expect(createPropertyDescriptor(someFunc, someFunc).set).toBe(someFunc);
   });
 
   it('isLikePropertyDecorator', () => {
@@ -229,8 +230,8 @@ describe('utils', () => {
 
     expect(initializer).toBeCalledTimes(1);
     expect(initializer).lastCalledWith(descriptor, someValue, someProperty, context);
-    expect(descriptor[Symbol.for(someProperty)]).toEqual(someValue);
-    expect(descriptor.get()).toEqual(someValue);
+    expect(descriptor[Symbol.for(someProperty)]).toBe(someValue);
+    expect(descriptor.get()).toBe(someValue);
 
     const get = jest.fn().mockImplementation(() => someValue);
     const set = jest.fn();
@@ -256,8 +257,8 @@ describe('utils', () => {
     expect(get).toBeCalledTimes(1);
     expect(initializer).toBeCalledTimes(2);
     expect(initializer).lastCalledWith(propDescriptor, someValue, someProperty, context);
-    expect(propDescriptor[Symbol.for(someProperty)]).toEqual(someValue);
-    expect(propDescriptor.get()).toEqual(someValue);
+    expect(propDescriptor[Symbol.for(someProperty)]).toBe(someValue);
+    expect(propDescriptor.get()).toBe(someValue);
   });
 
   it('isBabelDecorator', () => {
@@ -290,7 +291,7 @@ describe('utils', () => {
     descriptor.initializer();
 
     expect(descriptor.writable).toBeFalsy();
-    expect(descriptor).toEqual(babelDescriptor);
+    expect(descriptor).toStrictEqual(babelDescriptor);
     expect(babelInitializer).toBeCalledTimes(1);
     expect(initializer).toBeCalledTimes(1);
     expect(initializer).lastCalledWith(babelDescriptor, someValue, someProperty, context);
@@ -317,7 +318,7 @@ describe('utils', () => {
     const descriptor = {};
     const decorator = composePropertyDecorators(decorators);
 
-    expect(decorator(someValue, someProperty, descriptor)).toEqual(descriptor);
+    expect(decorator(someValue, someProperty, descriptor)).toStrictEqual(descriptor);
 
     expect(decorator1).toBeCalledTimes(1);
     expect(decorator1).lastCalledWith(someValue, someProperty, descriptor);
@@ -332,27 +333,27 @@ describe('utils', () => {
     const storesNameExist = [someProperty];
     const storesNameNotExist = ['someNotExistStoreName'];
 
-    expect(checkStoresState(stores, isStoreStateFalse)).toEqual(false);
+    expect(checkStoresState(stores, isStoreStateFalse)).toBeFalsy();
     expect(isStoreStateFalse).toBeCalledTimes(1);
     expect(isStoreStateFalse).lastCalledWith(someValue);
 
-    expect(checkStoresState(stores, isStoreStateTrue)).toEqual(true);
+    expect(checkStoresState(stores, isStoreStateTrue)).toBeTruthy();
     expect(isStoreStateTrue).toBeCalledTimes(1);
     expect(isStoreStateTrue).lastCalledWith(someValue);
 
-    expect(checkStoresState(stores, isStoreStateFalse, storesNameExist)).toEqual(false);
+    expect(checkStoresState(stores, isStoreStateFalse, storesNameExist)).toBeFalsy();
     expect(isStoreStateFalse).toBeCalledTimes(2);
     expect(isStoreStateFalse).lastCalledWith(someValue);
 
-    expect(checkStoresState(stores, isStoreStateTrue, storesNameExist)).toEqual(true);
+    expect(checkStoresState(stores, isStoreStateTrue, storesNameExist)).toBeTruthy();
     expect(isStoreStateTrue).toBeCalledTimes(2);
     expect(isStoreStateTrue).lastCalledWith(someValue);
 
-    expect(checkStoresState(stores, isStoreStateFalse, storesNameNotExist)).toEqual(true);
+    expect(checkStoresState(stores, isStoreStateFalse, storesNameNotExist)).toBeTruthy();
     expect(isStoreStateFalse).toBeCalledTimes(2);
     expect(isStoreStateFalse).lastCalledWith(someValue);
 
-    expect(checkStoresState(stores, isStoreStateTrue, storesNameNotExist)).toEqual(true);
+    expect(checkStoresState(stores, isStoreStateTrue, storesNameNotExist)).toBeTruthy();
     expect(isStoreStateTrue).toBeCalledTimes(2);
     expect(isStoreStateTrue).lastCalledWith(someValue);
   });
@@ -366,9 +367,9 @@ describe('utils', () => {
       isReady: true,
     };
 
-    expect(isStoreReady(storeEmpty)).toEqual(true);
-    expect(isStoreReady(storeFalse)).toEqual(false);
-    expect(isStoreReady(storeTrue)).toEqual(true);
+    expect(isStoreReady(storeEmpty)).toBeTruthy();
+    expect(isStoreReady(storeFalse)).toBeFalsy();
+    expect(isStoreReady(storeTrue)).toBeTruthy();
   });
 
   it('findStoreStateInStores', () => {
@@ -380,7 +381,7 @@ describe('utils', () => {
     expect(isStoreStateFalse).toBeCalledTimes(1);
     expect(isStoreStateFalse).lastCalledWith(someValue);
 
-    expect(findStoreStateInStores(stores, isStoreStateTrue)).toEqual(someValue);
+    expect(findStoreStateInStores(stores, isStoreStateTrue)).toBe(someValue);
     expect(isStoreStateTrue).toBeCalledTimes(1);
     expect(isStoreStateTrue).lastCalledWith(someValue);
   });
@@ -394,9 +395,9 @@ describe('utils', () => {
       isError: true,
     };
 
-    expect(isStoreError(storeEmpty)).toEqual(false);
-    expect(isStoreError(storeFalse)).toEqual(false);
-    expect(isStoreError(storeTrue)).toEqual(true);
+    expect(isStoreError(storeEmpty)).toBeFalsy();
+    expect(isStoreError(storeFalse)).toBeFalsy();
+    expect(isStoreError(storeTrue)).toBeTruthy();
   });
 
   it('mergeStateToStore', () => {
@@ -426,17 +427,17 @@ describe('utils', () => {
 
     mergeStateToStore(storeState, directorrStoreEmpty);
 
-    expect(directorrStoreEmpty).toEqual({});
+    expect(directorrStoreEmpty).toStrictEqual({});
 
     mergeStateToStore(storeState, directorrStore);
 
-    expect(directorrStore).toEqual({
+    expect(directorrStore).toStrictEqual({
       [someProperty]: someValue,
     });
 
     mergeStateToStore(storeStateDeep, directorrStoreDeep);
 
-    expect(directorrStoreDeep).toEqual(storeStateDeep);
+    expect(directorrStoreDeep).toStrictEqual(storeStateDeep);
   });
 
   it('hydrateStoresToState', () => {
@@ -445,7 +446,7 @@ describe('utils', () => {
       [storeName, someValue],
     ]);
 
-    expect(hydrateStoresToState(directorrStores)).toEqual({
+    expect(hydrateStoresToState(directorrStores)).toStrictEqual({
       [someProperty]: someValue,
       [storeName]: someValue,
     });
@@ -476,5 +477,23 @@ describe('utils', () => {
 
     expect(actionType2PayloadAfterware).toBeCalledTimes(1);
     expect(actionType2PayloadAfterware).lastCalledWith(dispatch, actionTwo.payload);
+  });
+
+  it('isActionHave', () => {
+    const otherType = 'otherType';
+    const patternWithValueTrue = {
+      someValue: jest.fn().mockReturnValue(true),
+    };
+    const patternWithValueFalse = {
+      someValue: jest.fn().mockReturnValue(false),
+    };
+
+    expect(isActionHave(action, otherType, {})).toBeFalsy();
+    expect(isActionHave({ type: otherType }, otherType, {})).toBeFalsy();
+    expect(isActionHave(action, action.type, { ...someValue })).toBeTruthy();
+    expect(isActionHave(action, action.type, {})).toBeTruthy();
+    expect(isActionHave(action, action.type, { prop: 1 })).toBeFalsy();
+    expect(isActionHave(action, action.type, patternWithValueTrue)).toBeTruthy();
+    expect(isActionHave(action, action.type, patternWithValueFalse)).toBeFalsy();
   });
 });

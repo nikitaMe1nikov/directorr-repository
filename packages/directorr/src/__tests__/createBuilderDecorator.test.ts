@@ -29,6 +29,6 @@ describe('createBuilderDecorator', () => {
       someValue
     );
 
-    expect(descriptor).toEqual(someValue);
+    expect(descriptor).toBe(someValue);
   });
 });

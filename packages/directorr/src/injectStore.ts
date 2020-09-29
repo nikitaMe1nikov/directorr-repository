@@ -11,15 +11,13 @@ import {
 } from './utils';
 import {
   callDecoratorWithNotConsrtactorType,
-  notFoundConstuctorInDirectorrStore,
+  notFoundDirectorrStore,
   notFoundStoreInDirectorrStore,
   dontUseWithAnotherDecorator,
 } from './messages';
 import {
   DirectorrStoreClassConstructor,
-  // DecoratorTarget,
   Decorator,
-  // CreateDecorator,
   CreateDecoratorOneArg,
   BabelDescriptor,
 } from './types';
@@ -31,8 +29,8 @@ export function injectStoreDecorator(
   moduleName: string
 ) {
   function get(this: any) {
-    if (!(STORES_FIELD_NAME in this))
-      throw new Error(notFoundConstuctorInDirectorrStore(moduleName, StoreConstructor));
+    if (!(STORES_FIELD_NAME in this) || this[STORES_FIELD_NAME] === null)
+      throw new Error(notFoundDirectorrStore(moduleName, StoreConstructor));
 
     const store = this[STORES_FIELD_NAME].get(getStoreName(StoreConstructor));
 

@@ -17,7 +17,7 @@ describe('whenState', () => {
     expect(checkerFalse).toBeCalledTimes(1);
     expect(checkerFalse).lastCalledWith(store, payload);
 
-    expect(stateChecker(payload, valueFunc, store, [checkerTrue])).toEqual(payload);
+    expect(stateChecker(payload, valueFunc, store, [checkerTrue])).toBe(payload);
     expect(valueFunc).toBeCalledTimes(1);
     expect(valueFunc).lastCalledWith(payload);
     expect(checkerTrue).toBeCalledTimes(1);
@@ -46,13 +46,13 @@ describe('whenState', () => {
     expect(stateChecker(payload, valueFunc, store, [checkerObjLikePayload])).toBeUndefined();
     expect(valueFunc).toBeCalledTimes(0);
 
-    expect(stateChecker(payload, valueFunc, store, [checkerEmptyObj])).toEqual(payload);
+    expect(stateChecker(payload, valueFunc, store, [checkerEmptyObj])).toBe(payload);
     expect(valueFunc).toBeCalledTimes(1);
     expect(valueFunc).lastCalledWith(payload);
 
-    expect(
-      stateChecker(payload, valueFunc, checkerObjLikePayload, [checkerObjLikePayload])
-    ).toEqual(payload);
+    expect(stateChecker(payload, valueFunc, checkerObjLikePayload, [checkerObjLikePayload])).toBe(
+      payload
+    );
     expect(valueFunc).toBeCalledTimes(2);
     expect(valueFunc).lastCalledWith(payload);
 
@@ -69,7 +69,7 @@ describe('whenState', () => {
       stateChecker(payload, valueFunc, checkerObjLikeWithCheckerTrue, [
         checkerObjLikeWithCheckerTrue,
       ])
-    ).toEqual(payload);
+    ).toBe(payload);
     expect(checkerTrue).toBeCalledTimes(1);
     expect(checkerTrue).lastCalledWith(checkerObjLikeWithCheckerTrue, payload, someProperty);
     expect(valueFunc).toBeCalledTimes(3);

@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import {
   Directorr,
   config,
@@ -22,7 +25,6 @@ import {
   isLikeAction,
   createAfterware,
   isActionHave,
-  isPayloadHave,
   createActionAndEffect,
   isStoreReady,
   isStoreError,
@@ -63,7 +65,6 @@ describe('index', () => {
     expect(isLikeAction).not.toBeUndefined();
     expect(createAfterware).not.toBeUndefined();
     expect(isActionHave).not.toBeUndefined();
-    expect(isPayloadHave).not.toBeUndefined();
     expect(createActionAndEffect).not.toBeUndefined();
     expect(isStoreReady).not.toBeUndefined();
     expect(isStoreError).not.toBeUndefined();

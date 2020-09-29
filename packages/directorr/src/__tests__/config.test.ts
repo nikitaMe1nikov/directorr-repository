@@ -12,16 +12,29 @@ import { actionType, actionType2 } from '../__mocks__/mocks';
 
 describe('config', () => {
   it('config default', () => {
-    expect(config.batchFunction).toEqual(batchFunction);
-    expect(config.createAction).toEqual(createAction);
-    expect(config.actionTypeDivider).toEqual(ACTION_TYPE_DIVIDER);
+    expect(config.batchFunction).toBe(batchFunction);
+    expect(config.createAction).toBe(createAction);
+    expect(config.actionTypeDivider).toBe(ACTION_TYPE_DIVIDER);
     expect(config.createActionType([actionType, actionType2])).toEqual(
       createActionType([actionType, actionType2], config.actionTypeDivider)
     );
-    expect(config.dispatchEffectsOrig).toEqual(dispatchEffects);
-    expect(config.dispatchEffects).toEqual(dispatchEffects);
-    expect(config.hydrateStoresToState).toEqual(hydrateStoresToState);
-    expect(config.mergeStateToStore).toEqual(mergeStateToStore);
+    expect(config.dispatchEffectsOrig).toBe(dispatchEffects);
+    expect(config.dispatchEffects).toBe(dispatchEffects);
+    expect(config.hydrateStoresToState).toBe(hydrateStoresToState);
+    expect(config.mergeStateToStore).toBe(mergeStateToStore);
+
+    config.configure({});
+
+    expect(config.batchFunction).toBe(batchFunction);
+    expect(config.createAction).toBe(createAction);
+    expect(config.actionTypeDivider).toBe(ACTION_TYPE_DIVIDER);
+    expect(config.createActionType([actionType, actionType2])).toEqual(
+      createActionType([actionType, actionType2], config.actionTypeDivider)
+    );
+    expect(config.dispatchEffectsOrig).toBe(dispatchEffects);
+    expect(config.dispatchEffects).toBe(dispatchEffects);
+    expect(config.hydrateStoresToState).toBe(hydrateStoresToState);
+    expect(config.mergeStateToStore).toBe(mergeStateToStore);
   });
 
   it('config.configure', () => {
@@ -43,15 +56,15 @@ describe('config', () => {
       mergeStateToStore,
     });
 
-    expect(config.batchFunction).toEqual(batchFunction);
-    expect(config.createAction).toEqual(createAction);
-    expect(config.actionTypeDivider).toEqual(actionTypeDivider);
+    expect(config.batchFunction).toBe(batchFunction);
+    expect(config.createAction).toBe(createAction);
+    expect(config.actionTypeDivider).toBe(actionTypeDivider);
     expect(config.createActionType([actionType, actionType2])).toEqual(
       createActionType([actionType, actionType2], actionTypeDivider)
     );
-    expect(config.dispatchEffectsOrig).toEqual(dispatchEffects);
-    expect(config.dispatchEffects).toEqual(dispatchEffects);
-    expect(config.hydrateStoresToState).toEqual(hydrateStoresToState);
-    expect(config.mergeStateToStore).toEqual(mergeStateToStore);
+    expect(config.dispatchEffectsOrig).toBe(dispatchEffects);
+    expect(config.dispatchEffects).toBe(dispatchEffects);
+    expect(config.hydrateStoresToState).toBe(hydrateStoresToState);
+    expect(config.mergeStateToStore).toBe(mergeStateToStore);
   });
 });

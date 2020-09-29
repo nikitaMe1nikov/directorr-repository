@@ -16,6 +16,9 @@ describe('createCheckerContext', () => {
       callDecoratorWithNotConvertPayload(moduleName, wrongArg)
     );
 
-    expect(createCheckerContext(moduleName, checker, converter)).toEqual([checker, converter]);
+    expect(createCheckerContext(moduleName, checker, converter)).toStrictEqual([
+      checker,
+      converter,
+    ]);
   });
 });

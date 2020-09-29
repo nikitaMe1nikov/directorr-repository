@@ -90,11 +90,7 @@ class Directorr implements DirectorrInterface {
   ) {
     const store = this.initStore(StoreConstructor, initOptions);
 
-    if (DEPENDENCY_FIELD_NAME in store) {
-      store[DEPENDENCY_FIELD_NAME].push(depName);
-    } else {
-      defineProperty(store, DEPENDENCY_FIELD_NAME, createValueDescriptor([depName]));
-    }
+    store[DEPENDENCY_FIELD_NAME].push(depName);
 
     return store;
   }
@@ -123,10 +119,8 @@ class Directorr implements DirectorrInterface {
       const InjectedStores = (StoreConstructor as any)[INJECTED_STORES_FIELD_NAME];
 
       try {
-        for (let i = 0, l = InjectedStores.length, injectedFrom: any; i < l; ++i) {
-          injectedFrom = this.initStore(InjectedStores[i])[INJECTED_FROM_FIELD_NAME];
-
-          if (!injectedFrom.includes(StoreConstructor)) injectedFrom.push(StoreConstructor);
+        for (const injectedStore of InjectedStores) {
+          this.initStore(injectedStore)[INJECTED_FROM_FIELD_NAME].push(StoreConstructor);
         }
       } catch (e) {
         if (e instanceof RangeError) {
@@ -144,6 +138,11 @@ class Directorr implements DirectorrInterface {
     const store = new (StoreConstructor as DirectorrStoreClassConstructor)(
       StoreConstructor.storeInitOptions
     );
+
+    if (!(INJECTED_FROM_FIELD_NAME in store)) {
+      defineProperty(store, INJECTED_FROM_FIELD_NAME, createValueDescriptor([]));
+      defineProperty(store, DEPENDENCY_FIELD_NAME, createValueDescriptor([]));
+    }
 
     // attach to directorr
     defineProperty(store, STORES_FIELD_NAME, createValueDescriptor(this.stores));
@@ -181,8 +180,8 @@ class Directorr implements DirectorrInterface {
         const InjectedStores = (StoreConstructor as any)[INJECTED_STORES_FIELD_NAME];
 
         try {
-          for (let i = 0, l = InjectedStores.length; i < l; ++i) {
-            this.destroyStore(InjectedStores[i], StoreConstructor);
+          for (const injectedStore of InjectedStores) {
+            this.destroyStore(injectedStore, StoreConstructor);
           }
         } catch (e) {
           if (e instanceof RangeError) {
@@ -198,7 +197,7 @@ class Directorr implements DirectorrInterface {
         const injectedFrom: DirectorrStoreClass[] = store[INJECTED_FROM_FIELD_NAME];
         const index = injectedFrom.indexOf(FromStoreConstructor);
 
-        if (index !== -1) injectedFrom.splice(index, 1);
+        injectedFrom.splice(index, 1);
       }
 
       // remove store
@@ -329,7 +328,8 @@ class Directorr implements DirectorrInterface {
 
   private removeStoreAfterware(afterware: Afterware) {
     const index = this.afterwares.indexOf(afterware);
-    if (index !== -1) this.afterwares.splice(index, 1);
+
+    this.afterwares.splice(index, 1);
   }
 
   dispatch: DispatchAction = config.batchFunction(action => {

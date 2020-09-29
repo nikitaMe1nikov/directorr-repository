@@ -10,6 +10,6 @@ describe('createActionTypeContext', () => {
       callDecoratorWithNotActionType(moduleName, wrongActionType)
     );
 
-    expect(createActionTypeContext(moduleName, actionType)).toEqual(actionType);
+    expect(createActionTypeContext(moduleName, actionType)).toBe(actionType);
   });
 });

@@ -78,7 +78,7 @@ describe('connectStore', () => {
 
     expect(
       addDispatchAction(innerStoreOne, outerStore, actionType, undefined, dispatchActionOne)
-    ).toEqual(innerStoreOne);
+    ).toBe(innerStoreOne);
 
     expect(innerStoreOne[DISPATCH_ACTION_FIELD_NAME]).toBeDefined();
 
@@ -95,7 +95,7 @@ describe('connectStore', () => {
 
     expect(
       addDispatchAction(innerStoreTwo, outerStore, actionType, prefixActionType, dispatchActionTwo)
-    ).toEqual(innerStoreOne);
+    ).toBe(innerStoreTwo);
 
     expect(innerStoreTwo[DISPATCH_ACTION_FIELD_NAME]).toBeDefined();
 
@@ -122,7 +122,7 @@ describe('connectStore', () => {
 
     expect(
       initializer(store, someValue, someProperty, actionType, addDispatchAction, addFields)
-    ).toEqual(someValue);
+    ).toBe(someValue);
 
     expect(addDispatchAction).toBeCalledTimes(1);
     expect(addDispatchAction).lastCalledWith(someValue, store, someProperty, actionType);
