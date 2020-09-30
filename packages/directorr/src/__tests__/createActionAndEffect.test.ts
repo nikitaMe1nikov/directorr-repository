@@ -1,26 +1,23 @@
 import createActionAndEffect from '../createActionAndEffect';
-import { actionType } from '../__mocks__/mocks';
-
-jest.mock('../action', () => {
-  const actionDescriptor = jest.fn();
-
-  return actionDescriptor.mockImplementation(() => actionDescriptor);
-});
-
-jest.mock('../effect', () => {
-  const actionDescriptor = jest.fn();
-
-  return actionDescriptor.mockImplementation(() => actionDescriptor);
-});
+import { actionType, someValue } from '../__mocks__/mocks';
 
 describe('createActionAndEffect', () => {
-  it('createActionAndEffect', () => {
-    const [action, effect] = createActionAndEffect(actionType);
+  it('use in class', () => {
+    const [action, effect] = createActionAndEffect<void>(actionType);
 
-    expect(action).toBeCalledTimes(1);
-    expect(action).lastCalledWith(actionType);
+    class SomeClass {
+      @action
+      someAction = jest.fn().mockImplementation(v => v);
 
-    expect(effect).toBeCalledTimes(1);
-    expect(effect).lastCalledWith(actionType);
+      @effect
+      someEffect = jest.fn();
+    }
+
+    const obj = new SomeClass();
+
+    obj.someAction(someValue);
+
+    expect(obj.someEffect).toBeCalledTimes(1);
+    expect(obj.someEffect).lastCalledWith(someValue);
   });
 });

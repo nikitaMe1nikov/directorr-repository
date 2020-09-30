@@ -16,7 +16,7 @@ import {
   CreateDecoratorOneArgOption,
 } from './types';
 import decorator from './decorator';
-import createBuilderDecorator from './createBuilderDecorator';
+import createDecoratorFactory from './createrDecoratorFactory';
 import createActionTypeOptionContext from './createActionTypeOptionContext';
 import addInitFields from './initFields';
 
@@ -74,7 +74,7 @@ export function initializer(
   return addDispatchActionInStore(store, initObject, property, prefixActionType);
 }
 
-const connectStore: CreateDecoratorOneArgOption<ActionType> = createBuilderDecorator(
+const connectStore: CreateDecoratorOneArgOption<ActionType> = createDecoratorFactory(
   MODULE_NAME,
   decorator,
   initializer,

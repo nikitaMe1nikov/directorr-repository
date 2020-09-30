@@ -1,9 +1,14 @@
 import { isFunction, DISPATCH_ACTION_FIELD_NAME } from './utils';
 import config from './config';
 import { callWithPropNotEquallFunc } from './messages';
-import { RunDispatcher, ActionType, CreateDecoratorOneArg } from './types';
+import {
+  RunDispatcher,
+  ActionType,
+  CreateDecoratorValueTypedWithTypeAction,
+  DecoratorValueTypedForAction,
+} from './types';
 import decorator from './decorator';
-import createBuilderDecorator from './createBuilderDecorator';
+import createDecoratorFactory from './createrDecoratorFactory';
 import createActionTypeContext from './createActionTypeContext';
 import addInitFields from './initFields';
 
@@ -32,11 +37,18 @@ export function initializer(
   return (...args: any[]) => dispatcher(args, actionType, value, initObject);
 }
 
-const action: CreateDecoratorOneArg<ActionType> = createBuilderDecorator(
+export function addTypeToDecorator(decorator: DecoratorValueTypedForAction, context: any) {
+  decorator.type = context;
+
+  return decorator;
+}
+
+const action: CreateDecoratorValueTypedWithTypeAction<ActionType> = createDecoratorFactory(
   MODULE_NAME,
   decorator,
   initializer,
-  createActionTypeContext
+  createActionTypeContext,
+  addTypeToDecorator
 );
 
 export default action;

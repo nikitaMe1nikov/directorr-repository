@@ -18,7 +18,10 @@ export interface SomeObject {
   [key: string]: any;
 }
 
-export type SomeActionType = string | DirectorrStoreClassConstructor<any>;
+export type SomeActionType =
+  | string
+  | DirectorrStoreClassConstructor<any>
+  | DecoratorValueTypedForAction<any, string>;
 
 export type ActionType = SomeActionType | SomeActionType[] | ActionType[];
 
@@ -97,12 +100,16 @@ export type Decorator = (
   ...args: any[]
 ) => void;
 
-export type DecoratorValueTyped<R> = <T extends Record<K, R>, K extends string>(
+export type DecoratorValueTyped<R = any> = <T extends Record<K, R>, K extends string>(
   target: T,
   property: K,
   descriptor?: BabelDescriptor,
   ...args: any[]
 ) => void;
+
+export interface DecoratorValueTypedForAction<R = any, C = any> extends DecoratorValueTyped<R> {
+  type: C;
+}
 
 export type SomeAction<A = any> = (...args: any[]) => A;
 
@@ -114,7 +121,17 @@ export type CreateDecoratorOneArgOption<A1 = any> = (arg?: A1) => Decorator;
 
 export type CreateDecoratorOneArg<A = any, D = Decorator> = (arg: A) => D;
 
+export type CreateDecoratorValueTypedEffect<A = any> = <P = any>(
+  arg: A
+) => DecoratorValueTyped<SomeEffect<P>>;
+
+export type CreateDecoratorValueTypedWithTypeAction<A = any> = <P = any>(
+  arg: A
+) => DecoratorValueTypedForAction<SomeAction<P | null>>;
+
 export type CreateContext = (moduleName: string, arg1: any, arg2?: any) => any;
+
+export type ConvertDecorator<D = any> = (decorator: D, context: any) => D;
 
 export interface InitializerContext {
   actionType: string;

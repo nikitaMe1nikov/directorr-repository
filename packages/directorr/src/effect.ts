@@ -1,8 +1,8 @@
 import { isFunction, EFFECTS_FIELD_NAME } from './utils';
 import { callWithPropNotEquallFunc } from './messages';
-import { ActionType, EffectsMap, CreateDecoratorOneArg } from './types';
+import { ActionType, EffectsMap, CreateDecoratorValueTypedEffect } from './types';
 import decorator from './decorator';
-import createBuilderDecorator from './createBuilderDecorator';
+import createrDecoratorFactory from './createrDecoratorFactory';
 import createActionTypeContext from './createActionTypeContext';
 import addInitFields from './initFields';
 
@@ -31,7 +31,7 @@ export function initializer(
   return value;
 }
 
-const effect: CreateDecoratorOneArg<ActionType> = createBuilderDecorator(
+const effect: CreateDecoratorValueTypedEffect<ActionType> = createrDecoratorFactory(
   MODULE_NAME,
   decorator,
   initializer,

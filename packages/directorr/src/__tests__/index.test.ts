@@ -19,7 +19,7 @@ import {
   reloadAction,
   whenReload,
   composePropertyDecorators,
-  createBuilderPropertyDecorator,
+  createPropertyDecoratorFactory,
   callWithPropNotEquallFunc,
   isFunction,
   isLikeAction,
@@ -59,7 +59,7 @@ describe('index', () => {
     expect(reloadAction).not.toBeUndefined();
     expect(whenReload).not.toBeUndefined();
     expect(composePropertyDecorators).not.toBeUndefined();
-    expect(createBuilderPropertyDecorator).not.toBeUndefined();
+    expect(createPropertyDecoratorFactory).not.toBeUndefined();
     expect(callWithPropNotEquallFunc).not.toBeUndefined();
     expect(isFunction).not.toBeUndefined();
     expect(isLikeAction).not.toBeUndefined();

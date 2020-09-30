@@ -85,6 +85,9 @@ describe('action', () => {
 
       @action([actionType, SomeClassThree])
       actionThree = callAction;
+
+      @action<string>(actionType)
+      actionNull = () => null;
     }
 
     const obj = new SomeClass();
@@ -122,5 +125,11 @@ describe('action', () => {
         someValue
       )
     );
+
+    dispatchEffects.mockReset();
+
+    obj.actionNull();
+
+    expect(dispatchEffects).toBeCalledTimes(0);
   });
 });

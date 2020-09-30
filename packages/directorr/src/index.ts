@@ -11,9 +11,10 @@ import injectStore from './injectStore';
 import reloadAction from './reloadAction';
 import whenReload from './whenReload';
 export * from './checkers';
-import createBuilderPropertyDecorator from './createBuilderPropertyDecorator';
+import createPropertyDecoratorFactory from './createPropertyDecoratorFactory';
 import connectStore from './connectStore';
 import createActionAndEffect from './createActionAndEffect';
+import createActionFactory from './createActionFactory';
 import {
   DIRECTORR_INIT_STORE_ACTION,
   DIRECTORR_DESTROY_STORE_ACTION,
@@ -58,7 +59,7 @@ export {
   reloadAction,
   whenReload,
   composePropertyDecorators,
-  createBuilderPropertyDecorator,
+  createPropertyDecoratorFactory,
   callWithPropNotEquallFunc,
   isFunction,
   isLikeAction,
@@ -77,4 +78,5 @@ export {
   EMPTY_STRING,
   EMPTY_OBJECT,
   EMPTY_FUNC,
+  createActionFactory,
 };

@@ -18,6 +18,9 @@ import {
   AfterwareMap,
   Afterware,
   DirectorrStoreClassConstructor,
+  CheckPayload,
+  ConvertPayloadFunction,
+  DecoratorValueTypedForAction,
 } from './types';
 import { notFindStoreName } from './messages';
 
@@ -95,23 +98,24 @@ export const {
 
 const STRING_OBJECT = '[object Object]';
 
-export function isObject(obj: any): boolean {
+export function isObject(obj: any): obj is SomeObject {
   return toString.call(obj) === STRING_OBJECT;
 }
 
-export function isString(string: any): boolean {
-  return typeof string === TYPEOF.STRING;
+export function isString(str: any): str is string {
+  return typeof str === TYPEOF.STRING;
 }
 
-export function isFunction(v: any): boolean {
-  return !!(v && v.constructor && v.call && v.apply);
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function isFunction(func: any): func is Function {
+  return !!(func && func.constructor && func.call && func.apply);
 }
 
 export function hasOwnProperty(target: any, prop: string | symbol) {
   return hasOwnPropertyFromPrototype.call(target, prop);
 }
 
-export function isLikeActionType(actionType?: ActionType): boolean {
+export function isLikeActionType(actionType?: any): actionType is ActionType {
   if (!actionType) return false;
 
   if (isArray(actionType)) {
@@ -129,7 +133,7 @@ export function isLikeActionType(actionType?: ActionType): boolean {
   return isString(actionType) || isFunction(actionType);
 }
 
-export function isLikeAction(action?: any): boolean {
+export function isLikeAction(action?: any): action is Action {
   if (!action) return false;
 
   return isObject(action) && action.type !== undefined;
@@ -143,10 +147,16 @@ export function getStoreName(v: DirectorrStoreClassConstructor<any> | SomeObject
   throw new Error(notFindStoreName());
 }
 
+export function isDecoratorWithCtx(decorator?: any): decorator is DecoratorValueTypedForAction {
+  return !!decorator.type;
+}
+
 export function calcActionType(someActionType: SomeActionType): string {
-  return isFunction(someActionType)
-    ? getStoreName(someActionType as DirectorrStoreClassConstructor<any>)
-    : (someActionType as string);
+  if (isFunction(someActionType)) {
+    return isDecoratorWithCtx(someActionType) ? someActionType.type : getStoreName(someActionType);
+  }
+
+  return someActionType;
 }
 
 export function createActionType(actionType: ActionType, divider: string): string {
@@ -171,17 +181,17 @@ export function batchFunction(f: SomeFunction): SomeFunction {
   return f;
 }
 
-export function createAction(type: string, payload?: any): Action {
+export function createAction<T = string, P = any>(type: T, payload?: P): Action<T, P> {
   return { type, payload };
 }
 
-export function isChecker(sample?: any): boolean {
+export function isChecker(sample?: any): sample is CheckPayload {
   if (!sample) return false;
 
   return isFunction(sample) || isObject(sample);
 }
 
-export function isConverter(func?: any): boolean {
+export function isConverter(func?: any): func is ConvertPayloadFunction {
   return isFunction(func);
 }
 
@@ -195,7 +205,9 @@ export function dispatchEffects(this: any, action: Action): void {
   }
 }
 
-export function isLikePropertyDecorator(decorator?: BabelDescriptor): boolean {
+export function isLikePropertyDecorator(
+  decorator?: BabelDescriptor
+): decorator is PropertyDescriptor {
   return !!decorator?.value;
 }
 
@@ -229,11 +241,11 @@ export function createTypescriptDescriptor(
   return createPropertyDescriptor(newGet, newSet);
 }
 
-export function isBabelDecorator(decorator?: BabelDescriptor): boolean {
+export function isBabelDecorator(decorator?: any): decorator is BabelDescriptor {
   return !!(decorator && decorator.initializer !== undefined);
 }
 
-export function isTypescriptDecorator(decorator?: BabelDescriptor): boolean {
+export function isTypescriptDecorator(decorator?: any): decorator is PropertyDescriptor {
   return !!(decorator && !isBabelDecorator(decorator));
 }
 
@@ -244,7 +256,6 @@ export function createBabelDescriptor(
   ctx: any
 ): BabelDescriptor {
   descriptor.writable = false;
-  // descriptor.enumerable = false;
 
   const oldInitializer = descriptor.initializer;
 

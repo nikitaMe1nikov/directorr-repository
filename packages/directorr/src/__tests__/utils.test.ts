@@ -39,6 +39,7 @@ import {
   isConverter,
   isTypescriptDecorator,
   isActionHave,
+  isDecoratorWithCtx,
 } from '../utils';
 import { notFindStoreName } from '../messages';
 import {
@@ -114,7 +115,18 @@ describe('utils', () => {
     expect(calcActionType(storeName)).toBe(storeName);
   });
 
+  it('isDecoratorWithCtx', () => {
+    function someActionDecorator() {}
+    someActionDecorator.type = 'type';
+
+    expect(isDecoratorWithCtx(someActionDecorator)).toBeTruthy();
+    expect(isDecoratorWithCtx(EMPTY_FUNC)).toBeFalsy();
+  });
+
   it('createActionType', () => {
+    function someActionDecorator() {}
+    someActionDecorator.type = 'type';
+
     expect(createActionType(actionType, ACTION_TYPE_DIVIDER)).toBe(actionType);
     expect(createActionType(actionTypeArray, ACTION_TYPE_DIVIDER)).toBe(
       actionTypeArray.join(ACTION_TYPE_DIVIDER)
@@ -122,6 +134,9 @@ describe('utils', () => {
     expect(createActionType(SomeClass, ACTION_TYPE_DIVIDER)).toBe(SomeClass.name);
     expect(createActionType([actionType, SomeClass], ACTION_TYPE_DIVIDER)).toBe(
       [actionType, SomeClass.name].join(ACTION_TYPE_DIVIDER)
+    );
+    expect(createActionType([actionType, someActionDecorator], ACTION_TYPE_DIVIDER)).toBe(
+      [actionType, someActionDecorator.type].join(ACTION_TYPE_DIVIDER)
     );
     expect(createActionType([[actionType, SomeClass], SomeClass], ACTION_TYPE_DIVIDER)).toBe(
       [actionType, SomeClass.name, SomeClass.name].join(ACTION_TYPE_DIVIDER)
