@@ -1,5 +1,5 @@
 import {
-  createBuilderPropertyDecorator,
+  createPropertyDecoratorFactory,
   isFunction,
   callWithPropNotEquallFunc,
   isLikeAction,
@@ -52,7 +52,7 @@ export function initializer(
   return (payload: any) => validate(payload, value, initObject, ctx);
 }
 
-const validateAll = createBuilderPropertyDecorator<ObjectSchema, ValidateOptions>(
+const validateAll = createPropertyDecoratorFactory<ObjectSchema, ValidateOptions>(
   MODULE_NAME,
   initializer,
   createSchemaContext
