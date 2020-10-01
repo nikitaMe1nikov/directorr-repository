@@ -1,31 +1,40 @@
 import { observable } from 'mobx';
-import { action, effect } from '@nimel/directorr';
+import { createActionAndEffect } from '@nimel/directorr';
 
 import { EMPTY_STRING } from 'components/utils';
 
-export const CHANGE = 'INPUT.CHANGE';
-export const COMPLATE = 'INPUT.COMPLATE';
-export const RESET = 'INPUT.RESET';
+export interface TextInputChangePayload {
+  value: string;
+}
+export type TextInputComplatePayload = TextInputChangePayload;
+
+export const [actionInputChange, effectInputChange] = createActionAndEffect<TextInputChangePayload>(
+  'INPUT.CHANGE'
+);
+export const [actionInputComplate, effectInputComplate] = createActionAndEffect<
+  TextInputComplatePayload
+>('INPUT.COMPLATE');
+export const [actionInputReset, effectInputReset] = createActionAndEffect<void>('INPUT.RESET');
 
 export default class TextInputStore {
   @observable value = EMPTY_STRING;
   @observable disabled = false;
 
-  @action(CHANGE)
+  @actionInputChange
   onChange = ({ target }: any) => ({ value: target.value });
 
-  @effect(CHANGE)
-  toChange = ({ value }: any) => {
+  @effectInputChange
+  toChange = ({ value }: TextInputChangePayload) => {
     this.value = value;
   };
 
-  @action(COMPLATE)
+  @actionInputComplate
   onComplate = () => ({ value: this.value });
 
-  @action(RESET)
+  @actionInputReset
   reset = () => {};
 
-  @effect(RESET)
+  @effectInputReset
   toReset = () => {
     this.value = EMPTY_STRING;
   };

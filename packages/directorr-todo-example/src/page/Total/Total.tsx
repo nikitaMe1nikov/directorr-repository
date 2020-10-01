@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '@nimel/directorr-react';
 import clsx from 'clsx';
 import Toggle from 'components/Toggle/Toggle';
-import { FILTER_TYPE } from 'page/PageStore';
+import { FilterType } from 'types';
 import TotalStore from './TotalStore';
 import styles from './Total.css';
 
@@ -34,7 +34,7 @@ const FiltersUncompose: FC = () => {
         type="button"
         className={clsx([
           styles.filter_button,
-          filter === FILTER_TYPE.ALL ? styles.filter_button__active : null,
+          filter === FilterType.ALL && styles.filter_button__active,
         ])}
         onClick={changeFilterToAll}
       >
@@ -44,7 +44,7 @@ const FiltersUncompose: FC = () => {
         type="button"
         className={clsx([
           styles.filter_button,
-          filter === FILTER_TYPE.ACTIVE ? styles.filter_button__active : null,
+          filter === FilterType.ACTIVE && styles.filter_button__active,
         ])}
         onClick={changeFilterToActive}
       >
@@ -54,7 +54,7 @@ const FiltersUncompose: FC = () => {
         type="button"
         className={clsx([
           styles.filter_button,
-          filter === FILTER_TYPE.COMPLATED ? styles.filter_button__active : null,
+          filter === FilterType.COMPLATED && styles.filter_button__active,
         ])}
         onClick={changeFilterToComplated}
       >

@@ -7,7 +7,7 @@ import styles from './TodoItem.css';
 const TodoItem: FC<{
   item: TodoItemStore;
   removeTodo: (todo: any) => void;
-  checkedTodo: (id: number, checked: boolean) => void;
+  checkedTodo: (id: string, checked: boolean) => void;
 }> = ({ item, removeTodo, checkedTodo }) => {
   const onRemove = useCallback(() => {
     removeTodo(item);

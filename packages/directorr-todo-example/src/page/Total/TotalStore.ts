@@ -1,23 +1,24 @@
-import { action, effect, connectStore, injectStore } from '@nimel/directorr';
-import ToggleStore, { TOGGLE_CHANGE } from 'components/Toggle/ToggleStore';
-import PageStore, {
-  FILTER_TYPE,
-  ALL_TODO_COMPLATED,
-  ALL_TODO_ACTIVE,
-  CLEAR_COMPLATED_TODO,
-  CHANGE_FILTER,
-  CHANGE_TODO_TOGGLE,
-  CHANGE_TODOS_LIST,
-} from 'page/PageStore';
-import { REMOVE_TODO_SUCCESS } from '../../sagas';
+import { effect, connectStore, injectStore } from '@nimel/directorr';
+import ToggleStore, { actionToggle, TogglePayload } from 'components/Toggle/ToggleStore';
+import PageStore from 'page/PageStore';
+import {
+  effectRemoveTodoSuccess,
+  actionAllTodoComplated,
+  actionAllTodoActive,
+  actionClearComplatedTodo,
+  actionChangeFilter,
+  effectChangeTodoToggle,
+  effectChangeTodosList,
+} from 'decorators';
+import { FilterType } from 'types';
 
 export default class TotalStore {
   @injectStore(PageStore) pageStore: PageStore;
 
   @connectStore() allToggle = new ToggleStore();
 
-  @effect([ToggleStore, TOGGLE_CHANGE])
-  onToggleAll = ({ value: checked }: any) => {
+  @effect<TogglePayload>([ToggleStore, actionToggle])
+  onToggleAll = ({ value: checked }: TogglePayload) => {
     if (checked) {
       this.toAllComplate();
     } else {
@@ -25,16 +26,16 @@ export default class TotalStore {
     }
   };
 
-  @action(ALL_TODO_COMPLATED)
+  @actionAllTodoComplated
   toAllComplate = () => {};
 
-  @action(ALL_TODO_ACTIVE)
+  @actionAllTodoActive
   toAllActive = () => {};
 
-  @action(CLEAR_COMPLATED_TODO)
+  @actionClearComplatedTodo
   clearComplated = () => {};
 
-  @effect(REMOVE_TODO_SUCCESS)
+  @effectRemoveTodoSuccess
   toClearComplated = () => {
     this.allToggle.value = false;
   };
@@ -43,16 +44,16 @@ export default class TotalStore {
     return this.pageStore.filter;
   }
 
-  @action(CHANGE_FILTER)
-  changeFilterToAll = () => FILTER_TYPE.ALL;
+  @actionChangeFilter
+  changeFilterToAll = () => ({ filter: FilterType.ALL });
 
-  @action(CHANGE_FILTER)
-  changeFilterToActive = () => FILTER_TYPE.ACTIVE;
+  @actionChangeFilter
+  changeFilterToActive = () => ({ filter: FilterType.ACTIVE });
 
-  @action(CHANGE_FILTER)
-  changeFilterToComplated = () => FILTER_TYPE.COMPLATED;
+  @actionChangeFilter
+  changeFilterToComplated = () => ({ filter: FilterType.COMPLATED });
 
-  @effect(CHANGE_TODO_TOGGLE)
+  @effectChangeTodoToggle
   onToggleItem = () => {
     const { list: todosList } = this.pageStore.todosStore;
 
@@ -61,7 +62,7 @@ export default class TotalStore {
     this.allToggle.value = checkedList.length === todosList.length;
   };
 
-  @effect(CHANGE_TODOS_LIST)
+  @effectChangeTodosList
   whenChangeTodosList = () => {
     this.allToggle.disabled = !this.pageStore.todosStore.list.length;
   };

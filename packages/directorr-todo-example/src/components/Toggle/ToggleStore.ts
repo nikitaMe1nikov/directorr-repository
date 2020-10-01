@@ -1,21 +1,25 @@
 import { observable } from 'mobx';
-import { action, effect } from '@nimel/directorr';
+import { createActionAndEffect } from '@nimel/directorr';
 
-export const TOGGLE_CHANGE = 'TOGGLE.CHANGE';
+export interface TogglePayload {
+  value: boolean;
+}
+
+export const [actionToggle, effectToggle] = createActionAndEffect<TogglePayload>('TOGGLE.CHANGE');
 
 export default class ToggleStore {
+  @observable value: boolean;
+  @observable disabled = false;
+
   constructor(v = false) {
     this.value = v;
   }
 
-  @observable value: boolean;
-  @observable disabled = false;
-
-  @action(TOGGLE_CHANGE)
+  @actionToggle
   onChange = (e: any) => ({ value: e.target.checked });
 
-  @effect(TOGGLE_CHANGE)
-  toToggle = ({ value }: any) => {
+  @effectToggle
+  toToggle = ({ value }: TogglePayload) => {
     this.value = value;
   };
 }

@@ -1,67 +1,93 @@
 import { put, takeEvery, delay } from 'redux-saga/effects';
-import { config } from '@nimel/directorr';
+import { createActionFactory } from '@nimel/directorr';
 import localforage from 'localforage';
+
+import {
+  actionGetTodos,
+  actionAddTodo,
+  actionRemoveTodo,
+  actionLoading,
+  actionGetTodosSuccess,
+  actionAddTodoSuccess,
+  actionGetTodosError,
+  actionAddTodoError,
+  actionRemoveTodoSuccess,
+  actionRemoveTodoError,
+} from 'decorators';
+import {
+  TodosSuccessPayload,
+  AddTodoSuccessPayload,
+  RemoveTodoSuccessPayload,
+  AddTodoPayload,
+  RemoveTodoPayload,
+  Todo,
+} from 'types';
 
 localforage.config({ name: 'directorr-todo' });
 
-export const GET_TODOS = 'GET_TODOS';
-export const LOADING = 'LOADING';
-export const GET_TODOS_SUCCESS = 'GET_TODOS_SUCCESS';
-export const GET_TODOS_ERROR = 'GET_TODOS_ERROR';
-export const ADD_TODO = 'ADD_TODOS';
-export const ADD_TODO_SUCCESS = 'ADD_TODOS_SUCCESS';
-export const ADD_TODO_ERROR = 'ADD_TODOS_ERROR';
-export const REMOVE_TODO = 'REMOVE_TODO';
-export const REMOVE_TODO_SUCCESS = 'REMOVE_TODO_SUCCESS';
-export const REMOVE_TODO_ERROR = 'REMOVE_TODO_ERROR';
-const { createAction } = config;
+export const createActionLoading = createActionFactory<void>(actionLoading.type);
+export const createActionGetTodosSuccess = createActionFactory<TodosSuccessPayload>(
+  actionGetTodosSuccess.type
+);
+export const createGetTodosError = createActionFactory<void>(actionGetTodosError.type);
+export const createActionAddTodoSuccess = createActionFactory<AddTodoSuccessPayload>(
+  actionAddTodoSuccess.type
+);
+export const createActionAddTodoError = createActionFactory<void>(actionAddTodoError.type);
+export const createActionRemoveTodoSuccess = createActionFactory<RemoveTodoSuccessPayload>(
+  actionRemoveTodoSuccess.type
+);
+export const createActionRemoveTodoError = createActionFactory<void>(actionRemoveTodoError.type);
 
 const DELAY = 600;
 
 function* getTodos() {
-  yield put(createAction(LOADING));
+  yield put(createActionLoading());
 
   try {
     yield delay(DELAY);
     const length = yield localforage.length();
-    let todos: any[] = [];
-    todos = yield localforage.iterate((text, id, idx) => {
-      todos.push({ id, text });
+    let todos: Todo[] = [];
+    todos = yield localforage.iterate((data: string, id, idx) => {
+      todos.push({ id, ...JSON.parse(data) });
 
       if (idx === length) return todos;
     });
-    yield put(createAction(GET_TODOS_SUCCESS, todos));
+    yield put(createActionGetTodosSuccess({ todos }));
   } catch (e) {
-    yield put(createAction(GET_TODOS_ERROR));
+    yield put(createGetTodosError());
   }
 }
 
-function* addTodo({ payload }: any) {
-  yield put(createAction(LOADING));
+function* addTodo({ payload }: { payload: AddTodoPayload }) {
+  yield put(createActionLoading());
   try {
     yield delay(DELAY);
-    yield localforage.setItem(payload.id, payload.text);
-    yield put(createAction(ADD_TODO_SUCCESS, payload));
+    yield localforage.setItem(
+      payload.id,
+      JSON.stringify({ text: payload.text, checked: payload.checked })
+    );
+    yield put(createActionAddTodoSuccess(payload));
   } catch (e) {
-    yield put(createAction(ADD_TODO_ERROR));
+    yield put(createActionAddTodoError());
   }
 }
 
-function* removeTodo({ payload }: any) {
-  yield put(createAction(LOADING));
+function* removeTodo({ payload }: { payload: RemoveTodoPayload }) {
+  yield put(createActionLoading());
   try {
     yield delay(DELAY);
     yield localforage.removeItem(payload.id);
-    yield put(createAction(REMOVE_TODO_SUCCESS, payload));
+    yield put(createActionRemoveTodoSuccess(payload));
   } catch (e) {
-    yield put(createAction(REMOVE_TODO_ERROR));
+    yield put(createActionRemoveTodoError());
   }
 }
 
 function* sagas() {
-  yield takeEvery(GET_TODOS, getTodos);
-  yield takeEvery(ADD_TODO, addTodo);
-  yield takeEvery(REMOVE_TODO, removeTodo);
+  yield takeEvery(actionGetTodos.type, getTodos);
+  yield takeEvery(actionAddTodo.type, addTodo);
+  yield takeEvery(actionRemoveTodo.type, removeTodo);
 }
 
 export default sagas;

@@ -1,31 +1,32 @@
 import { observable } from 'mobx';
-import { action, effect } from '@nimel/directorr';
 
 import TodoItemStore from 'page/TodoItem/TodoItemStore';
-
-export const CHANGE_ITEM_TOGGLE = 'TODOS.CHANGE_ITEM_TOGGLE';
+import { actionChangeTodoToggle, effectChangeTodoToggle } from 'decorators';
+import { Todo, ChangeTodoTogglePayload } from 'types';
 
 export default class TodosStore {
   @observable list: TodoItemStore[] = [];
 
-  addTodo = (todo: TodoItemStore) => {
+  addTodo = (todo: Todo) => {
     this.list.push(new TodoItemStore(todo));
   };
 
-  @action(CHANGE_ITEM_TOGGLE)
-  changeTodoToggle = (id: number, checked: boolean) => ({
+  @actionChangeTodoToggle
+  changeTodoToggle = (id: string, checked: boolean) => ({
     id,
     checked,
   });
 
-  @effect(CHANGE_ITEM_TOGGLE)
-  toChangeTodoToggle = ({ id, checked }: any) => {
+  @effectChangeTodoToggle
+  toChangeTodoToggle = ({ id, checked }: ChangeTodoTogglePayload) => {
     const todo = this.list.find(todo => todo.id === id);
 
-    if (todo) todo.checked = checked;
+    if (todo) {
+      todo.checked = checked;
+    }
   };
 
-  removeTodo = (id: number) => {
+  removeTodo = (id: string) => {
     const index = this.list.findIndex(todo => todo.id === id);
 
     this.list.splice(index, 1);
