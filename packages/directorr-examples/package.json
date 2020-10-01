@@ -2,6 +2,7 @@
   "name": "@nimel/directorr-examples",
   "version": "1.0.0-rc.1",
   "private": true,
+  "description": "Examples written on directorr",
   "main": "src/index.js",
   "scripts": {
     "local-publish": "echo 'skip'",
