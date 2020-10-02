@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { HistoryStore } from '@nimel/directorr-react-router';
+import { HistoryStore } from '@nimel/directorr-router-react';
 import { useStore } from '@nimel/directorr-react';
 // eslint-disable-next-line css-modules/no-unused-class
 import styles from './index.css';

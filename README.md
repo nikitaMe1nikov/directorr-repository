@@ -12,7 +12,7 @@ Ability to write less code and easily separate business logic from different fra
 - [**directorr-middlewares**](https://github.com/nikitaMe1nikov/directorr-repository/tree/master/packages/directorr-middlewares)
 - [**directorr-router**](https://github.com/nikitaMe1nikov/directorr-repository/tree/master/packages/directorr-router)
 - [**directorr-react**](https://github.com/nikitaMe1nikov/directorr-repository/tree/master/packages/directorr-react)
-- [**directorr-react-router**](https://github.com/nikitaMe1nikov/directorr-repository/tree/master/packages/directorr-react-router)
+- [**directorr-router-react**](https://github.com/nikitaMe1nikov/directorr-repository/tree/master/packages/directorr-router-react)
 - [**directorr-next**](https://github.com/nikitaMe1nikov/directorr-repository/tree/master/packages/directorr-next)
 
 ## Examples

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Directorr } from '@nimel/directorr';
 import { DirectorrProvider } from '@nimel/directorr-react';
-import { Router, historyChange, ANY_PATH } from '@nimel/directorr-react-router';
+import { Router, historyChange, ANY_PATH } from '@nimel/directorr-router-react';
 import { logMiddleware } from '@nimel/directorr-middlewares';
 import './index.css';
 import PageOne from './PageOne';

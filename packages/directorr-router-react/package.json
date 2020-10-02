@@ -1,5 +1,5 @@
 {
-  "name": "@nimel/directorr-react-router",
+  "name": "@nimel/directorr-router-react",
   "version": "1.0.0-rc.1",
   "publishConfig": {
     "access": "public"

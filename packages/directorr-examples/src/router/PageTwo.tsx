@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Router, ANIMATIONS, HistoryStore } from '@nimel/directorr-react-router';
+import { Router, ANIMATIONS, HistoryStore } from '@nimel/directorr-router-react';
 import { useStore } from '@nimel/directorr-react';
 import PageThree from './PageThree';
 import PageFour from './PageFour';
