@@ -50,7 +50,7 @@ export const GLOBAL_DEP = { global: true };
 class Directorr implements DirectorrInterface {
   stores: DirectorrStores = new Map();
 
-  getStore(StoreConstructor: DirectorrStoreClassConstructor<any>) {
+  getStore<C>(StoreConstructor: DirectorrStoreClassConstructor<C>): C {
     return this.stores.get(getStoreName(StoreConstructor));
   }
 
