@@ -278,7 +278,8 @@ describe('Directorr', () => {
       createAction(DIRECTORR_INIT_STORE_ACTION, {
         StoreConstructor: StoreWithAfterware,
       }),
-      director.dispatchType
+      director.dispatchType,
+      director
     );
     expect(director).toMatchObject({
       afterwares: [StoreWithAfterware.afterware],
@@ -607,8 +608,8 @@ describe('Directorr', () => {
 
     await flushPromises();
 
-    expect(resolve).toHaveBeenCalled();
-    expect(reject).not.toHaveBeenCalled();
+    expect(resolve).toBeCalled();
+    expect(reject).not.toBeCalled();
   });
 
   it('waitAllStoresState with store isReady = false', async () => {
@@ -627,8 +628,8 @@ describe('Directorr', () => {
 
     await flushPromises();
 
-    expect(resolve).not.toHaveBeenCalled();
-    expect(reject).not.toHaveBeenCalled();
+    expect(resolve).not.toBeCalled();
+    expect(reject).not.toBeCalled();
   });
 
   it('waitAllStoresState with store that change isReady', async () => {
@@ -653,21 +654,21 @@ describe('Directorr', () => {
 
     await flushPromises();
 
-    expect(resolve).not.toHaveBeenCalled();
-    expect(reject).not.toHaveBeenCalled();
+    expect(resolve).not.toBeCalled();
+    expect(reject).not.toBeCalled();
 
     director.dispatch(action);
 
-    expect(resolve).not.toHaveBeenCalled();
-    expect(reject).not.toHaveBeenCalled();
+    expect(resolve).not.toBeCalled();
+    expect(reject).not.toBeCalled();
 
     store.changeReady();
     director.dispatch(action);
 
     await flushPromises();
 
-    expect(resolve).toHaveBeenCalled();
-    expect(reject).not.toHaveBeenCalled();
+    expect(resolve).toBeCalled();
+    expect(reject).not.toBeCalled();
   });
 
   it('waitStoresState', async () => {
@@ -690,15 +691,15 @@ describe('Directorr', () => {
 
     await flushPromises();
 
-    expect(resolve).not.toHaveBeenCalled();
-    expect(reject).not.toHaveBeenCalled();
+    expect(resolve).not.toBeCalled();
+    expect(reject).not.toBeCalled();
 
     director.waitStoresState([StoreTrue]).then(resolve).catch(reject);
 
     await flushPromises();
 
-    expect(resolve).toHaveBeenCalled();
-    expect(reject).not.toHaveBeenCalled();
+    expect(resolve).toBeCalled();
+    expect(reject).not.toBeCalled();
   });
 
   it('waitStoresState with store that change isReady', async () => {
@@ -723,21 +724,21 @@ describe('Directorr', () => {
 
     await flushPromises();
 
-    expect(resolve).not.toHaveBeenCalled();
-    expect(reject).not.toHaveBeenCalled();
+    expect(resolve).not.toBeCalled();
+    expect(reject).not.toBeCalled();
 
     director.dispatch(action);
 
-    expect(resolve).not.toHaveBeenCalled();
-    expect(reject).not.toHaveBeenCalled();
+    expect(resolve).not.toBeCalled();
+    expect(reject).not.toBeCalled();
 
     store.changeReady();
     director.dispatch(action);
 
     await flushPromises();
 
-    expect(resolve).toHaveBeenCalled();
-    expect(reject).not.toHaveBeenCalled();
+    expect(resolve).toBeCalled();
+    expect(reject).not.toBeCalled();
   });
 
   it('findStoreState', async () => {
@@ -761,46 +762,101 @@ describe('Directorr', () => {
     await flushPromises();
 
     expect(resolve).toBeCalledWith(director.getStore(StoreTrue));
-    expect(reject).not.toHaveBeenCalled();
+    expect(reject).not.toBeCalled();
   });
 
-  it('findStoreState with store that change isReady', async () => {
+  it('findStoreState with store that change isError', async () => {
     const resolve = jest.fn();
     const reject = jest.fn();
 
-    class StoreReady extends Store {
+    class StoreError extends Store {
       isError = false;
 
-      changeReady() {
+      changeError() {
         this.isError = !this.isError;
       }
     }
 
     const director = new Directorr();
 
-    director.addStores(StoreReady);
+    director.addStores(StoreError);
 
-    const store = director.getStore(StoreReady);
+    const store = director.getStore(StoreError);
 
     director.findStoreState().then(resolve).catch(reject);
 
     await flushPromises();
 
-    expect(resolve).not.toHaveBeenCalled();
-    expect(reject).not.toHaveBeenCalled();
+    expect(resolve).not.toBeCalled();
+    expect(reject).not.toBeCalled();
 
     director.dispatch(action);
 
-    expect(resolve).not.toHaveBeenCalled();
-    expect(reject).not.toHaveBeenCalled();
+    expect(resolve).not.toBeCalled();
+    expect(reject).not.toBeCalled();
 
-    store.changeReady();
+    store.changeError();
     director.dispatch(action);
 
     await flushPromises();
 
     expect(resolve).toBeCalledWith(store);
-    expect(reject).not.toHaveBeenCalled();
+    expect(reject).not.toBeCalled();
+  });
+
+  it('check unsubscribe when findStoreState and waitStoresState in Promise.race with store that change isError', async () => {
+    const resolve = jest.fn();
+    const reject = jest.fn();
+
+    class StoreReady extends Store {
+      isReady = false;
+
+      changeReady() {
+        this.isReady = !this.isReady;
+      }
+    }
+
+    class StoreError extends Store {
+      isError = false;
+
+      changeError() {
+        this.isError = !this.isError;
+      }
+    }
+
+    const director = new Directorr();
+
+    jest.spyOn(director, 'unsubscribe');
+
+    director.addStores(StoreReady, StoreError);
+
+    const store = director.getStore(StoreError);
+    const waitStores = director.waitStoresState([StoreReady, StoreError]);
+
+    Promise.race([waitStores, director.findStoreState()]).then(resolve).catch(reject);
+
+    await flushPromises();
+
+    expect(resolve).not.toBeCalled();
+    expect(reject).not.toBeCalled();
+
+    director.dispatch(action);
+
+    expect(resolve).not.toBeCalled();
+    expect(reject).not.toBeCalled();
+
+    store.changeError();
+    director.dispatch(action);
+
+    await flushPromises();
+
+    expect(resolve).toBeCalledWith(store);
+    expect(reject).not.toBeCalled();
+    expect(director.unsubscribe).toBeCalledTimes(1);
+
+    waitStores.cancel();
+
+    expect(director.unsubscribe).toBeCalledTimes(2);
   });
 
   it('addReduxMiddlewares', () => {

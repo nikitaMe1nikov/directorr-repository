@@ -1,5 +1,17 @@
 import { Middleware as ReduxMiddleware } from 'redux';
 
+export type Resolver<T = any> = (value?: T | PromiseLike<T>) => void;
+export type Rejector = (reason?: any) => void;
+export type WhenCancel = (callback: () => void) => void;
+export type Executor<T = any> = (
+  resolve: Resolver<T>,
+  reject: Rejector,
+  whenCancel: WhenCancel
+) => void;
+export interface PromiseCancelable<T = any> extends Promise<T> {
+  cancel: () => void;
+}
+
 export interface DirectorrStoreClass<I = any, O = any> {
   storeName?: string;
   storeInitOptions?: O;
@@ -64,11 +76,16 @@ export type Next = (action: Action) => void;
 
 export type Middleware = (action: Action, next: Next, store: DirectorrInterface) => void;
 
-export type Afterware = (action: Action, dispatchType: DirectorrInterface['dispatchType']) => void;
+export type Afterware = (
+  action: Action,
+  dispatchType: DirectorrInterface['dispatchType'],
+  directorr: DirectorrInterface
+) => void;
 
 export type PayloadAfterware = (
   dispatchType: DirectorrInterface['dispatchType'],
-  payload: Action['payload']
+  payload: Action['payload'],
+  directorr: DirectorrInterface
 ) => void;
 
 export interface AfterwareMap {
@@ -230,12 +247,12 @@ export interface DirectorrInterface {
   getStore: <I>(StoreConstructor: DirectorrStoreClassConstructor<I, any>) => I | undefined;
   getHydrateStoresState: () => DirectorrStoresState;
   mergeStateToStore: (storeState: DirectorrStoresState) => void;
-  waitAllStoresState: (checkStoreState?: CheckStoreState) => Promise<any>;
+  waitAllStoresState: (checkStoreState?: CheckStoreState) => PromiseCancelable<any>;
   waitStoresState: (
     stores: DirectorrStoreClassConstructor<any>[],
     checkStoreState?: CheckStoreState
-  ) => Promise<any>;
-  findStoreState: (checkStoreState?: CheckStoreState) => Promise<any>;
+  ) => PromiseCancelable<any>;
+  findStoreState: (checkStoreState?: CheckStoreState) => PromiseCancelable<any>;
   addStoreDependency: <I>(
     StoreConstructor: DirectorrStoreClassConstructor<any>,
     depName: Depency,

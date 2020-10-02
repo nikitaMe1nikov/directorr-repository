@@ -40,6 +40,7 @@ import {
   isTypescriptDecorator,
   isActionHave,
   isDecoratorWithCtx,
+  createPromiseCancelable,
 } from '../utils';
 import { notFindStoreName } from '../messages';
 import {
@@ -55,6 +56,7 @@ import {
   storeName,
   SomeClass,
 } from '../__mocks__/mocks';
+import { flushPromises } from '../../../../tests/utils';
 
 describe('utils', () => {
   it('symbols', () => {
@@ -475,23 +477,24 @@ describe('utils', () => {
       [actionType]: actionTypePayloadAfterware,
       [actionType2]: actionType2PayloadAfterware,
     };
+    const directorr: any = someValue;
 
     const afterware = createAfterware(afterwareMap);
 
-    afterware({ type: 'type', payload: {} }, dispatch);
+    afterware({ type: 'type', payload: {} }, dispatch, directorr);
 
     expect(actionTypePayloadAfterware).toBeCalledTimes(0);
     expect(actionType2PayloadAfterware).toBeCalledTimes(0);
 
-    afterware(action, dispatch);
+    afterware(action, dispatch, directorr);
 
     expect(actionTypePayloadAfterware).toBeCalledTimes(1);
-    expect(actionTypePayloadAfterware).lastCalledWith(dispatch, action.payload);
+    expect(actionTypePayloadAfterware).lastCalledWith(dispatch, action.payload, directorr);
 
-    afterware(actionTwo, dispatch);
+    afterware(actionTwo, dispatch, directorr);
 
     expect(actionType2PayloadAfterware).toBeCalledTimes(1);
-    expect(actionType2PayloadAfterware).lastCalledWith(dispatch, actionTwo.payload);
+    expect(actionType2PayloadAfterware).lastCalledWith(dispatch, actionTwo.payload, directorr);
   });
 
   it('isActionHave', () => {
@@ -510,5 +513,56 @@ describe('utils', () => {
     expect(isActionHave(action, action.type, { prop: 1 })).toBeFalsy();
     expect(isActionHave(action, action.type, patternWithValueTrue)).toBeTruthy();
     expect(isActionHave(action, action.type, patternWithValueFalse)).toBeFalsy();
+  });
+
+  it('createPromiseCancelable when not resolved', async () => {
+    const fulfill = jest.fn();
+    const reject = jest.fn();
+    const whenCancelCallback = jest.fn();
+    const notResolvedExecutor = (res: any, rej: any, whenCancel: any) => {
+      whenCancel(whenCancelCallback);
+    };
+
+    const promise = createPromiseCancelable(notResolvedExecutor);
+
+    promise.then(fulfill).catch(reject);
+
+    await flushPromises();
+
+    expect(fulfill).not.toBeCalled();
+    expect(reject).not.toBeCalled();
+    expect(whenCancelCallback).not.toBeCalled();
+
+    promise.cancel();
+
+    expect(fulfill).not.toBeCalled();
+    expect(reject).not.toBeCalled();
+    expect(whenCancelCallback).toBeCalled();
+  });
+
+  it('createPromiseCancelable when resolved', async () => {
+    const fulfill = jest.fn();
+    const reject = jest.fn();
+    const whenCancelCallback = jest.fn();
+    const resolvedExecutor = (res: any, rej: any, whenCancel: any) => {
+      res();
+      whenCancel(whenCancelCallback);
+    };
+
+    const promise = createPromiseCancelable(resolvedExecutor);
+
+    promise.then(fulfill).catch(reject);
+
+    await flushPromises();
+
+    expect(fulfill).toBeCalledTimes(1);
+    expect(reject).not.toBeCalled();
+    expect(whenCancelCallback).not.toBeCalled();
+
+    promise.cancel();
+
+    expect(fulfill).toBeCalledTimes(1);
+    expect(reject).not.toBeCalled();
+    expect(whenCancelCallback).not.toBeCalled();
   });
 });

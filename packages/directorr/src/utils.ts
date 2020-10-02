@@ -21,6 +21,10 @@ import {
   CheckPayload,
   ConvertPayloadFunction,
   DecoratorValueTypedForAction,
+  Resolver,
+  PromiseCancelable,
+  Executor,
+  Rejector,
 } from './types';
 import { notFindStoreName } from './messages';
 
@@ -95,6 +99,42 @@ export const {
   keys,
   prototype: { toString, hasOwnProperty: hasOwnPropertyFromPrototype },
 } = Object;
+
+export function createPromiseCancelable<T = any>(executor: Executor<T>): PromiseCancelable<T> {
+  let fulfill: Resolver<T> = EMPTY_FUNC;
+  let reject: Rejector = EMPTY_FUNC;
+  let callback: () => void = EMPTY_FUNC;
+  let pending = true;
+
+  function whenCancel(cb: () => void) {
+    callback = cb;
+  }
+
+  function resolver(arg: any) {
+    pending = false;
+    return fulfill(arg);
+  }
+
+  function rejector(arg: any) {
+    pending = false;
+    return reject(arg);
+  }
+
+  function cancel() {
+    fulfill(Promise.resolve<any>(undefined));
+    if (pending) callback();
+  }
+
+  const promise = new Promise(function Executor(res, rej) {
+    fulfill = res;
+    reject = rej;
+    executor(resolver, rejector, whenCancel);
+  }) as PromiseCancelable<T>;
+
+  promise.cancel = cancel;
+
+  return promise;
+}
 
 const STRING_OBJECT = '[object Object]';
 
@@ -357,10 +397,10 @@ export function hydrateStoresToState(directorrStores: DirectorrStores) {
 }
 
 export function createAfterware(afterwareMap: AfterwareMap): Afterware {
-  return (action, dispatch) => {
+  return (action, dispatch, directorr) => {
     const payloadAfterware = afterwareMap[action.type];
 
-    if (payloadAfterware) payloadAfterware(dispatch, action.payload);
+    if (payloadAfterware) payloadAfterware(dispatch, action.payload, directorr);
   };
 }
 

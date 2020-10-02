@@ -21,6 +21,7 @@ import {
   isStoreError,
   hasOwnProperty,
   isObject,
+  createPromiseCancelable,
 } from './utils';
 import config from './config';
 import { callWithNotAction, haveCycleInjectedStore, notObserver } from './messages';
@@ -227,7 +228,7 @@ class Directorr implements DirectorrInterface {
   };
 
   waitAllStoresState(isStoreState: CheckStoreState = isStoreReady) {
-    return new Promise<any>(res => {
+    return createPromiseCancelable<any>((res, rej, whenCancel) => {
       if (checkStoresState(this.stores, isStoreState)) return res();
 
       const unsub = this.subscribe(stores => {
@@ -237,6 +238,8 @@ class Directorr implements DirectorrInterface {
           return res();
         }
       });
+
+      whenCancel(unsub);
     });
   }
 
@@ -246,7 +249,7 @@ class Directorr implements DirectorrInterface {
   ) {
     const storeNames = stores.map(s => getStoreName(s));
 
-    return new Promise<any>(res => {
+    return createPromiseCancelable<any>((res, rej, whenCancel) => {
       if (checkStoresState(this.stores, isStoreState, storeNames)) return res();
 
       const unsub = this.subscribe(stores => {
@@ -256,11 +259,13 @@ class Directorr implements DirectorrInterface {
           return res();
         }
       });
+
+      whenCancel(unsub);
     });
   }
 
   findStoreState(isStoreState: CheckStoreState = isStoreError) {
-    return new Promise<any>(res => {
+    return createPromiseCancelable<any>((res, rej, whenCancel) => {
       const store = findStoreStateInStores(this.stores, isStoreState);
 
       if (store) return res(store);
@@ -274,6 +279,8 @@ class Directorr implements DirectorrInterface {
           return res(store);
         }
       });
+
+      whenCancel(unsub);
     });
   }
 
@@ -373,7 +380,7 @@ class Directorr implements DirectorrInterface {
     }
 
     for (const afterware of this.afterwares) {
-      afterware(action, this.dispatchType);
+      afterware(action, this.dispatchType, this);
     }
 
     for (const handler of this.subscribeHandlers.concat()) {
