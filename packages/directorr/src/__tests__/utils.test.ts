@@ -565,4 +565,30 @@ describe('utils', () => {
     expect(reject).not.toBeCalled();
     expect(whenCancelCallback).not.toBeCalled();
   });
+
+  it('createPromiseCancelable when rejected', async () => {
+    const fulfill = jest.fn();
+    const reject = jest.fn();
+    const whenCancelCallback = jest.fn();
+    const resolvedExecutor = (res: any, rej: any, whenCancel: any) => {
+      rej();
+      whenCancel(whenCancelCallback);
+    };
+
+    const promise = createPromiseCancelable(resolvedExecutor);
+
+    promise.then(fulfill).catch(reject);
+
+    await flushPromises();
+
+    expect(reject).toBeCalledTimes(1);
+    expect(fulfill).not.toBeCalled();
+    expect(whenCancelCallback).not.toBeCalled();
+
+    promise.cancel();
+
+    expect(reject).toBeCalledTimes(1);
+    expect(fulfill).not.toBeCalled();
+    expect(whenCancelCallback).not.toBeCalled();
+  });
 });
