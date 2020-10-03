@@ -47,7 +47,11 @@ describe('HistoryStore', () => {
       createAction(DIRECTORR_INIT_STORE_ACTION, { StoreConstructor: HistoryStore })
     );
 
-    expect(store).toMatchObject({});
+    expect(store).toMatchObject({
+      path: '/',
+      queryObject: {},
+      state: null,
+    });
 
     store[DISPATCH_EFFECTS_FIELD_NAME](
       createAction(DIRECTORR_INIT_STORE_ACTION, {
