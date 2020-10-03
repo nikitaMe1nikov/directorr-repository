@@ -1,6 +1,6 @@
 # dirrector-react
 
-[React](https://github.com/facebook/react) bindings for [Directorr](https://github.com/nikitaMe1nikov/directorr).  
+[React](https://github.com/facebook/react) bindings for [Directorr](https://github.com/nikitaMe1nikov/directorr-repository/tree/master/packages/directorr).  
 
 ## Installation
 

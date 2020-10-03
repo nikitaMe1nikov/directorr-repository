@@ -1,6 +1,6 @@
 # directorr-appinitializer
 
->Simplification of the application initialization process.
+>Simplification of the application initialization process for [Directorr](https://github.com/nikitaMe1nikov/directorr-repository/tree/master/packages/directorr)
 
 ## Installation
 

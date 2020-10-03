@@ -1,6 +1,6 @@
 # directorr-router
 
->Router for [Directorr](https://github.com/nikitaMe1nikov/directorr).
+>Router for [Directorr](https://github.com/nikitaMe1nikov/directorr-repository/tree/master/packages/directorr).
 
 ## Installation
 

@@ -14,6 +14,8 @@ Ability to write less code and easily separate business logic from different fra
 - [**directorr-react**](https://github.com/nikitaMe1nikov/directorr-repository/tree/master/packages/directorr-react)
 - [**directorr-router-react**](https://github.com/nikitaMe1nikov/directorr-repository/tree/master/packages/directorr-router-react)
 - [**directorr-next**](https://github.com/nikitaMe1nikov/directorr-repository/tree/master/packages/directorr-next)
+- [**directorr-appinitializer**](https://github.com/nikitaMe1nikov/directorr-repository/tree/master/packages/directorr-appinitializer)
+- [**directorr-appinitializer-react**](https://github.com/nikitaMe1nikov/directorr-repository/tree/master/packages/directorr-appinitializer-react)
 
 ## Examples
 
