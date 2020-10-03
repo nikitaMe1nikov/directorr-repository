@@ -102,7 +102,6 @@ export default class PageStore {
 
   @whenInit
   init = () => {
-    console.log(this);
     this.getTodos();
   };
 
