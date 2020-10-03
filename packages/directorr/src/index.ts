@@ -11,6 +11,7 @@ import injectStore from './injectStore';
 import reloadAction from './reloadAction';
 import whenReload from './whenReload';
 export * from './checkers';
+export * from './testUtils';
 import createPropertyDecoratorFactory from './createPropertyDecoratorFactory';
 import connectStore from './connectStore';
 import createActionAndEffect from './createActionAndEffect';

@@ -38,6 +38,10 @@ import {
   EMPTY_STRING,
   EMPTY_OBJECT,
   EMPTY_FUNC,
+  dispatchEffectInStore,
+  dispatchInitEffectInStore,
+  dispatchDestroyEffectInStore,
+  dispatchReloadEffectInStore,
 } from '../index';
 
 describe('index', () => {
@@ -78,5 +82,9 @@ describe('index', () => {
     expect(EMPTY_STRING).not.toBeUndefined();
     expect(EMPTY_OBJECT).not.toBeUndefined();
     expect(EMPTY_FUNC).not.toBeUndefined();
+    expect(dispatchEffectInStore).not.toBeUndefined();
+    expect(dispatchInitEffectInStore).not.toBeUndefined();
+    expect(dispatchDestroyEffectInStore).not.toBeUndefined();
+    expect(dispatchReloadEffectInStore).not.toBeUndefined();
   });
 });
