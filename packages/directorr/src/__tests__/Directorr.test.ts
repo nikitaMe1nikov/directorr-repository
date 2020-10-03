@@ -148,6 +148,35 @@ describe('Directorr', () => {
     expect(storeNext).toBe(store);
   });
 
+  it('initStore with store dont used decorators', async () => {
+    class SomeStore {
+      static storeInitOptions = {};
+
+      initProps: any;
+
+      constructor(initProps: any) {
+        this.initProps = initProps;
+      }
+    }
+    const director = new Directorr();
+
+    const store = director.addStoreDependency(SomeStore, DEP, initOptions);
+
+    await flushPromises();
+
+    expect(store).toBeInstanceOf(SomeStore);
+    expect(store.initProps).toBe(SomeStore.storeInitOptions);
+    expect(store[STORES_FIELD_NAME]).toBe(director.stores);
+    expect(store[DISPATCH_ACTION_FIELD_NAME]).toBe(director.dispatch);
+    expect(store[INJECTED_FROM_FIELD_NAME]).toHaveLength(0);
+
+    expect(director.getStore(SomeStore)).toBe(store);
+
+    const storeNext = director.addStoreDependency(SomeStore, DEP, initOptions);
+
+    expect(storeNext).toBe(store);
+  });
+
   it('initStore with injected store', async () => {
     const director = new Directorr();
 

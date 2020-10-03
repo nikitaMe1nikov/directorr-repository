@@ -149,6 +149,9 @@ class Directorr implements DirectorrInterface {
     defineProperty(store, STORES_FIELD_NAME, createValueDescriptor(this.stores));
     defineProperty(store, DISPATCH_ACTION_FIELD_NAME, createValueDescriptor(this.dispatch));
 
+    if (!(DISPATCH_EFFECTS_FIELD_NAME in store))
+      defineProperty(store, DISPATCH_EFFECTS_FIELD_NAME, createValueDescriptor(EMPTY_FUNC));
+
     // add store
     this.stores.set(storeName, store);
 
