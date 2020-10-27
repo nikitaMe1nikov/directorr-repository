@@ -3,12 +3,12 @@ import { EMPTY_STRING } from '@nimel/directorr';
 import { someProperty } from '../__mocks__/mocks';
 import { Status } from '../types';
 import {
-  effectSubmit,
-  effectChangeStatus,
-  effectVisit,
-  effectFocus,
-  effectChangeValue,
-  effectReset,
+  effectFormSubmit,
+  effectFormChangeStatus,
+  effectFormVisit,
+  effectFormFocus,
+  effectFormChangeValue,
+  effectFormReset,
 } from '../decorators';
 
 describe('FormStore', () => {
@@ -39,7 +39,7 @@ describe('FormStore', () => {
   it('change value', () => {
     const value = 'value';
     class FormChange extends FormStore {
-      @effectChangeValue
+      @effectFormChangeValue
       effect = jest.fn();
     }
     const store = new FormChange();
@@ -60,10 +60,10 @@ describe('FormStore', () => {
 
   it('focus', () => {
     class FormFocus extends FormStore {
-      @effectFocus
+      @effectFormFocus
       effectFocus = jest.fn();
 
-      @effectVisit
+      @effectFormVisit
       effectVisit = jest.fn();
     }
     const store = new FormFocus();
@@ -93,7 +93,7 @@ describe('FormStore', () => {
 
   it('visit', () => {
     class FormVisit extends FormStore {
-      @effectVisit
+      @effectFormVisit
       effect = jest.fn();
     }
     const store = new FormVisit();
@@ -117,7 +117,7 @@ describe('FormStore', () => {
   it('change status', () => {
     const message = 'message';
     class FormStatus extends FormStore {
-      @effectChangeStatus
+      @effectFormChangeStatus
       effect = jest.fn();
     }
     const store = new FormStatus();
@@ -149,7 +149,7 @@ describe('FormStore', () => {
 
   it('submit', () => {
     class FormSubmit extends FormStore {
-      @effectSubmit
+      @effectFormSubmit
       effect = jest.fn();
     }
     const store = new FormSubmit();
@@ -162,7 +162,7 @@ describe('FormStore', () => {
 
   it('reset', () => {
     class FormReset extends FormStore {
-      @effectReset
+      @effectFormReset
       effect = jest.fn();
     }
     const store = new FormReset();

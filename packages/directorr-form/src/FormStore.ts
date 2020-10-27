@@ -8,17 +8,17 @@ import {
   FormChangeStatusPayload,
 } from './types';
 import {
-  actionChangeValue,
-  effectChangeValue,
-  actionFocus,
-  effectFocus,
-  actionVisit,
-  effectVisit,
-  actionChangeStatus,
-  effectChangeStatus,
-  actionSubmit,
-  actionReset,
-  effectReset,
+  actionFormChangeValue,
+  effectFormChangeValue,
+  actionFormFocus,
+  effectFormFocus,
+  actionFormVisit,
+  effectFormVisit,
+  actionFormChangeStatus,
+  effectFormChangeStatus,
+  actionFormSubmit,
+  actionFormReset,
+  effectFormReset,
 } from './decorators';
 
 export class FormStore {
@@ -56,58 +56,58 @@ export class FormStore {
     return this.status === Status.invalid;
   }
 
-  @actionChangeValue
+  @actionFormChangeValue
   changeValue = (value: string) => ({ value });
 
-  @effectChangeValue
+  @effectFormChangeValue
   toChangeValue = ({ value }: FormValuePayload) => {
     this.isChanged = true;
 
     this.value = value;
   };
 
-  @actionFocus
+  @actionFormFocus
   focus = () => {
     this.visit();
 
     return { focus: true };
   };
 
-  @actionFocus
+  @actionFormFocus
   blur = () => ({ focus: false });
 
-  @effectFocus
+  @effectFormFocus
   toFocus = ({ focus }: FormFocusPayload) => {
     this.isFocused = focus;
   };
 
-  @actionVisit
+  @actionFormVisit
   visit = () => (this.isVisited ? null : undefined);
 
-  @effectVisit
+  @effectFormVisit
   toVisit = () => {
     this.isVisited = true;
   };
 
-  @actionChangeStatus
+  @actionFormChangeStatus
   changeStatusToInvalid = (message: string) => ({ status: Status.invalid, message });
 
-  @actionChangeStatus
+  @actionFormChangeStatus
   changeStatusToValid = () => ({ status: Status.valid });
 
-  @effectChangeStatus
+  @effectFormChangeStatus
   toChangeStatus = ({ status, message }: FormChangeStatusPayload) => {
     this.status = status;
     this.message = message;
   };
 
-  @actionSubmit
+  @actionFormSubmit
   submit = () => {};
 
-  @actionReset
+  @actionFormReset
   reset = () => {};
 
-  @effectReset
+  @effectFormReset
   toReset = () => {
     this.value = this.defaultValue;
     this.message = this.defaultMessage;
