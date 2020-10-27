@@ -21,7 +21,7 @@ import {
   effectReset,
 } from './decorators';
 
-export default class FormStore {
+export class FormStore {
   defaultValue: string;
   defaultMessage?: string;
   @observable value: string;
@@ -114,3 +114,5 @@ export default class FormStore {
     this.status = Status.default;
   };
 }
+
+export default FormStore;

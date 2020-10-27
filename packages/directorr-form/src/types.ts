@@ -1,8 +1,8 @@
 import { ValidateOptions as ValidateOptionsYup, ObjectSchema } from 'yup';
 
-export type ValidateOptions = ValidateOptionsYup;
+export type ValidateOptionsAll = ValidateOptionsYup;
 
-export type ValidateOptionsAll = ValidateOptions & {
+export type ValidateOptions = ValidateOptionsAll & {
   payloadProp: string;
 };
 
@@ -11,6 +11,13 @@ export type ValidateSchemaAll = (
   valueFunc: SomeFunc,
   store: any,
   [schema, options, fields]: [ObjectSchema<any>, ValidateOptionsAll, string[]]
+) => any;
+
+export type ValidateSchema = (
+  payload: any,
+  valueFunc: SomeFunc,
+  store: any,
+  [schema, options, fields]: [ObjectSchema<any>, ValidateOptions, string[]]
 ) => any;
 
 export const enum Status {
@@ -39,3 +46,10 @@ export interface FormChangeStatusPayload {
 }
 
 export type SomeFunc = (arg: any) => any;
+
+export interface validatePayload {
+  validationError?: {
+    errors: string[];
+    message: string;
+  };
+}

@@ -1,18 +1,7 @@
-import { object, string } from 'yup';
+import { object, string, number } from 'yup';
 import { callWithPropNotEquallFunc } from '@nimel/directorr';
-import validate, {
-  isLikeFormStore,
-  calcValues,
-  MODULE_NAME,
-  validateSchema,
-  initializer,
-} from '../validate';
-import {
-  propNotExistInClass,
-  propInClassNotLikeFormStore,
-  useWithEffects,
-  callWithWrongSchema,
-} from '../messages';
+import validate, { MODULE_NAME, validateSchema, initializer } from '../validate';
+import { useWithEffects, callWithWrongSchema } from '../messages';
 import { DEFAULT_VALIDATE_OPTIONS } from '../createSchemaContext';
 import { someValue, someProperty, someFunc, action } from '../__mocks__/mocks';
 
@@ -23,57 +12,6 @@ class FakeFormStore {
 }
 
 describe('validate', () => {
-  it('isLikeFormStore', () => {
-    const likeFormStore = new FakeFormStore();
-    const fakeStore = {};
-
-    expect(isLikeFormStore(fakeStore)).toBeFalsy();
-    expect(isLikeFormStore(likeFormStore)).toBeTruthy();
-  });
-
-  it('calcValues', () => {
-    const formStoreOne = new FakeFormStore();
-    const formStoreTwo = {
-      ...formStoreOne,
-      value: '',
-    };
-    const formStoreThree = {
-      ...formStoreOne,
-      value: undefined,
-    };
-    const formStoreFour = {
-      ...formStoreOne,
-      value: null,
-    };
-    const otherPropOne = 'otherPropOne';
-    const otherPropTwo = 'otherPropTwo';
-    const otherPropThree = 'otherPropThree';
-    const otherFields = [otherPropOne];
-    const store = {
-      [someProperty]: formStoreOne,
-      [otherPropOne]: formStoreTwo,
-      [otherPropTwo]: formStoreThree,
-      [otherPropThree]: formStoreFour,
-    };
-    const fields = [someProperty, otherPropOne, otherPropTwo, otherPropThree];
-    const storeWithWrongFormStore = {
-      [someProperty]: {},
-    };
-
-    expect(() => calcValues(otherFields, someValue)).toThrowError(
-      propNotExistInClass(MODULE_NAME, otherPropOne, store)
-    );
-    expect(() => calcValues(fields, storeWithWrongFormStore)).toThrowError(
-      propInClassNotLikeFormStore(MODULE_NAME, someProperty, storeWithWrongFormStore)
-    );
-    expect(calcValues(fields, store)).toMatchObject({
-      [someProperty]: someProperty,
-      [otherPropOne]: undefined,
-      [otherPropTwo]: undefined,
-      [otherPropThree]: undefined,
-    });
-  });
-
   it('validateSchema', () => {
     const formStore = new FakeFormStore();
     const valueFunc = jest.fn().mockImplementation(v => v);
@@ -81,16 +19,13 @@ describe('validate', () => {
       [someProperty]: formStore,
     };
     const fields = [someProperty];
-    const schema: any = {
-      validateSyncAt: jest.fn(),
-    };
-    const errorMessage = 'errorMessage';
-    const error = new Error(errorMessage);
-    const schemaThrowError: any = {
-      validateSyncAt: jest.fn().mockImplementation(() => {
-        throw error;
-      }),
-    };
+    const schema = object({
+      [someProperty]: string().required(),
+    });
+    const schemaNumber = object({
+      [someProperty]: number().required(),
+    });
+    const errorMessage = 'someProp must be a `number` type, but the final value was: `"someProp"`.';
     const formStorePayload = {
       [DEFAULT_VALIDATE_OPTIONS.payloadProp]: someProperty,
     };
@@ -116,31 +51,19 @@ describe('validate', () => {
     ).toEqual(formStorePayload);
     expect(formStore.changeStatusToValid).toBeCalledTimes(1);
     expect(formStore.changeStatusToInvalid).toBeCalledTimes(0);
-    expect(schema.validateSyncAt).toBeCalledTimes(1);
-    expect(schema.validateSyncAt).lastCalledWith(
-      someProperty,
-      { [someProperty]: someProperty },
-      DEFAULT_VALIDATE_OPTIONS
-    );
     expect(valueFunc).toBeCalledTimes(1);
     expect(valueFunc).lastCalledWith(formStorePayload);
 
     const payload = validateSchema(formStorePayload, valueFunc, store, [
-      schemaThrowError,
+      schemaNumber,
       DEFAULT_VALIDATE_OPTIONS,
       fields,
     ]);
     expect(payload).toMatchObject(formStorePayload);
-    expect(payload.validationError).toEqual(error);
+    expect(payload.validationError).toBeInstanceOf(Error);
     expect(formStore.changeStatusToValid).toBeCalledTimes(1);
     expect(formStore.changeStatusToInvalid).toBeCalledTimes(1);
     expect(formStore.changeStatusToInvalid).lastCalledWith(errorMessage);
-    expect(schemaThrowError.validateSyncAt).toBeCalledTimes(1);
-    expect(schemaThrowError.validateSyncAt).lastCalledWith(
-      someProperty,
-      { [someProperty]: someProperty },
-      DEFAULT_VALIDATE_OPTIONS
-    );
     expect(valueFunc).toBeCalledTimes(2);
     expect(valueFunc).lastCalledWith(payload);
   });
