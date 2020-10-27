@@ -1,6 +1,6 @@
 {
   "name": "@nimel/directorr-appinitializer",
-  "version": "1.0.0-rc.3",
+  "version": "1.0.0-rc.4",
   "publishConfig": {
     "access": "public"
   },
@@ -39,12 +39,12 @@
     "test-typescript:w": "jest --rootDir='.' --config '../../jest.typescript.config.js' --watchAll"
   },
   "peerDependencies": {
-    "@nimel/directorr": "^1.0.0-rc.3",
+    "@nimel/directorr": "^1.0.0-rc.4",
     "mobx": "5.15.6"
   },
   "dependencies": {},
   "devDependencies": {
-    "@nimel/directorr": "^1.0.0-rc.3",
+    "@nimel/directorr": "^1.0.0-rc.4",
     "mobx": "5.15.6"
   },
   "author": "Nikita Melnikov",
