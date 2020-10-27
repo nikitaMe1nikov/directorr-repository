@@ -6,14 +6,14 @@ import { ANY_PATH } from '@nimel/directorr-router';
 import { createMemoryHistory } from 'history';
 import Router from '../Router';
 import ComponentWrapper from '../ComponentWrapper';
-import { Persisted } from '../types';
+import { PERSISTED } from '../types';
 import { ANIMATIONS, childStyle, disableInteractionStyle } from '../constants';
 import { createDirectorr, mountWithDirectorr } from '../__mocks__/utils';
 import { flushTimeouts } from '../../../../tests/utils';
 
 describe('nested Routers', () => {
   it('switch component when history push and back', async () => {
-    const persisted = Persisted.NEVER;
+    const persisted = PERSISTED.NEVER;
     const animation = ANIMATIONS.NONE;
     const history = createMemoryHistory();
     const directorr = createDirectorr(history);
@@ -100,7 +100,7 @@ describe('nested Routers', () => {
   });
 
   it('animation = NONE for all Routers which do not match the path', async () => {
-    const persisted = Persisted.ALWAYS;
+    const persisted = PERSISTED.ALWAYS;
     const animation = ANIMATIONS.FADE;
     const history = createMemoryHistory();
     const directorr = createDirectorr(history);

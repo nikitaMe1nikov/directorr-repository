@@ -1,6 +1,6 @@
 import { ComponentType } from 'react';
 import { EMPTY_OBJECT } from '@nimel/directorr';
-import { Action, matchPath } from '@nimel/directorr-router';
+import { ACTION, Action, matchPath } from '@nimel/directorr-router';
 import { Route, Animation, RouteComponent } from './types';
 
 export const EMPTY_REACT_COMPONENT = () => null;
@@ -34,7 +34,7 @@ export function calcAnimationFromAction(
   nextAnimation: Animation
 ) {
   switch (action) {
-    case Action.POP:
+    case ACTION.POP:
       return prevAnimation;
     default:
       return nextAnimation;

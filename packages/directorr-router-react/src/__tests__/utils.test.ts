@@ -1,5 +1,5 @@
 import { findRouteAndComponent, calcAnimationFromAction, styleInjector } from '../utils';
-import { Action } from '@nimel/directorr-router';
+import { ACTION } from '@nimel/directorr-router';
 
 describe('utils', () => {
   it('findRouteAndComponent', () => {
@@ -19,9 +19,9 @@ describe('utils', () => {
     const prevAnimation: any = {};
     const nextAnimation: any = {};
 
-    expect(calcAnimationFromAction(Action.POP, prevAnimation, nextAnimation)).toBe(prevAnimation);
-    expect(calcAnimationFromAction(Action.PUSH, prevAnimation, nextAnimation)).toBe(nextAnimation);
-    expect(calcAnimationFromAction(Action.REPLACE, prevAnimation, nextAnimation)).toBe(
+    expect(calcAnimationFromAction(ACTION.POP, prevAnimation, nextAnimation)).toBe(prevAnimation);
+    expect(calcAnimationFromAction(ACTION.PUSH, prevAnimation, nextAnimation)).toBe(nextAnimation);
+    expect(calcAnimationFromAction(ACTION.REPLACE, prevAnimation, nextAnimation)).toBe(
       nextAnimation
     );
   });

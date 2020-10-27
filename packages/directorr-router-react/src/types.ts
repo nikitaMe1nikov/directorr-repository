@@ -1,11 +1,13 @@
 import { ComponentType, CSSProperties } from 'react';
 import { HistoryActionPayload, QueryObject, LocationState } from '@nimel/directorr-router';
 
-export const enum Persisted {
-  SMART = 'SMART',
-  ALWAYS = 'ALWAYS',
-  NEVER = 'NEVER',
-}
+export const PERSISTED: { SMART: 'SMART'; ALWAYS: 'ALWAYS'; NEVER: 'NEVER' } = {
+  SMART: 'SMART',
+  ALWAYS: 'ALWAYS',
+  NEVER: 'NEVER',
+};
+
+export type Persisted = keyof typeof PERSISTED;
 
 export interface Params {
   [key: string]: string | number;

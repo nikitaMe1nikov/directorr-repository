@@ -6,7 +6,7 @@ import { createMemoryHistory } from 'history';
 import Router from '../Router';
 import RouterStore from '../RouterStore';
 import ComponentWrapper from '../ComponentWrapper';
-import { Persisted } from '../types';
+import { PERSISTED } from '../types';
 import { styleInjector } from '../utils';
 import {
   ANIMATIONS,
@@ -123,7 +123,7 @@ describe('Router', () => {
   });
 
   it('switch component when change history with persisted = NEVER', async () => {
-    const persisted = Persisted.NEVER;
+    const persisted = PERSISTED.NEVER;
     const animation = ANIMATIONS.FADE;
     const history = createMemoryHistory();
     const directorr = createDirectorr(history);
@@ -185,7 +185,7 @@ describe('Router', () => {
   });
 
   it('switch component when change history with persisted = SMART', async () => {
-    const persisted = Persisted.SMART;
+    const persisted = PERSISTED.SMART;
     const animation = ANIMATIONS.FADE;
     const history = createMemoryHistory();
     const directorr = createDirectorr(history);
@@ -290,7 +290,7 @@ describe('Router', () => {
   });
 
   it('switch component when change history with persisted = ALWAYS', async () => {
-    const persisted = Persisted.ALWAYS;
+    const persisted = PERSISTED.ALWAYS;
     const animation = ANIMATIONS.FADE;
     const history = createMemoryHistory();
     const directorr = createDirectorr(history);
@@ -360,9 +360,9 @@ describe('Router', () => {
   });
 
   it('​​should overwritten animation and persisted per route when push - back', async () => {
-    const persisted = Persisted.ALWAYS;
+    const persisted = PERSISTED.ALWAYS;
     const animation = ANIMATIONS.FADE;
-    const persistedRoute = Persisted.NEVER;
+    const persistedRoute = PERSISTED.NEVER;
     const animationRoute = ANIMATIONS.NONE;
     const history = createMemoryHistory();
     const directorr = createDirectorr(history);
@@ -470,9 +470,9 @@ describe('Router', () => {
   });
 
   it('​​should overwritten animation and persisted per route when push - push', async () => {
-    const persisted = Persisted.ALWAYS;
+    const persisted = PERSISTED.ALWAYS;
     const animation = ANIMATIONS.FADE;
-    const persistedRoute = Persisted.NEVER;
+    const persistedRoute = PERSISTED.NEVER;
     const animationRoute = ANIMATIONS.NONE;
     const history = createMemoryHistory();
     const directorr = createDirectorr(history);
@@ -580,7 +580,7 @@ describe('Router', () => {
   });
 
   it('render with routes redirect', async () => {
-    const persisted = Persisted.NEVER;
+    const persisted = PERSISTED.NEVER;
     const history = createMemoryHistory();
     const directorr = createDirectorr(history);
     const OneComponent = () => null;
@@ -668,7 +668,7 @@ describe('Router', () => {
   });
 
   it('switch component when history push to redirect route', async () => {
-    const persisted = Persisted.NEVER;
+    const persisted = PERSISTED.NEVER;
     const animation = ANIMATIONS.NONE;
     const history = createMemoryHistory();
     const directorr = createDirectorr(history);

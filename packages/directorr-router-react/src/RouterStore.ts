@@ -8,7 +8,7 @@ import {
 } from '@nimel/directorr-router';
 import { RouterHandler, RouterTask } from './types';
 
-export default class RouterStore {
+export class RouterStore {
   historyQueue: RouterTask[] = [];
   handlersStack: RouterHandler[] = [];
 
@@ -67,3 +67,5 @@ export default class RouterStore {
     if (this.historyQueue.length) this.findNextTask();
   };
 }
+
+export default RouterStore;

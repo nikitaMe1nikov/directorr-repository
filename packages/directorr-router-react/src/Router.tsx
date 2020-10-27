@@ -1,7 +1,7 @@
 import React, { ReactNode, ComponentType } from 'react';
 import { connector } from '@nimel/directorr-react';
 import { EMPTY_FUNC, EMPTY_STRING } from '@nimel/directorr';
-import { Action } from '@nimel/directorr-router';
+import { Action, ACTION } from '@nimel/directorr-router';
 import ComponentWrapper from './ComponentWrapper';
 import {
   findRouteAndComponent,
@@ -18,6 +18,7 @@ import {
   RouterHandler,
   RouteRedirect,
   RouteComponent,
+  PERSISTED,
 } from './types';
 import {
   ANIMATIONS,
@@ -55,7 +56,7 @@ interface RouterState {
 export class Router extends React.PureComponent<RouterProps> {
   static defaultProps = {
     animation: ANIMATIONS.NONE,
-    persisted: Persisted.SMART,
+    persisted: PERSISTED.SMART,
     disableAnimationWhenNotShowRoute: true,
     startAnimationDelay: 0,
   };
@@ -225,8 +226,8 @@ export class Router extends React.PureComponent<RouterProps> {
     const { action } = this.nextRouteState;
 
     if (
-      persisted === Persisted.NEVER ||
-      (action !== Action.PUSH && persisted === Persisted.SMART)
+      persisted === PERSISTED.NEVER ||
+      (action !== ACTION.PUSH && persisted === PERSISTED.SMART)
     ) {
       this.routesMap.delete(prevPathKey);
     } else {

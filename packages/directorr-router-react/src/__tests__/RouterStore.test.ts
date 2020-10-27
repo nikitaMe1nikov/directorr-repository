@@ -1,12 +1,12 @@
 import { STORES_FIELD_NAME } from '@nimel/directorr';
-import { Action } from '@nimel/directorr-router';
+import { ACTION } from '@nimel/directorr-router';
 import RouterStore from '../RouterStore';
 import { flushPromises } from '../../../../tests/utils';
 
 class HistoryStoreMock {
   static storeName = 'HistoryStore';
-  path: '/path';
-  action: Action.POP;
+  path = '/path';
+  action = ACTION.POP;
 }
 
 describe('RouterStore', () => {
@@ -53,14 +53,14 @@ describe('RouterStore', () => {
       path: '/path',
       queryObject: {},
       state: {},
-      action: Action.POP,
+      action: ACTION.POP,
       pattern: 'pattern',
     };
     const taskTwo = {
       path: '/nextpath',
       queryObject: {},
       state: {},
-      action: Action.POP,
+      action: ACTION.POP,
       pattern: 'pattern',
     };
     const store = new RouterStore();
@@ -96,7 +96,7 @@ describe('RouterStore', () => {
       path: '/path',
       queryObject: {},
       state: {},
-      action: Action.POP,
+      action: ACTION.POP,
       pattern: 'pattern',
     };
     const store = new RouterStore();
