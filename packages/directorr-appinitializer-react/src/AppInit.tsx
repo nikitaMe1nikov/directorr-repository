@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { InitOptions, AppInitStore } from '@nimel/directorr-appinitializer';
 import { useStore } from '@nimel/directorr-react';
 
-const AppInit: FC<{ stores: InitOptions; LoadingComponent?: ComponentType }> = ({
+export const AppInit: FC<{ stores: InitOptions; LoadingComponent?: ComponentType }> = ({
   stores,
   children,
   LoadingComponent,

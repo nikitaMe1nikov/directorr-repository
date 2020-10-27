@@ -1,14 +1,16 @@
-import { DirectorrStoreClassConstructor } from '@nimel/directorr';
+export interface SomeClassConstructor<I = any, O = any> {
+  new (options?: O): I;
+}
 
-export type InitOptions = DirectorrStoreClassConstructor[];
+export type InitOptions = SomeClassConstructor[];
 
 export interface InitStorePayload {
-  stores: DirectorrStoreClassConstructor[];
+  stores: SomeClassConstructor[];
 }
 
 export interface InitStoreErrorPayload {
-  store: DirectorrStoreClassConstructor;
-  stores: DirectorrStoreClassConstructor[];
+  store: SomeClassConstructor;
+  stores: SomeClassConstructor[];
 }
 
 export type InitStoreSuccessPayload = InitStorePayload;

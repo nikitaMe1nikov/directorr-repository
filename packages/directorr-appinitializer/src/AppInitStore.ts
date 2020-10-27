@@ -1,5 +1,11 @@
 import { observable } from 'mobx';
-import { whenInit, Action, DirectorrInterface, isStoreError } from '@nimel/directorr';
+import {
+  whenOptions,
+  Action,
+  DirectorrInterface,
+  isStoreReady,
+  isStoreError,
+} from '@nimel/directorr';
 import {
   initStoreAction,
   initStoreErrorAction,
@@ -8,7 +14,7 @@ import {
 } from './decorators';
 import { InitOptions } from './types';
 
-export default class AppInitStore {
+export class AppInitStore {
   static afterware = (
     { type, payload }: Action,
     dispatchType: DirectorrInterface['dispatchType'],
@@ -18,7 +24,8 @@ export default class AppInitStore {
       const { stores } = payload;
 
       directorr.addStores(...stores);
-      const waitStores = directorr.waitStoresState(stores);
+
+      const waitStores = directorr.waitStoresState(stores, isStoreReady);
       const waitStoreWithError = directorr.findStoreState(isStoreError);
 
       Promise.race([waitStores, waitStoreWithError]).then(store => {
@@ -35,7 +42,7 @@ export default class AppInitStore {
 
   @observable isInitComplated = false;
 
-  @whenInit
+  @whenOptions
   @initStoreAction
   init = (stores: InitOptions) => ({ stores });
 
@@ -44,3 +51,5 @@ export default class AppInitStore {
     this.isInitComplated = true;
   };
 }
+
+export default AppInitStore;

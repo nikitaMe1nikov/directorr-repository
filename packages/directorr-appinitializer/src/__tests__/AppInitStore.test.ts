@@ -1,7 +1,7 @@
 import {
   createAction,
   DISPATCH_ACTION_FIELD_NAME,
-  dispatchInitEffectInStore,
+  dispatchOptionsEffectInStore,
   dispatchEffectInStore,
   Directorr,
   action,
@@ -61,7 +61,7 @@ describe('AppInitStore', () => {
 
     Object.defineProperty(store, DISPATCH_ACTION_FIELD_NAME, { value: dispatchAction });
 
-    dispatchInitEffectInStore(store, initOptions);
+    dispatchOptionsEffectInStore(store, initOptions);
 
     expect(dispatchAction).toBeCalledTimes(1);
     expect(dispatchAction).toBeCalledWith(
