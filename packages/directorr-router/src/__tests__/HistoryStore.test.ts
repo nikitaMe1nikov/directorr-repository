@@ -1,15 +1,14 @@
 import {
   createAction,
   DISPATCH_EFFECTS_FIELD_NAME,
-  DIRECTORR_INIT_STORE_ACTION,
   DIRECTORR_DESTROY_STORE_ACTION,
 } from '@nimel/directorr';
-import { createMemoryHistory } from 'history';
+import { createMemoryHistory, createBrowserHistory } from 'history';
 import qs from 'query-string';
-import { Action } from '../types';
-import { ROUTER_STORE_ACTIONS } from '../actionTypes';
+import { ACTION } from '../types';
 import HistoryStore from '../HistoryStore';
 import { reloadWindow } from '../utils';
+import { actionRouterState } from '../decorators';
 
 jest.mock('../utils', () => {
   const originalModule = jest.requireActual('../utils');
@@ -19,8 +18,27 @@ jest.mock('../utils', () => {
     reloadWindow: jest.fn(),
   };
 });
+jest.mock('history', () => {
+  const originalModule = jest.requireActual('history');
+  const history = { location: {}, action: '', listen: jest.fn() };
+  const createBrowserHistory = jest.fn().mockReturnValue(history);
+  (createBrowserHistory as any).history = history;
+
+  return {
+    ...originalModule,
+    createBrowserHistory,
+    history,
+  };
+});
 
 describe('HistoryStore', () => {
+  it('constructor default prop', () => {
+    new HistoryStore();
+
+    expect(createBrowserHistory).toBeCalled();
+    expect((createBrowserHistory as any).history.listen).toBeCalledTimes(1);
+  });
+
   it('constructor', () => {
     const history = createMemoryHistory();
     jest.spyOn(history, 'listen');
@@ -34,33 +52,6 @@ describe('HistoryStore', () => {
       state,
       queryObject: qs.parse(search),
     });
-  });
-
-  it('init', () => {
-    const path = 'path';
-    const queryObject = {};
-    const state = {};
-    const history = createMemoryHistory();
-    const store: any = new HistoryStore(history);
-
-    store[DISPATCH_EFFECTS_FIELD_NAME](
-      createAction(DIRECTORR_INIT_STORE_ACTION, { StoreConstructor: HistoryStore })
-    );
-
-    expect(store).toMatchObject({
-      path: '/',
-      queryObject: {},
-      state: null,
-    });
-
-    store[DISPATCH_EFFECTS_FIELD_NAME](
-      createAction(DIRECTORR_INIT_STORE_ACTION, {
-        StoreConstructor: HistoryStore,
-        initOptions: { path, queryObject, state },
-      })
-    );
-
-    expect(store).toMatchObject({ state, path, queryObject });
   });
 
   it('destroy', () => {
@@ -83,16 +74,7 @@ describe('HistoryStore', () => {
     const store: any = new HistoryStore(history);
 
     store[DISPATCH_EFFECTS_FIELD_NAME](
-      createAction(ROUTER_STORE_ACTIONS.STATE, { StoreConstructor: HistoryStore })
-    );
-
-    expect(store).toMatchObject({ path: '/', queryObject, state: null });
-
-    store[DISPATCH_EFFECTS_FIELD_NAME](
-      createAction(ROUTER_STORE_ACTIONS.STATE, {
-        StoreConstructor: HistoryStore,
-        initOptions: { path, queryObject, state },
-      })
+      createAction(actionRouterState.type, { path, queryObject, state })
     );
 
     expect(store).toMatchObject({ path, queryObject, state });
@@ -103,7 +85,7 @@ describe('HistoryStore', () => {
     const id = 12;
     const queryObject = { id };
     const state = {};
-    const action = Action.POP;
+    const action = ACTION.POP;
     const payload = {
       path,
       queryObject,
@@ -130,7 +112,7 @@ describe('HistoryStore', () => {
     const id = 12;
     const queryObject = { id };
     const state = {};
-    const action = Action.POP;
+    const action = ACTION.POP;
     const payload = {
       path,
       queryObject,
@@ -157,7 +139,7 @@ describe('HistoryStore', () => {
     const id = 12;
     const queryObject = { id };
     const state = {};
-    const action = Action.POP;
+    const action = ACTION.POP;
     const payload = {
       path,
       queryObject,
@@ -299,7 +281,7 @@ describe('HistoryStore', () => {
         search: '',
         state,
       },
-      action: Action.POP,
+      action: ACTION.POP,
     });
 
     expect(store).toMatchObject({
@@ -318,7 +300,7 @@ describe('HistoryStore', () => {
         search: '',
         state: {},
       },
-      action: Action.POP,
+      action: ACTION.POP,
     };
     const taskPush = {
       location: {
@@ -326,7 +308,7 @@ describe('HistoryStore', () => {
         search: '',
         state: {},
       },
-      action: Action.PUSH,
+      action: ACTION.PUSH,
     };
     const taskReplace = {
       location: {
@@ -334,7 +316,7 @@ describe('HistoryStore', () => {
         search: '',
         state: {},
       },
-      action: Action.REPLACE,
+      action: ACTION.REPLACE,
     };
     const history = createMemoryHistory();
     const store: any = new HistoryStore(history);
@@ -360,6 +342,10 @@ describe('HistoryStore', () => {
     store.dispatchAction(taskPop);
 
     expect(handler).toBeCalledTimes(3);
+
+    store.unsubscribe(handler);
+
+    expect(handler).toBeCalledTimes(3);
   });
 
   it('unsubscribe when subscribe handler call', () => {
@@ -369,7 +355,7 @@ describe('HistoryStore', () => {
         search: '',
         state: {},
       },
-      action: Action.POP,
+      action: ACTION.POP,
     };
     const history = createMemoryHistory();
     const store: any = new HistoryStore(history);

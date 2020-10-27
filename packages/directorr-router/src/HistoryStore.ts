@@ -1,4 +1,4 @@
-import { whenInit, whenDestroy, EMPTY_FUNC } from '@nimel/directorr';
+import { whenDestroy, EMPTY_FUNC } from '@nimel/directorr';
 import { createBrowserHistory } from 'history';
 import qs from 'query-string';
 import {
@@ -40,6 +40,7 @@ import {
   QueryObject,
   HistoryRouterTask,
   HistoryRouterHandler,
+  ACTION,
 } from './types';
 
 export default class HistoryStore {
@@ -64,7 +65,7 @@ export default class HistoryStore {
     this.path = pathname;
     this.queryObject = qs.parse(search);
     this.state = state;
-    this.action = action as any;
+    this.action = action;
   }
 
   subscribe = (handler: HistoryRouterHandler) => this.handlersStack.push(handler);
@@ -74,16 +75,11 @@ export default class HistoryStore {
     if (index !== -1) this.handlersStack.splice(index, 1);
   };
 
-  @whenInit
   @effectRouterState
-  toSetState = (payload: RouterActionPayload) => {
-    if (payload) {
-      const { path, queryObject, state } = payload;
-
-      this.path = path;
-      this.queryObject = queryObject;
-      this.state = state;
-    }
+  toSetState = ({ path, queryObject, state }: RouterActionPayload) => {
+    this.path = path;
+    this.queryObject = queryObject;
+    this.state = state;
   };
 
   @whenDestroy
@@ -186,10 +182,10 @@ export default class HistoryStore {
     };
 
     switch (action) {
-      case Action.POP:
+      case ACTION.POP:
         this.toHistoryPop(routerPayload);
         break;
-      case Action.REPLACE:
+      case ACTION.REPLACE:
         this.toHistoryReplace(routerPayload);
         break;
       default:
@@ -201,5 +197,5 @@ export default class HistoryStore {
     }
   };
 
-  toJSON = EMPTY_FUNC;
+  toJSON() {}
 }

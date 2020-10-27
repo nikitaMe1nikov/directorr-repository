@@ -28,6 +28,7 @@ import {
   effectHistoryPush,
   actionHistoryReplace,
   effectHistoryReplace,
+  calcPath,
 } from '../index';
 
 describe('index', () => {
@@ -61,5 +62,6 @@ describe('index', () => {
     expect(effectHistoryPush).not.toBeUndefined();
     expect(actionHistoryReplace).not.toBeUndefined();
     expect(effectHistoryReplace).not.toBeUndefined();
+    expect(calcPath).not.toBeUndefined();
   });
 });

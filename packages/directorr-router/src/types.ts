@@ -1,17 +1,19 @@
 import { Location as LocationHistory, History as HistoryType } from 'history';
 import { ParsedQuery } from 'query-string';
 
+export const ACTION: { POP: 'POP'; PUSH: 'PUSH'; REPLACE: 'REPLACE' } = {
+  POP: 'POP',
+  PUSH: 'PUSH',
+  REPLACE: 'REPLACE',
+};
+
 export interface Params {
   [key: string]: string | number;
 }
 
 export type QueryObject = ParsedQuery;
 
-export const enum Action {
-  POP = 'POP',
-  PUSH = 'PUSH',
-  REPLACE = 'REPLACE',
-}
+export type Action = keyof typeof ACTION;
 export type Location = LocationHistory;
 export type LocationState = Record<string, any> | null;
 export type Blocker = (...args: any[]) => any;
@@ -33,7 +35,7 @@ export interface HistoryActionPayload {
 }
 
 export interface HistoryChangeActionPayload extends HistoryActionPayload {
-  match: { params?: Params };
+  match: boolean;
 }
 
 export interface RouterActionPayload {
@@ -56,4 +58,13 @@ export type BlockState = [Blocker, () => void];
 export interface Options {
   exact?: boolean;
   strict?: boolean;
+}
+
+export interface RouterIsPatternActionPayload {
+  pattern: string;
+}
+
+export interface RouterIsPatternSuccessActionPayload extends RouterIsPatternActionPayload {
+  path: string;
+  queryObject?: QueryObject;
 }
