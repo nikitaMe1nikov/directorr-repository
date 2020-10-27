@@ -9,7 +9,7 @@ import {
   CreateDecoratorOneArg,
 } from './types';
 import decorator from './decorator';
-import createDecoratorFactory from './createrDecoratorFactory';
+import createDecoratorFactory from './createDecoratorFactory';
 import createCheckerContext from './createCheckerContext';
 
 export const MODULE_NAME = 'whenState';
@@ -48,7 +48,7 @@ export function initializer(
   return (payload: any) => stateCheckFunc(payload, value, initObject, checker);
 }
 
-const whenState: CreateDecoratorOneArg<CheckState> = createDecoratorFactory(
+export const whenState: CreateDecoratorOneArg<CheckState> = createDecoratorFactory(
   MODULE_NAME,
   decorator,
   initializer,

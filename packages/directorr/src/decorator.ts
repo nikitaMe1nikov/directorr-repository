@@ -11,7 +11,7 @@ export function decorator(
   ctx: any,
   buildDescriptor = createDescriptor
 ) {
-  if (isLikePropertyDecorator(descriptor))
+  if (!isLikePropertyDecorator(descriptor))
     throw new Error(useForNotPropDecorator(moduleName, property));
 
   return buildDescriptor(descriptor, property, initializerForInitObject, ctx);

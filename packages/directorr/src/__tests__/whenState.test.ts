@@ -187,7 +187,7 @@ describe('whenState', () => {
     expect(callEffect).lastCalledWith(payload);
   });
 
-  it('use whenState in class with other decorators', () => {
+  it('use in class with other decorators', () => {
     const callEffect = jest.fn();
     const storeProp = 'storeProp';
     const checkerFalse = {

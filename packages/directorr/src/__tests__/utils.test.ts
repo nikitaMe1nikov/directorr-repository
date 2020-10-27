@@ -41,6 +41,8 @@ import {
   isActionHave,
   isDecoratorWithCtx,
   createPromiseCancelable,
+  clearTimersEffect,
+  TIMERS_FIELD_NAME,
 } from '../utils';
 import { notFindStoreName } from '../messages';
 import {
@@ -56,7 +58,7 @@ import {
   storeName,
   SomeClass,
 } from '../__mocks__/mocks';
-import { flushPromises } from '../../../../tests/utils';
+import { flushPromises, flushTimeouts } from '../../../../tests/utils';
 
 describe('utils', () => {
   it('symbols', () => {
@@ -226,8 +228,8 @@ describe('utils', () => {
   });
 
   it('isLikePropertyDecorator', () => {
-    expect(isLikePropertyDecorator({})).toBeFalsy();
-    expect(isLikePropertyDecorator(createValueDescriptor(someValue))).toBeTruthy();
+    expect(isLikePropertyDecorator({})).toBeTruthy();
+    expect(isLikePropertyDecorator(createValueDescriptor(someValue))).toBeFalsy();
   });
 
   it('createTypescriptDescriptor', () => {
@@ -590,5 +592,32 @@ describe('utils', () => {
     expect(reject).toBeCalledTimes(1);
     expect(fulfill).not.toBeCalled();
     expect(whenCancelCallback).not.toBeCalled();
+  });
+
+  it('clearTimersEffect', async () => {
+    const timer = jest.fn();
+    const intimer = jest.fn();
+    const timerID = setTimeout(intimer, 0);
+    class SomeClass {
+      [TIMERS_FIELD_NAME] = [timer, timerID];
+      clearTimersEffect = clearTimersEffect;
+    }
+
+    const obj = new SomeClass();
+
+    obj.clearTimersEffect({ StoreConstructor: {} as any });
+
+    expect(timer).not.toBeCalled();
+    expect(intimer).not.toBeCalled();
+
+    obj.clearTimersEffect({ StoreConstructor: SomeClass as any });
+
+    expect(timer).toBeCalledTimes(1);
+    expect(intimer).not.toBeCalled();
+
+    await flushTimeouts();
+
+    expect(timer).toBeCalledTimes(1);
+    expect(intimer).not.toBeCalled();
   });
 });

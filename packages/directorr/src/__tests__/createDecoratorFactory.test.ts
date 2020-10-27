@@ -1,4 +1,4 @@
-import createDecoratorFactory from '../createrDecoratorFactory';
+import createDecoratorFactory from '../createDecoratorFactory';
 import { someValue, someFunc, someProperty, moduleName, someDescriptor } from '../__mocks__/mocks';
 
 describe('createrDecoratorFactory', () => {
@@ -7,7 +7,9 @@ describe('createrDecoratorFactory', () => {
     const createContext = jest.fn().mockImplementation(() => someValue);
     const convertDecorator = jest.fn().mockImplementation(v => v);
 
-    expect(() => createDecoratorFactory(moduleName, decorator, someFunc)).not.toThrow();
+    expect(() =>
+      createDecoratorFactory(moduleName, decorator, someFunc)(someValue, someValue)
+    ).not.toThrow();
 
     const builderDecorator = createDecoratorFactory(
       moduleName,

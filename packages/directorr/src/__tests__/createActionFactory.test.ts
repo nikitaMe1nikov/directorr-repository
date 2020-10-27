@@ -1,4 +1,4 @@
-import createActionFactory from '../createActionFactory';
+import { createActionFactory } from '../createActionFactory';
 import { actionType, someValue } from '../__mocks__/mocks';
 
 describe('createActionFactory', () => {

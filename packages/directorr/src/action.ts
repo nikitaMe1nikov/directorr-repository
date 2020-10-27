@@ -8,7 +8,7 @@ import {
   DecoratorValueTypedForAction,
 } from './types';
 import decorator from './decorator';
-import createDecoratorFactory from './createrDecoratorFactory';
+import createDecoratorFactory from './createDecoratorFactory';
 import createActionTypeContext from './createActionTypeContext';
 import addInitFields from './initFields';
 
@@ -43,7 +43,7 @@ export function addTypeToDecorator(decorator: DecoratorValueTypedForAction, cont
   return decorator;
 }
 
-const action: CreateDecoratorValueTypedWithTypeAction<ActionType> = createDecoratorFactory(
+export const action: CreateDecoratorValueTypedWithTypeAction<ActionType> = createDecoratorFactory(
   MODULE_NAME,
   decorator,
   initializer,

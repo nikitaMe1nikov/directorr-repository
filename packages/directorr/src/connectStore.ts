@@ -16,7 +16,7 @@ import {
   CreateDecoratorOneArgOption,
 } from './types';
 import decorator from './decorator';
-import createDecoratorFactory from './createrDecoratorFactory';
+import createDecoratorFactory from './createDecoratorFactory';
 import createActionTypeOptionContext from './createActionTypeOptionContext';
 import addInitFields from './initFields';
 

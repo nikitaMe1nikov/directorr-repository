@@ -43,7 +43,7 @@ export interface Action<T = string, P = any> {
   [extraProps: string]: any;
 }
 
-export type EffectsMap = Map<string, string[]>;
+export type EffectsMap = Map<string, (string | symbol)[]>;
 
 export type DispatchEffects = (action: Action) => void;
 
@@ -140,6 +140,11 @@ export type CreateDecoratorOneArg<A = any, D = Decorator> = (arg: A) => D;
 
 export type CreateDecoratorValueTypedEffect<A = any> = <P = any>(
   arg: A
+) => DecoratorValueTyped<SomeEffect<P>>;
+
+export type CreateDecoratorValueTypedWithEffectPayload<A1 = any, A2 = any, P = any> = (
+  arg1: A1,
+  arg2?: A2
 ) => DecoratorValueTyped<SomeEffect<P>>;
 
 export type CreateDecoratorValueTypedWithTypeAction<A = any> = <P = any>(
@@ -271,6 +276,10 @@ export type UnsubscribeHandler = () => void;
 export type CheckStoreState = (someCalss: DirectorrStoreClass) => boolean;
 
 export interface InitPayload {
+  StoreConstructor: DirectorrStoreClass;
+}
+
+export interface OptionsPayload {
   StoreConstructor: DirectorrStoreClass;
   initOptions?: any;
 }

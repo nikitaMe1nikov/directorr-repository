@@ -1,20 +1,25 @@
-import { DirectorrStoreClass, InitPayload } from './types';
+import { DirectorrStoreClass, InitPayload, DecoratorValueTyped, SomeEffect } from './types';
 import effect from './effect';
 import whenState from './whenState';
 import whenPayload from './whenPayload';
 import { composePropertyDecorators, DIRECTORR_INIT_STORE_ACTION } from './utils';
 
+function pickSameConstructor(store: DirectorrStoreClass, payload: InitPayload) {
+  return store.constructor === payload.StoreConstructor;
+}
+
 function returnTrue() {
   return true;
 }
 
-const whenInit = composePropertyDecorators([
+function returnUndefined() {
+  return undefined;
+}
+
+export const whenInit: DecoratorValueTyped<SomeEffect<void>> = composePropertyDecorators([
   effect(DIRECTORR_INIT_STORE_ACTION),
-  whenState(
-    (store: DirectorrStoreClass, payload: InitPayload) =>
-      store.constructor === payload.StoreConstructor
-  ),
-  whenPayload(returnTrue, (payload: InitPayload) => payload.initOptions),
+  whenState(pickSameConstructor),
+  whenPayload(returnTrue, returnUndefined),
 ]);
 
 export default whenInit;

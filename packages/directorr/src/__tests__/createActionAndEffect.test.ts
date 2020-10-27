@@ -1,4 +1,4 @@
-import createActionAndEffect from '../createActionAndEffect';
+import { createActionAndEffect } from '../createActionAndEffect';
 import { actionType, someValue } from '../__mocks__/mocks';
 
 describe('createActionAndEffect', () => {

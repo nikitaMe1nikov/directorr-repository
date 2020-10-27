@@ -106,7 +106,7 @@ describe('action', () => {
     obj.actionTwo(someValue);
 
     expect(dispatchEffects).toBeCalledTimes(2);
-    expect(dispatchEffects).toHaveBeenNthCalledWith(
+    expect(dispatchEffects).nthCalledWith(
       1,
       createAction(createActionType(actionType2, ACTION_TYPE_DIVIDER), someValue)
     );

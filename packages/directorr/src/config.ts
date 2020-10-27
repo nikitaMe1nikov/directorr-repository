@@ -66,4 +66,6 @@ class Config {
   };
 }
 
-export default new Config();
+export const config = new Config();
+
+export default config;

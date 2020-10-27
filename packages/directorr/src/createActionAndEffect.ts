@@ -8,8 +8,8 @@ import {
   ActionType,
 } from './types';
 
-export default function createActionAndEffect<P = any>(
+export function createActionAndEffect<P = any>(
   type: ActionType
-): [DecoratorValueTypedForAction<SomeAction<P>>, DecoratorValueTyped<SomeEffect<P>>] {
+): [DecoratorValueTypedForAction<SomeAction<P | null>>, DecoratorValueTyped<SomeEffect<P>>] {
   return [action<P>(type), effect<P>(type)];
 }

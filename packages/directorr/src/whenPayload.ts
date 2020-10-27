@@ -10,7 +10,7 @@ import {
   SomeFunction,
 } from './types';
 import decorator from './decorator';
-import createDecoratorFactory from './createrDecoratorFactory';
+import createDecoratorFactory from './createDecoratorFactory';
 import createCheckerContext from './createCheckerContext';
 
 export const MODULE_NAME = 'whenPayload';
@@ -50,11 +50,9 @@ export function initializer(
   return (payload: any) => payloadCheckerFunc(payload, value, args);
 }
 
-const whenPayload: CreateDecorator<CheckPayload, ConvertPayloadFunction> = createDecoratorFactory(
-  MODULE_NAME,
-  decorator,
-  initializer,
-  createCheckerContext
-);
+export const whenPayload: CreateDecorator<
+  CheckPayload,
+  ConvertPayloadFunction
+> = createDecoratorFactory(MODULE_NAME, decorator, initializer, createCheckerContext);
 
 export default whenPayload;

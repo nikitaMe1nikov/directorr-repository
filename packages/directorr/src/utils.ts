@@ -25,6 +25,7 @@ import {
   PromiseCancelable,
   Executor,
   Rejector,
+  InitPayload,
 } from './types';
 import { notFindStoreName } from './messages';
 
@@ -42,6 +43,10 @@ export const INJECTED_FROM_FIELD_NAME = Symbol.for('dirrector: injected from sto
 
 export const DEPENDENCY_FIELD_NAME = Symbol.for('dirrector: external dependency');
 
+export const TIMERS_FIELD_NAME = Symbol.for('dirrector: timers');
+
+export const CLEAR_TIMERS_EFFECT_FIELD_NAME = Symbol.for('dirrector: clear timers');
+
 export const EMPTY_FUNC = () => {};
 
 export const RETURN_ARG_FUNC = (a: any) => a;
@@ -51,6 +56,8 @@ export const EMPTY_STRING = '';
 export const EMPTY_OBJECT = Object.freeze({});
 
 export const DIRECTORR_INIT_STORE_ACTION = '@@DIRECTORR.INIT_STORE_ACTION';
+
+export const DIRECTORR_OPTIONS_STORE_ACTION = '@@DIRECTORR.OPTIONS_STORE_ACTION';
 
 export const DIRECTORR_DESTROY_STORE_ACTION = '@@DIRECTORR.DESTROY_STORE_ACTION';
 
@@ -248,7 +255,7 @@ export function dispatchEffects(this: any, action: Action): void {
 export function isLikePropertyDecorator(
   decorator?: BabelDescriptor
 ): decorator is PropertyDescriptor {
-  return !!decorator?.value;
+  return !!decorator?.initializer || !decorator?.value;
 }
 
 export function createTypescriptDescriptor(
@@ -339,7 +346,7 @@ export function checkStoresState(
   storesNames?: string[]
 ) {
   if (storesNames) {
-    for (let i = 0, l = storesNames.length, store; i < l; ++i) {
+    for (let i = 0, l = storesNames.length, store: any; i < l; ++i) {
       store = directorrStores.get(storesNames[i]);
 
       if (!store) continue;
@@ -433,4 +440,14 @@ export function isActionHave(
   }
 
   return false;
+}
+
+export function clearTimersEffect(payload: InitPayload) {
+  if (this.constructor === payload.StoreConstructor) {
+    const timers: (number | SomeFunction)[] = this[TIMERS_FIELD_NAME];
+
+    for (const timer of timers) {
+      isFunction(timer) ? timer() : clearTimeout(timer);
+    }
+  }
 }

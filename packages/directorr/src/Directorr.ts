@@ -12,6 +12,7 @@ import {
   EMPTY_FUNC,
   DIRECTORR_INIT_STORE_ACTION,
   DIRECTORR_DESTROY_STORE_ACTION,
+  DIRECTORR_OPTIONS_STORE_ACTION,
   isLikeAction,
   getStoreName,
   isStoreReady,
@@ -47,7 +48,7 @@ import { ReduxMiddlewareAdapter, MiddlewareAdapter } from './MiddlewareAdapters'
 export const MODULE_NAME = 'Directorr';
 export const GLOBAL_DEP = { global: true };
 
-class Directorr implements DirectorrInterface {
+export class Directorr implements DirectorrInterface {
   stores: DirectorrStores = new Map();
 
   getStore<C>(StoreConstructor: DirectorrStoreClassConstructor<C>): C {
@@ -113,7 +114,11 @@ class Directorr implements DirectorrInterface {
   private initStore(StoreConstructor: DirectorrStoreClassConstructor, initOptions?: SomeObject) {
     const storeName = getStoreName(StoreConstructor);
 
-    if (this.stores.has(storeName)) return this.stores.get(storeName);
+    if (this.stores.has(storeName)) {
+      this.dispatchType(DIRECTORR_OPTIONS_STORE_ACTION, { StoreConstructor, initOptions });
+
+      return this.stores.get(storeName);
+    }
 
     // add injected stores
     if (hasOwnProperty(StoreConstructor, INJECTED_STORES_FIELD_NAME)) {
@@ -161,11 +166,13 @@ class Directorr implements DirectorrInterface {
 
     // call init action
     if (hasOwnProperty(StoreConstructor, INJECTED_STORES_FIELD_NAME)) {
-      this.waitStoresState((StoreConstructor as any)[INJECTED_STORES_FIELD_NAME]).then(() =>
-        this.dispatchType(DIRECTORR_INIT_STORE_ACTION, { StoreConstructor, initOptions })
-      );
+      this.waitStoresState((StoreConstructor as any)[INJECTED_STORES_FIELD_NAME]).then(() => {
+        this.dispatchType(DIRECTORR_INIT_STORE_ACTION, { StoreConstructor });
+        this.dispatchType(DIRECTORR_OPTIONS_STORE_ACTION, { StoreConstructor, initOptions });
+      });
     } else {
-      this.dispatchType(DIRECTORR_INIT_STORE_ACTION, { StoreConstructor, initOptions });
+      this.dispatchType(DIRECTORR_INIT_STORE_ACTION, { StoreConstructor });
+      this.dispatchType(DIRECTORR_OPTIONS_STORE_ACTION, { StoreConstructor, initOptions });
     }
 
     return store;

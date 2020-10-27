@@ -70,6 +70,9 @@ export function createInjectStore(moduleName: string, decorator: Decorator) {
   };
 }
 
-const injectStore: CreateDecoratorOneArg = createInjectStore(MODULE_NAME, injectStoreDecorator);
+export const injectStore: CreateDecoratorOneArg = createInjectStore(
+  MODULE_NAME,
+  injectStoreDecorator
+);
 
 export default injectStore;

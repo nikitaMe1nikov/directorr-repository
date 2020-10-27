@@ -1,11 +1,15 @@
 import { RETURN_ARG_FUNC } from './utils';
 import { BabelDescriptor, Initializer, Decorator, CreateContext, ConvertDecorator } from './types';
 
-export default function createDecoratorFactory(
+function returnArgs(moduleName: any, arg1: any, arg2: any) {
+  return [arg1, arg2];
+}
+
+export function createDecoratorFactory(
   moduleName: string,
   decorator: Decorator,
   initializer: Initializer,
-  createContext: CreateContext = RETURN_ARG_FUNC,
+  createContext: CreateContext = returnArgs,
   convertDecorator: ConvertDecorator = RETURN_ARG_FUNC
 ) {
   return function decoratorFactory(arg1?: any, arg2?: any) {
@@ -18,3 +22,5 @@ export default function createDecoratorFactory(
     );
   };
 }
+
+export default createDecoratorFactory;

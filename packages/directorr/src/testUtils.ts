@@ -3,6 +3,7 @@ import {
   DIRECTORR_INIT_STORE_ACTION,
   DIRECTORR_DESTROY_STORE_ACTION,
   DIRECTORR_RELOAD_STORE_ACTION,
+  DIRECTORR_OPTIONS_STORE_ACTION,
   createAction,
 } from './utils';
 import { SomeObject } from './types';
@@ -12,8 +13,14 @@ export function dispatchEffectInStore(store: SomeObject, actionType: string, pay
     (store as any)[DISPATCH_EFFECTS_FIELD_NAME](createAction(actionType, payload));
 }
 
-export function dispatchInitEffectInStore(store: SomeObject, initOptions?: any): void {
+export function dispatchInitEffectInStore(store: SomeObject): void {
   dispatchEffectInStore(store, DIRECTORR_INIT_STORE_ACTION, {
+    StoreConstructor: store.constructor,
+  });
+}
+
+export function dispatchOptionsEffectInStore(store: SomeObject, initOptions?: any): void {
+  dispatchEffectInStore(store, DIRECTORR_OPTIONS_STORE_ACTION, {
     StoreConstructor: store.constructor,
     initOptions,
   });

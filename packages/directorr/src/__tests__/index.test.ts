@@ -18,6 +18,7 @@ import {
   whenDestroy,
   reloadAction,
   whenReload,
+  delay,
   composePropertyDecorators,
   createPropertyDecoratorFactory,
   callWithPropNotEquallFunc,
@@ -42,6 +43,7 @@ import {
   dispatchInitEffectInStore,
   dispatchDestroyEffectInStore,
   dispatchReloadEffectInStore,
+  isString,
 } from '../index';
 
 describe('index', () => {
@@ -62,6 +64,7 @@ describe('index', () => {
     expect(whenDestroy).not.toBeUndefined();
     expect(reloadAction).not.toBeUndefined();
     expect(whenReload).not.toBeUndefined();
+    expect(delay).not.toBeUndefined();
     expect(composePropertyDecorators).not.toBeUndefined();
     expect(createPropertyDecoratorFactory).not.toBeUndefined();
     expect(callWithPropNotEquallFunc).not.toBeUndefined();
@@ -86,5 +89,6 @@ describe('index', () => {
     expect(dispatchInitEffectInStore).not.toBeUndefined();
     expect(dispatchDestroyEffectInStore).not.toBeUndefined();
     expect(dispatchReloadEffectInStore).not.toBeUndefined();
+    expect(isString).not.toBeUndefined();
   });
 });

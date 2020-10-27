@@ -1,7 +1,7 @@
 import { getStoreName } from '../utils';
-import { DirectorrInterface, Action } from '../types';
+import { DirectorrInterface, Action, PromiseCancelable } from '../types';
 
-export default class DirectorrMock implements DirectorrInterface {
+export class DirectorrMock implements DirectorrInterface {
   stores = new Map();
   actions: Action[] = [];
   addStores = jest.fn().mockImplementation((...Stores: any[]) => {
@@ -27,9 +27,24 @@ export default class DirectorrMock implements DirectorrInterface {
   removeStoreDependency = jest.fn();
   getHydrateStoresState = jest.fn();
   getStore = jest.fn().mockImplementation(Store => this.stores.get(getStoreName(Store)));
-  waitAllStoresState = jest.fn().mockImplementationOnce(() => Promise.resolve());
-  waitStoresState = jest.fn().mockImplementationOnce(s => Promise.resolve(s));
-  findStoreState = jest.fn().mockImplementationOnce(() => Promise.resolve());
+  waitAllStoresState = jest.fn().mockImplementationOnce(() => {
+    const promise: any = Promise.resolve();
+    promise.cancel = jest.fn();
+
+    return promise as PromiseCancelable;
+  });
+  waitStoresState = jest.fn().mockImplementationOnce(s => {
+    const promise: any = Promise.resolve(s);
+    promise.cancel = jest.fn();
+
+    return promise as PromiseCancelable;
+  });
+  findStoreState = jest.fn().mockImplementationOnce(() => {
+    const promise: any = Promise.resolve();
+    promise.cancel = jest.fn();
+
+    return promise as PromiseCancelable;
+  });
   dispatch = jest.fn().mockImplementationOnce(action => this.actions.push(action));
   dispatchType = jest
     .fn()
