@@ -1,7 +1,7 @@
-import { whenDestroy, whenInit } from '@nimel/directorr';
+import { whenDestroy } from '@nimel/directorr';
 import Router, { SingletonRouter } from 'next/router';
 import {
-  Action,
+  ACTION,
   QueryObject,
   RouterActionPayload,
   HistoryActionPayload,
@@ -16,8 +16,11 @@ import {
   effectRouterBack,
   effectHistoryPop,
   effectRouterState,
+  effectRouterIsPattern,
+  RouterIsPatternActionPayload,
+  actionRouterIsPatternSuccess,
 } from '@nimel/directorr-router';
-import { reloadWindow } from './utils';
+import { reloadWindow, convertBracketToColonParams } from './utils';
 
 export const ROUTER_EVENT = 'routeChangeComplete';
 
@@ -36,7 +39,7 @@ export default class NextHistoryStore {
       const { asPath, query, pathname } = this.nextRouter.router;
 
       this.path = asPath;
-      this.pattern = pathname;
+      this.pattern = convertBracketToColonParams(pathname);
       this.queryObject = query;
     }
   }
@@ -65,21 +68,17 @@ export default class NextHistoryStore {
   @actionHistoryPop
   toHistoryPop = (payload: HistoryActionPayload) => payload;
 
-  @whenInit
   @effectRouterState
-  toSetState = (payload: RouterActionPayload) => {
-    if (payload) {
-      const { pattern, path, queryObject } = payload;
-
-      this.path = path;
-      this.pattern = pattern;
-      this.queryObject = queryObject;
-    }
+  toSetState = ({ pattern, path, queryObject }: RouterActionPayload) => {
+    this.path = path;
+    this.pattern = pattern;
+    this.queryObject = queryObject;
   };
 
-  isCurrentPattern(pattern: string) {
-    return this.pattern === pattern;
-  }
+  @effectRouterIsPattern
+  @actionRouterIsPatternSuccess
+  checkPattern = ({ pattern }: RouterIsPatternActionPayload) =>
+    this.pattern === pattern ? { pattern, path: this.path, queryObject: this.queryObject } : null;
 
   @whenDestroy
   toClear = () => this.nextRouter.events.off(ROUTER_EVENT, this.dispatchAction);
@@ -109,8 +108,8 @@ export default class NextHistoryStore {
       this.toHistoryPop({
         path: asPath,
         queryObject: query,
-        pattern: pathname,
-        action: Action.POP,
+        pattern: convertBracketToColonParams(pathname),
+        action: ACTION.POP,
       });
     }
   };

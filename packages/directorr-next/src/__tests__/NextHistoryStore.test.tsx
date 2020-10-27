@@ -1,15 +1,26 @@
-import { ROUTER_STORE_ACTIONS } from '@nimel/directorr-router';
+import {
+  actionRouterState,
+  actionRouterIsPattern,
+  actionRouterIsPatternSuccess,
+} from '@nimel/directorr-router';
 import {
   createAction,
   DISPATCH_EFFECTS_FIELD_NAME,
-  DIRECTORR_INIT_STORE_ACTION,
   DIRECTORR_DESTROY_STORE_ACTION,
+  DISPATCH_ACTION_FIELD_NAME,
 } from '@nimel/directorr';
 import { SingletonRouter } from 'next/router';
 import NextHistoryStore, { ROUTER_EVENT } from '../NextHistoryStore';
 import { reloadWindow } from '../utils';
 
-jest.mock('../utils');
+jest.mock('../utils', () => {
+  const originalModule = jest.requireActual('../utils');
+
+  return {
+    ...originalModule,
+    reloadWindow: jest.fn(),
+  };
+});
 
 class RouterMock {
   asPath: string;
@@ -47,30 +58,6 @@ describe('NextHistoryStore', () => {
     });
   });
 
-  it('init', () => {
-    const path = 'path';
-    const queryObject = {};
-    const pattern = 'pattern';
-    const router = (new RouterMock() as unknown) as SingletonRouter;
-    const store: any = new NextHistoryStore(router);
-    const { asPath, query, pathname } = (router as any).router;
-
-    store[DISPATCH_EFFECTS_FIELD_NAME](
-      createAction(DIRECTORR_INIT_STORE_ACTION, { StoreConstructor: NextHistoryStore })
-    );
-
-    expect(store).toMatchObject({ pattern: pathname, path: asPath, queryObject: query });
-
-    store[DISPATCH_EFFECTS_FIELD_NAME](
-      createAction(DIRECTORR_INIT_STORE_ACTION, {
-        StoreConstructor: NextHistoryStore,
-        initOptions: { pattern, path, queryObject },
-      })
-    );
-
-    expect(store).toMatchObject({ pattern, path, queryObject });
-  });
-
   it('destroy', () => {
     const router = (new RouterMock() as unknown) as SingletonRouter;
     const store: any = new NextHistoryStore(router);
@@ -91,18 +78,7 @@ describe('NextHistoryStore', () => {
     const store: any = new NextHistoryStore(router);
 
     store[DISPATCH_EFFECTS_FIELD_NAME](
-      createAction(ROUTER_STORE_ACTIONS.STATE, { StoreConstructor: NextHistoryStore })
-    );
-
-    expect(store.pattern).not.toBe(pattern);
-    expect(store.path).not.toBe(path);
-    expect(store.queryObject).not.toBe(queryObject);
-
-    store[DISPATCH_EFFECTS_FIELD_NAME](
-      createAction(ROUTER_STORE_ACTIONS.STATE, {
-        StoreConstructor: NextHistoryStore,
-        initOptions: { pattern, path, queryObject },
-      })
+      createAction(actionRouterState.type, { pattern, path, queryObject })
     );
 
     expect(store).toMatchObject({ pattern, path, queryObject });
@@ -180,7 +156,8 @@ describe('NextHistoryStore', () => {
     expect(store.toJSON()).toBeUndefined();
   });
 
-  it('isCurrentPattern', () => {
+  it('isPattern logic', () => {
+    const action = jest.fn();
     const path = 'path';
     const queryObject = {};
     const pattern = 'pattern';
@@ -188,14 +165,22 @@ describe('NextHistoryStore', () => {
     const router = (new RouterMock() as unknown) as SingletonRouter;
     const store: any = new NextHistoryStore(router);
 
+    Object.defineProperty(store, DISPATCH_ACTION_FIELD_NAME, { value: action });
+
     store[DISPATCH_EFFECTS_FIELD_NAME](
-      createAction(DIRECTORR_INIT_STORE_ACTION, {
-        StoreConstructor: NextHistoryStore,
-        initOptions: { pattern, path, queryObject },
-      })
+      createAction(actionRouterState.type, { pattern, path, queryObject })
+    );
+    store[DISPATCH_EFFECTS_FIELD_NAME](
+      createAction(actionRouterIsPattern.type, { pattern: otherPattern })
     );
 
-    expect(store.isCurrentPattern(pattern)).toBeTruthy();
-    expect(store.isCurrentPattern(otherPattern)).toBeFalsy();
+    expect(action).not.toBeCalled();
+
+    store[DISPATCH_EFFECTS_FIELD_NAME](createAction(actionRouterIsPattern.type, { pattern }));
+
+    expect(action).toBeCalledTimes(1);
+    expect(action).lastCalledWith(
+      createAction(actionRouterIsPatternSuccess.type, { pattern, path, queryObject })
+    );
   });
 });

@@ -56,7 +56,7 @@ export default function NextWithDirectorr(
     );
 
     NextWithDirectorrContainer.displayName = `NextWithDirectorrContainer(${
-      Page.displayName || Page.name || 'Unknown'
+      Page.displayName || Page.name || UNKNOWN
     })`;
 
     NextWithDirectorrContainer.getInitialProps = async appCtx => {
@@ -71,14 +71,16 @@ export default function NextWithDirectorr(
 
         await Component.whenServerLoadDirectorr?.(directorr, appCtx);
 
-        const storeWithError = await Promise.race([
-          directorr.findStoreState(isStoreError),
-          directorr.waitAllStoresState(isStoreReady),
-        ]);
+        const waitAllStores = directorr.waitAllStoresState(isStoreReady);
+        const waitStoreWithError = directorr.findStoreState(isStoreError);
+
+        const storeWithError = await Promise.race([waitStoreWithError, waitAllStores]);
 
         if (storeWithError) {
+          waitAllStores.cancel();
           await Component.whenServerDirectorrError?.(storeWithError, directorr, appCtx);
         } else {
+          waitStoreWithError.cancel();
           await Component.whenServerDirectorrReady?.(directorr, appCtx);
         }
       }

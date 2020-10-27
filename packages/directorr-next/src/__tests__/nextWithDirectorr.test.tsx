@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { DirectorrProvider } from '@nimel/directorr-react';
-import { isStoreReady, isStoreError, DirectorrMock } from '@nimel/directorr';
+import { isStoreReady, isStoreError, DirectorrMock, PromiseCancelable } from '@nimel/directorr';
 import NextWithDirectorr, { toJSON, createMemoDirectorr, UNKNOWN } from '../nextWithDirectorr';
 import { flushPromises } from '../../../../tests/utils';
 import { NextWithDirectorrProps } from '../types';
@@ -233,7 +233,12 @@ describe('nextWithDirectorr', () => {
     env.inServer();
     const storeWithError = {};
     class DirectorrMockWithErrorStore extends DirectorrMock {
-      findStoreState = jest.fn().mockImplementationOnce(() => Promise.resolve(storeWithError));
+      findStoreState = jest.fn().mockImplementationOnce(() => {
+        const promise: any = Promise.resolve(storeWithError);
+        promise.cancel = jest.fn();
+
+        return promise as PromiseCancelable;
+      });
     }
     class ComponentWithStatic extends SomeComponent {
       static whenServerLoadDirectorr = jest.fn();
@@ -286,7 +291,12 @@ describe('nextWithDirectorr', () => {
     env.inServer();
     const storeWithError = {};
     class DirectorrMockWithErrorStore extends DirectorrMock {
-      findStoreState = jest.fn().mockImplementationOnce(() => Promise.resolve(storeWithError));
+      findStoreState = jest.fn().mockImplementationOnce(() => {
+        const promise: any = Promise.resolve(storeWithError);
+        promise.cancel = jest.fn();
+
+        return promise as PromiseCancelable;
+      });
     }
     class ComponentWithStatic extends SomeComponent {
       static whenServerLoadDirectorr = jest.fn();

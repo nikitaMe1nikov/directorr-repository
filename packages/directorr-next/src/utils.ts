@@ -1,31 +1,37 @@
-import { EMPTY_OBJECT } from '@nimel/directorr';
-
 export interface Params {
   [key: string]: string | number;
 }
 
-const ROOT_URL = '/';
-const SQUERE_LEFT = '[';
-const SQUERE_RIGHT = ']';
+const EMPTY_STRING = '';
+const ROOT_MARK = '/';
+const SQUERE_LEFT_MARK = '[';
+const SQUERE_LEFT_RGXP = /\[/g;
+const SQUERE_RIGHT_MARK = ']';
+const SQUERE_RIGHT_RGXP = /\]/g;
+const COLON_MARK = ':';
 
 export function reloadWindow() {
   window.location.reload();
 }
 
-export function generatePath(path: string, params: Params = EMPTY_OBJECT): string {
-  return path === ROOT_URL
-    ? path
-    : ROOT_URL +
-        path
-          .slice(1)
-          .split(ROOT_URL)
-          .map(segment => {
-            if (segment.startsWith(SQUERE_LEFT) && segment.endsWith(SQUERE_RIGHT)) {
-              return params[segment.slice(1, -1)];
-            }
+export function convertBracketToColonParams(pattern: string) {
+  return pattern.replace(SQUERE_LEFT_RGXP, COLON_MARK).replace(SQUERE_RIGHT_RGXP, EMPTY_STRING);
+}
 
-            return segment;
-          })
-          .filter(string => string)
-          .join(ROOT_URL);
+function filterExist(segment: string) {
+  return !!segment;
+}
+
+function addColon(segment: string) {
+  if (segment.startsWith(COLON_MARK)) {
+    return segment.replace(COLON_MARK, SQUERE_LEFT_MARK) + SQUERE_RIGHT_MARK;
+  }
+
+  return segment;
+}
+
+export function convertColonToBracketParams(pattern: string) {
+  return pattern === ROOT_MARK
+    ? pattern
+    : ROOT_MARK + pattern.split(ROOT_MARK).filter(filterExist).map(addColon).join(ROOT_MARK);
 }

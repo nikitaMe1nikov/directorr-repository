@@ -1,8 +1,8 @@
 import { historyChange } from '../decorators';
-import { HISTORY_ACTIONS } from '@nimel/directorr-router';
+import { actionHistoryPop } from '@nimel/directorr-router';
 import { createAction, DISPATCH_EFFECTS_FIELD_NAME } from '@nimel/directorr';
 
-describe('utils', () => {
+describe('decorators', () => {
   it('historyChange with HISTORY_ACTIONS.POP', () => {
     const effect = jest.fn();
     const pattern = '/';
@@ -13,13 +13,13 @@ describe('utils', () => {
     }
     const store: any = new SomeStore();
 
-    store[DISPATCH_EFFECTS_FIELD_NAME](createAction(HISTORY_ACTIONS.POP, { pattern }));
+    store[DISPATCH_EFFECTS_FIELD_NAME](createAction(actionHistoryPop.type, { pattern }));
 
     expect(effect).toBeCalledTimes(1);
     expect(effect).lastCalledWith({ pattern, match: true });
 
     store[DISPATCH_EFFECTS_FIELD_NAME](
-      createAction(HISTORY_ACTIONS.POP, { pattern: someDiffrentPattern })
+      createAction(actionHistoryPop.type, { pattern: someDiffrentPattern })
     );
 
     expect(effect).toBeCalledTimes(2);
