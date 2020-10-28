@@ -18,7 +18,7 @@
     "test:all": "npx oao all --tree 'yarn run test:all'",
     "lint:all": "npx oao all --tree 'yarn run lint'",
     "test-coverage:all": "npx oao all --tree 'yarn run test-coverage'",
-    "prerelease": "yarn test:all && yarn build:all && npx oao prepublish",
+    "prerelease": "yarn build:all && yarn test:all && npx oao prepublish",
     "release": "npx oao publish",
     "xxl": "xxl --src packages --exclude node_modules",
     "dedup": "npx yarn-deduplicate -s fewer yarn.lock"
