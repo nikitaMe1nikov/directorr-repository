@@ -1,6 +1,6 @@
 {
   "name": "@nimel/directorr-appinitializer-react",
-  "version": "1.0.0-rc.4",
+  "version": "1.0.0-rc.5",
   "publishConfig": {
     "access": "public"
   },
@@ -40,17 +40,17 @@
     "test-typescript:w": "jest --rootDir='.' --config '../../jest.typescript.config.js' --watchAll"
   },
   "peerDependencies": {
-    "@nimel/directorr": "^1.0.0-rc.4",
-    "@nimel/directorr-react": "^1.0.0-rc.4",
+    "@nimel/directorr": "^1.0.0-rc.5",
+    "@nimel/directorr-react": "^1.0.0-rc.5",
     "mobx-react-lite": "2.2.1",
     "react": ">=16.10.0"
   },
   "dependencies": {
-    "@nimel/directorr-appinitializer": "^1.0.0-rc.4"
+    "@nimel/directorr-appinitializer": "^1.0.0-rc.5"
   },
   "devDependencies": {
-    "@nimel/directorr": "^1.0.0-rc.4",
-    "@nimel/directorr-react": "^1.0.0-rc.4",
+    "@nimel/directorr": "^1.0.0-rc.5",
+    "@nimel/directorr-react": "^1.0.0-rc.5",
     "mobx-react-lite": "2.2.1",
     "react": "^16.13.1",
     "react-test-renderer": "^16.13.1"
