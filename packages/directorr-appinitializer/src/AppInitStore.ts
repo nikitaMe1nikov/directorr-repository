@@ -1,11 +1,5 @@
 import { observable } from 'mobx';
-import {
-  whenOptions,
-  Action,
-  DirectorrInterface,
-  isStoreReady,
-  isStoreError,
-} from '@nimel/directorr';
+import { Action, DirectorrInterface, isStoreReady, isStoreError } from '@nimel/directorr';
 import {
   initStoreAction,
   initStoreErrorAction,
@@ -42,9 +36,8 @@ export class AppInitStore {
 
   @observable isInitComplated = false;
 
-  @whenOptions
   @initStoreAction
-  init = (stores: InitOptions) => ({ stores });
+  loadStores = (stores: InitOptions) => ({ stores });
 
   @isReadyEffect
   toSuccess = () => {

@@ -12,7 +12,6 @@ import {
   EMPTY_FUNC,
   DIRECTORR_INIT_STORE_ACTION,
   DIRECTORR_DESTROY_STORE_ACTION,
-  DIRECTORR_OPTIONS_STORE_ACTION,
   isLikeAction,
   getStoreName,
   isStoreReady,
@@ -40,8 +39,7 @@ import {
   CheckStoreState,
   Afterware,
   DirectorrStoreClassConstructor,
-  Depency,
-  SomeObject,
+  DepencyName,
 } from './types';
 import { ReduxMiddlewareAdapter, MiddlewareAdapter } from './MiddlewareAdapters';
 
@@ -77,27 +75,29 @@ export class Directorr implements DirectorrInterface {
     storeConstructors.forEach(sc => this.addStore(sc));
   }
 
-  addStore(storeConstructor: DirectorrStoreClassConstructor<any>, initStoreOptions?: any) {
-    return this.addStoreDependency(storeConstructor, GLOBAL_DEP, initStoreOptions);
+  addStore<I>(storeConstructor: DirectorrStoreClassConstructor<I>): I {
+    return this.addStoreDependency(storeConstructor, GLOBAL_DEP);
   }
 
   removeStore(storeConstructor: DirectorrStoreClassConstructor<any>) {
     return this.removeStoreDependency(storeConstructor, GLOBAL_DEP);
   }
 
-  addStoreDependency(
-    StoreConstructor: DirectorrStoreClassConstructor<any>,
-    depName: Depency,
-    initOptions?: SomeObject
-  ) {
-    const store = this.initStore(StoreConstructor, initOptions);
+  addStoreDependency<I>(
+    StoreConstructor: DirectorrStoreClassConstructor<I>,
+    depName: DepencyName
+  ): I {
+    const store = this.initStore(StoreConstructor);
 
     store[DEPENDENCY_FIELD_NAME].push(depName);
 
     return store;
   }
 
-  removeStoreDependency(StoreConstructor: DirectorrStoreClassConstructor<any>, depName: Depency) {
+  removeStoreDependency(
+    StoreConstructor: DirectorrStoreClassConstructor<any>,
+    depName: DepencyName
+  ) {
     const store = this.getStore(StoreConstructor);
 
     if (store) {
@@ -111,18 +111,16 @@ export class Directorr implements DirectorrInterface {
     }
   }
 
-  private initStore(StoreConstructor: DirectorrStoreClassConstructor, initOptions?: SomeObject) {
+  private initStore<I>(StoreConstructor: DirectorrStoreClassConstructor<I>): I {
     const storeName = getStoreName(StoreConstructor);
 
-    if (this.stores.has(storeName)) {
-      this.dispatchType(DIRECTORR_OPTIONS_STORE_ACTION, { StoreConstructor, initOptions });
-
-      return this.stores.get(storeName);
-    }
+    if (this.stores.has(storeName)) return this.stores.get(storeName);
 
     // add injected stores
     if (hasOwnProperty(StoreConstructor, INJECTED_STORES_FIELD_NAME)) {
-      const InjectedStores = (StoreConstructor as any)[INJECTED_STORES_FIELD_NAME];
+      const InjectedStores: DirectorrStoreClassConstructor[] = (StoreConstructor as any)[
+        INJECTED_STORES_FIELD_NAME
+      ];
 
       try {
         for (const injectedStore of InjectedStores) {
@@ -141,9 +139,7 @@ export class Directorr implements DirectorrInterface {
     if (StoreConstructor.afterware) this.addStoreAfterware(StoreConstructor.afterware);
 
     // create store
-    const store = new (StoreConstructor as DirectorrStoreClassConstructor)(
-      StoreConstructor.storeInitOptions
-    );
+    const store = new StoreConstructor(StoreConstructor.storeInitOptions);
 
     if (!(INJECTED_FROM_FIELD_NAME in store)) {
       defineProperty(store, INJECTED_FROM_FIELD_NAME, createValueDescriptor([]));
@@ -168,11 +164,9 @@ export class Directorr implements DirectorrInterface {
     if (hasOwnProperty(StoreConstructor, INJECTED_STORES_FIELD_NAME)) {
       this.waitStoresState((StoreConstructor as any)[INJECTED_STORES_FIELD_NAME]).then(() => {
         this.dispatchType(DIRECTORR_INIT_STORE_ACTION, { StoreConstructor });
-        this.dispatchType(DIRECTORR_OPTIONS_STORE_ACTION, { StoreConstructor, initOptions });
       });
     } else {
       this.dispatchType(DIRECTORR_INIT_STORE_ACTION, { StoreConstructor });
-      this.dispatchType(DIRECTORR_OPTIONS_STORE_ACTION, { StoreConstructor, initOptions });
     }
 
     return store;

@@ -2,7 +2,6 @@ import {
   dispatchEffectInStore,
   dispatchInitEffectInStore,
   dispatchDestroyEffectInStore,
-  dispatchOptionsEffectInStore,
   dispatchReloadEffectInStore,
 } from '../testUtils';
 import {
@@ -10,7 +9,6 @@ import {
   DIRECTORR_INIT_STORE_ACTION,
   DIRECTORR_DESTROY_STORE_ACTION,
   DIRECTORR_RELOAD_STORE_ACTION,
-  DIRECTORR_OPTIONS_STORE_ACTION,
 } from '../utils';
 import { someValue, actionType } from '../__mocks__/mocks';
 
@@ -43,20 +41,6 @@ describe('testUtils', () => {
       type: DIRECTORR_INIT_STORE_ACTION,
       payload: {
         StoreConstructor: SomeStore,
-      },
-    });
-  });
-
-  it('dispatchOptionsEffectInStore', () => {
-    const store = new SomeStore();
-
-    dispatchOptionsEffectInStore(store, someValue);
-
-    expect(store[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledWith({
-      type: DIRECTORR_OPTIONS_STORE_ACTION,
-      payload: {
-        StoreConstructor: SomeStore,
-        initOptions: someValue,
       },
     });
   });

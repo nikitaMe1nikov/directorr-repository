@@ -1,7 +1,6 @@
 import {
   createAction,
   DISPATCH_ACTION_FIELD_NAME,
-  dispatchOptionsEffectInStore,
   dispatchEffectInStore,
   Directorr,
   action,
@@ -61,7 +60,7 @@ describe('AppInitStore', () => {
 
     Object.defineProperty(store, DISPATCH_ACTION_FIELD_NAME, { value: dispatchAction });
 
-    dispatchOptionsEffectInStore(store, initOptions);
+    store.loadStores(initOptions);
 
     expect(dispatchAction).toBeCalledTimes(1);
     expect(dispatchAction).toBeCalledWith(
@@ -83,7 +82,9 @@ describe('AppInitStore', () => {
     const directorr = new Directorr();
     const stores = [StoreOne];
 
-    directorr.addStore(AppInitStore, stores);
+    const initStore = directorr.addStore(AppInitStore);
+
+    initStore.loadStores(stores);
 
     const storeOne = directorr.getStore(StoreOne);
     storeOne.changeReady();
@@ -99,11 +100,13 @@ describe('AppInitStore', () => {
     const stores = [StoreOne, StoreError];
     jest.spyOn(directorr, 'unsubscribe');
 
-    const appStore = directorr.addStore(AppInitStore, stores);
+    const initStore = directorr.addStore(AppInitStore);
+
+    initStore.loadStores(stores);
 
     await flushPromises();
 
-    expect(appStore.isInitComplated).toBeFalsy();
+    expect(initStore.isInitComplated).toBeFalsy();
 
     const storeError = directorr.getStore(StoreError);
     storeError.changeError();

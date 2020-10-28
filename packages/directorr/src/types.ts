@@ -12,18 +12,18 @@ export interface PromiseCancelable<T = any> extends Promise<T> {
   cancel: () => void;
 }
 
-export interface DirectorrStoreClass<I = any, O = any> {
-  storeName?: string;
-  storeInitOptions?: O;
+export interface DirectorrStoreClass<I = any> {
   isReady?: boolean;
   isError?: boolean;
-  afterware?: Afterware;
   fromJSON?: (classInstance: I) => void;
 }
 
 export interface DirectorrStoreClassConstructor<I = DirectorrStoreClass, O = any>
-  extends DirectorrStoreClass<I, O> {
+  extends DirectorrStoreClass<I> {
   new (options?: O): I;
+  storeName?: string;
+  storeInitOptions?: O;
+  afterware?: Afterware;
 }
 
 export interface SomeObject {
@@ -235,15 +235,12 @@ export interface DirectorrStoresState {
   [key: string]: DirectorrStoreState;
 }
 
-export type Depency = symbol | SomeObject;
+export type DepencyName = symbol | SomeObject;
 
 export interface DirectorrInterface {
   addInitState: (initStoreState: DirectorrStoresState) => void;
   addStores: (...storeClasses: DirectorrStoreClassConstructor[]) => void;
-  addStore: <I extends DirectorrStore>(
-    StoreConstructor: DirectorrStoreClassConstructor<I>,
-    initStoreOptions?: SomeObject
-  ) => I;
+  addStore: <I>(StoreConstructor: DirectorrStoreClassConstructor<I>) => I;
   removeStore: (StoreConstructor: DirectorrStoreClassConstructor) => void;
   addReduxMiddlewares: (...middlewares: ReduxMiddleware[]) => void;
   addMiddlewares: (...middlewares: Middleware[]) => void;
@@ -259,13 +256,12 @@ export interface DirectorrInterface {
   ) => PromiseCancelable<any>;
   findStoreState: (checkStoreState?: CheckStoreState) => PromiseCancelable<any>;
   addStoreDependency: <I>(
-    StoreConstructor: DirectorrStoreClassConstructor<any>,
-    depName: Depency,
-    initStoreOptions?: SomeObject
+    StoreConstructor: DirectorrStoreClassConstructor<I>,
+    depName: DepencyName
   ) => I;
   removeStoreDependency: (
     StoreConstructor: DirectorrStoreClassConstructor<any>,
-    depName: Depency
+    depName: DepencyName
   ) => void;
 }
 

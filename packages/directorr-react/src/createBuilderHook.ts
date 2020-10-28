@@ -8,7 +8,7 @@ export default function createBuilderHook(hookToBuild: HookToBuild, moduleName: 
   return function createHook(storeContext: Context<any>) {
     if (!isContext(storeContext)) throw new Error(whenNotReactContext(moduleName, storeContext));
 
-    return <I>(StoreConstructor: DirectorrStoreClassConstructor<I>, initOptions?: any): I =>
-      hookToBuild(storeContext, StoreConstructor, initOptions);
+    return <I>(StoreConstructor: DirectorrStoreClassConstructor<I>): I =>
+      hookToBuild(storeContext, StoreConstructor);
   };
 }

@@ -14,16 +14,15 @@ describe('createBuilderHook', () => {
 
   it('createBuilderHook with correct storeContext', () => {
     class SomeStore {}
-    const initOptions = {};
     const hookBuild = jest.fn();
     const moduleName = 'moduleName';
     const context = createContext(null);
     const createHook = createBuilderHook(hookBuild, moduleName);
     const hook = createHook(context);
 
-    hook(SomeStore, initOptions);
+    hook(SomeStore);
 
     expect(hookBuild).toBeCalledTimes(1);
-    expect(hookBuild).lastCalledWith(context, SomeStore, initOptions);
+    expect(hookBuild).lastCalledWith(context, SomeStore);
   });
 });

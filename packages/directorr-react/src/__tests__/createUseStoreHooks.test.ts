@@ -47,12 +47,11 @@ describe('createUseStoreHooks', () => {
     const directorr = new DirectorrMock();
     const context = createContext(directorr);
     const useStore = createUseStoreHooks(context);
-    const initOptions = {};
 
     const {
       result: { current: store },
       unmount,
-    } = renderHook(() => useStore(SomeStore, initOptions));
+    } = renderHook(() => useStore(SomeStore));
 
     unmount();
 
@@ -60,7 +59,7 @@ describe('createUseStoreHooks', () => {
     expect(store).toBeInstanceOf(SomeStore);
 
     expect(directorr.addStoreDependency).toBeCalledTimes(1);
-    expect(directorr.addStoreDependency).lastCalledWith(SomeStore, USE_HOOKS, initOptions);
+    expect(directorr.addStoreDependency).lastCalledWith(SomeStore, USE_HOOKS);
     expect(directorr.removeStoreDependency).toBeCalledTimes(1);
     expect(directorr.removeStoreDependency).lastCalledWith(SomeStore, USE_HOOKS);
   });
@@ -70,12 +69,11 @@ describe('createUseStoreHooks', () => {
     const directorr = new DirectorrMock();
     const context = createContext(directorr);
     const useStore = createUseStoreHooks(context);
-    const initOptions = {};
 
     const {
       result: { current: store },
       rerender,
-    } = renderHook(() => useStore(SomeStore, initOptions));
+    } = renderHook(() => useStore(SomeStore));
 
     expect(store).toBe(directorr.getStore(SomeStore));
     expect(store).toBeInstanceOf(SomeStore);
@@ -83,6 +81,6 @@ describe('createUseStoreHooks', () => {
     rerender();
 
     expect(directorr.addStoreDependency).toBeCalledTimes(1);
-    expect(directorr.addStoreDependency).lastCalledWith(SomeStore, USE_HOOKS, initOptions);
+    expect(directorr.addStoreDependency).lastCalledWith(SomeStore, USE_HOOKS);
   });
 });

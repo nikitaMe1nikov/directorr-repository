@@ -12,7 +12,6 @@ import effect from './effect';
 import whenPayload from './whenPayload';
 import whenState from './whenState';
 import whenInit from './whenInit';
-import whenOptions from './whenOptions';
 import whenDestroy from './whenDestroy';
 import injectStore from './injectStore';
 import reloadAction from './reloadAction';
@@ -54,7 +53,6 @@ export {
   whenPayload,
   whenState,
   whenInit,
-  whenOptions,
   whenDestroy,
   reloadAction,
   whenReload,

@@ -8,11 +8,7 @@ export const HOOK_MODULE_NAME = 'useStore';
 export const BUILDER_MODULE_NAME = 'createUseStoreHooks';
 export const USE_HOOKS = { hooks: true };
 
-function useStore<C>(
-  context: Context<any>,
-  StoreConstructor: DirectorrStoreClass<C>,
-  initOptions?: any
-): C {
+function useStore<C>(context: Context<any>, StoreConstructor: DirectorrStoreClass<C>): C {
   if (!isFunction(StoreConstructor))
     throw new Error(whenNotStoreConstructor(HOOK_MODULE_NAME, StoreConstructor));
 
@@ -25,8 +21,7 @@ function useStore<C>(
   if (!store.current) {
     store.current = (dir.addStoreDependency(
       StoreConstructor as DirectorrStoreClassConstructor,
-      USE_HOOKS,
-      initOptions
+      USE_HOOKS
     ) as unknown) as C;
   }
 
