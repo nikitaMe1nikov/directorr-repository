@@ -27,7 +27,7 @@ class StoreOne {
   });
 
   @effect(CHANGE_READY)
-  toChangeReady = ({ isReady }) => {
+  toChangeReady = ({ isReady }: { isReady: boolean }) => {
     this.isReady = isReady;
   };
 
@@ -44,7 +44,7 @@ class StoreError {
   });
 
   @effect(CHANGE_ERROR)
-  toChangeReady = ({ isError }) => {
+  toChangeReady = ({ isError }: { isError: boolean }) => {
     this.isError = isError;
   };
 
@@ -86,7 +86,7 @@ describe('AppInitStore', () => {
 
     initStore.loadStores(stores);
 
-    const storeOne = directorr.getStore(StoreOne);
+    const storeOne = directorr.getStore(StoreOne) as StoreOne;
     storeOne.changeReady();
 
     await flushPromises();
@@ -108,7 +108,7 @@ describe('AppInitStore', () => {
 
     expect(initStore.isInitComplated).toBeFalsy();
 
-    const storeError = directorr.getStore(StoreError);
+    const storeError = directorr.getStore(StoreError) as StoreError;
     storeError.changeError();
 
     await flushPromises();

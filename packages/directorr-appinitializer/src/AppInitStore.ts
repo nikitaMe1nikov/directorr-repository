@@ -17,7 +17,7 @@ export class AppInitStore {
     if (type === initStoreAction.type) {
       const { stores } = payload;
 
-      directorr.addStores(...stores);
+      directorr.addStores(stores);
 
       const waitStores = directorr.waitStoresState(stores, isStoreReady);
       const waitStoreWithError = directorr.findStoreState(isStoreError);
