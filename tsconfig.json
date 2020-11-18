@@ -24,14 +24,12 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "strictPropertyInitialization": false,
     "useDefineForClassFields": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "noImplicitReturns": false,
     "noUnusedLocals": true,
-    "noImplicitAny": false,
-    "noImplicitThis": false,
+    "strictPropertyInitialization": false
   },
   "exclude": ["node_modules", "dist"]
 }
