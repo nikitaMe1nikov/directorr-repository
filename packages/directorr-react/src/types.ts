@@ -1,8 +1,5 @@
-import { Context } from 'react';
+import { IAnyModelType, Instance } from 'mobx-state-tree';
 import { DirectorrStoreClassConstructor } from '@nimel/directorr';
 
-export type HookToBuild<C = any> = (
-  context: Context<any>,
-  StoreConstructor: DirectorrStoreClassConstructor<C>,
-  initOptions?: any
-) => C;
+export type UseStoreHook = (<C extends IAnyModelType>(modelType: C) => Instance<C>) &
+  (<I>(StoreConstructor: DirectorrStoreClassConstructor<I>) => I);

@@ -1,33 +1,35 @@
 import { useContext, useEffect, Context, useRef } from 'react';
-import { Directorr, DirectorrStoreClass, DirectorrStoreClassConstructor } from '@nimel/directorr';
-import { whenNotStoreConstructor, whenContextNotLikeDirrector } from './messages';
-import { isFunction, isDirrectorInstance } from './utils';
-import createBuilderHook from './createBuilderHook';
+import { Directorr } from '@nimel/directorr';
+import { isModelType } from 'mobx-state-tree';
+import {
+  whenNotStoreConstructor,
+  whenContextNotLikeDirrector,
+  whenNotReactContext,
+} from './messages';
+import { isFunction, isDirrectorInstance, isContext } from './utils';
+import { UseStoreHook } from './types';
 
 export const HOOK_MODULE_NAME = 'useStore';
 export const BUILDER_MODULE_NAME = 'createUseStoreHooks';
-export const USE_HOOKS = { hooks: true };
+export const DEP_NAME = { useStore: true };
 
-function useStore<C>(context: Context<any>, StoreConstructor: DirectorrStoreClass<C>): C {
-  if (!isFunction(StoreConstructor))
+export function useStore(context: Context<any>, StoreConstructor: any): any {
+  if (!isFunction(StoreConstructor) && !isModelType(StoreConstructor))
     throw new Error(whenNotStoreConstructor(HOOK_MODULE_NAME, StoreConstructor));
 
-  const store = useRef<C>();
+  const store = useRef<any>();
   const dir: Directorr = useContext(context);
 
   if (!isDirrectorInstance(dir))
     throw new Error(whenContextNotLikeDirrector(HOOK_MODULE_NAME, dir));
 
   if (!store.current) {
-    store.current = (dir.addStoreDependency(
-      StoreConstructor as DirectorrStoreClassConstructor,
-      USE_HOOKS
-    ) as unknown) as C;
+    store.current = dir.addStoreDependency(StoreConstructor, DEP_NAME);
   }
 
   useEffect(
     () => () => {
-      dir.removeStoreDependency(StoreConstructor as DirectorrStoreClassConstructor, USE_HOOKS);
+      dir.removeStoreDependency(StoreConstructor, DEP_NAME);
     },
     []
   );
@@ -35,4 +37,9 @@ function useStore<C>(context: Context<any>, StoreConstructor: DirectorrStoreClas
   return store.current;
 }
 
-export default createBuilderHook(useStore, BUILDER_MODULE_NAME);
+export default function createUseStoreHook(storeContext: Context<Directorr>) {
+  if (!isContext(storeContext))
+    throw new Error(whenNotReactContext(BUILDER_MODULE_NAME, storeContext));
+
+  return ((StoreConstructor: any) => useStore(storeContext, StoreConstructor)) as UseStoreHook;
+}

@@ -3,14 +3,14 @@ import { createContext } from 'react';
 import createUseStoreHooks, {
   BUILDER_MODULE_NAME,
   HOOK_MODULE_NAME,
-  USE_HOOKS,
+  DEP_NAME,
 } from '../createUseStoreHooks';
 import {
   whenNotReactContext,
   whenNotStoreConstructor,
   whenContextNotLikeDirrector,
 } from '../messages';
-import { DirectorrMock } from '@nimel/directorr';
+import { DirectorrMock, Directorr } from '@nimel/directorr';
 
 describe('createUseStoreHooks', () => {
   it('throw when call with not like context', () => {
@@ -23,10 +23,10 @@ describe('createUseStoreHooks', () => {
 
   it('useStore throw when call with not constructor', () => {
     const SomeStore: any = 1;
-    const context = createContext(new DirectorrMock());
+    const context = createContext<Directorr>(new DirectorrMock() as any);
     const useStore = createUseStoreHooks(context);
 
-    expect(() => renderHook(() => useStore(SomeStore)).result.current).toThrowError(
+    expect(() => renderHook(() => useStore(SomeStore as any)).result.current).toThrowError(
       whenNotStoreConstructor(HOOK_MODULE_NAME, SomeStore)
     );
   });
@@ -34,7 +34,7 @@ describe('createUseStoreHooks', () => {
   it('throw when call with context not like Directorr', () => {
     class SomeStore {}
     const FakeDirectorr = {};
-    const context = createContext(FakeDirectorr);
+    const context = createContext<Directorr>(FakeDirectorr as any);
     const useStore = createUseStoreHooks(context);
 
     expect(() => renderHook(() => useStore(SomeStore)).result.current).toThrowError(
@@ -45,8 +45,8 @@ describe('createUseStoreHooks', () => {
   it('useStore return store', () => {
     class SomeStore {}
     const directorr = new DirectorrMock();
-    const context = createContext(directorr);
-    const useStore = createUseStoreHooks(context);
+    const context = createContext<Directorr>(directorr as any);
+    const useStore = createUseStoreHooks(context as any);
 
     const {
       result: { current: store },
@@ -59,15 +59,15 @@ describe('createUseStoreHooks', () => {
     expect(store).toBeInstanceOf(SomeStore);
 
     expect(directorr.addStoreDependency).toBeCalledTimes(1);
-    expect(directorr.addStoreDependency).lastCalledWith(SomeStore, USE_HOOKS);
+    expect(directorr.addStoreDependency).lastCalledWith(SomeStore, DEP_NAME);
     expect(directorr.removeStoreDependency).toBeCalledTimes(1);
-    expect(directorr.removeStoreDependency).lastCalledWith(SomeStore, USE_HOOKS);
+    expect(directorr.removeStoreDependency).lastCalledWith(SomeStore, DEP_NAME);
   });
 
   it('useStore return store when rerender', () => {
     class SomeStore {}
     const directorr = new DirectorrMock();
-    const context = createContext(directorr);
+    const context = createContext<Directorr>(directorr as any);
     const useStore = createUseStoreHooks(context);
 
     const {
@@ -81,6 +81,6 @@ describe('createUseStoreHooks', () => {
     rerender();
 
     expect(directorr.addStoreDependency).toBeCalledTimes(1);
-    expect(directorr.addStoreDependency).lastCalledWith(SomeStore, USE_HOOKS);
+    expect(directorr.addStoreDependency).lastCalledWith(SomeStore, DEP_NAME);
   });
 });

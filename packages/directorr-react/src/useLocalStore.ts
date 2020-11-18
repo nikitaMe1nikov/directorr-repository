@@ -1,17 +1,23 @@
 import { useRef } from 'react';
-import { DirectorrStoreClassConstructor } from '@nimel/directorr';
+import { isModelType } from 'mobx-state-tree';
 import { whenNotStoreConstructor } from './messages';
 import { isFunction } from './utils';
+import { UseStoreHook } from './types';
 
 export const HOOK_MODULE_NAME = 'useLocalStore';
 
-export default function useLocalStore<C>(StoreConstructor: DirectorrStoreClassConstructor<C>): C {
-  if (!isFunction(StoreConstructor))
+export const useLocalStore: UseStoreHook = (StoreConstructor: any) => {
+  if (!isFunction(StoreConstructor) && !isModelType(StoreConstructor))
     throw new Error(whenNotStoreConstructor(HOOK_MODULE_NAME, StoreConstructor));
 
-  const store = useRef<C | null>(null);
+  const store = useRef<any>();
 
-  if (!store.current) store.current = new StoreConstructor();
+  if (!store.current)
+    store.current = isModelType(StoreConstructor)
+      ? StoreConstructor.create()
+      : new StoreConstructor(StoreConstructor.storeInitOptions);
 
   return store.current;
-}
+};
+
+export default useLocalStore;

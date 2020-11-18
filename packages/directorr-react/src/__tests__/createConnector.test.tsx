@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { DirectorrMock } from '@nimel/directorr';
-import createConnector, { getStoreName, lowercaseFirstLetter } from '../createConnector';
+import { DirectorrMock, getStoreName } from '@nimel/directorr';
+import createConnector, { lowercaseFirstLetter } from '../createConnector';
 
 const someProps = {
   someProp: 'someProp',
@@ -25,15 +25,6 @@ describe('createConnector', () => {
     expect(lowercaseFirstLetter(strLow)).toBe(strLow);
   });
 
-  it('getStoreName', () => {
-    class SomeStoreWithStatic extends SomeStore {
-      static storeName = 'storeName';
-    }
-
-    expect(getStoreName(SomeStore)).toBe('someStore');
-    expect(getStoreName(SomeStoreWithStatic)).toBe(SomeStoreWithStatic.storeName);
-  });
-
   it('render with store SomeStore', () => {
     const directorr = new DirectorrMock();
     const store = directorr.addStore(SomeStore);
@@ -50,7 +41,7 @@ describe('createConnector', () => {
     expect(useStoreHook).lastCalledWith(SomeStore);
     expect(connector.find(SomeComponent).props()).toStrictEqual({
       ...someProps,
-      [getStoreName(SomeStore)]: store,
+      [lowercaseFirstLetter(getStoreName(SomeStore))]: store,
     });
   });
 });
