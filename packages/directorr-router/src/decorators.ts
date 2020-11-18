@@ -4,6 +4,11 @@ import {
   createActionAndEffect,
   DecoratorValueTyped,
   SomeEffect,
+  action,
+  effect,
+  SomeAction,
+  whenState,
+  DecoratorValueTypedForAction,
 } from '@nimel/directorr';
 import {
   HistoryActionPayload,
@@ -16,6 +21,21 @@ import {
   RouterIsPatternSuccessActionPayload,
 } from './types';
 import { matchPath, calcParams } from './utils';
+
+function returnTrue() {
+  return true;
+}
+
+export function addStoreToPayload(payload: RouterIsPatternActionPayload, store: any) {
+  return {
+    ...payload,
+    store,
+  };
+}
+
+export function pickSameStore(payload: RouterIsPatternActionPayload, store: any) {
+  return store === payload.store;
+}
 
 export const [actionRouterPush, effectRouterPush] = createActionAndEffect<RouterActionPayload>(
   'ROUTER.PUSH'
@@ -43,12 +63,22 @@ export const [actionRouterState, effectRouterState] = createActionAndEffect<Rout
   'ROUTER.STATE'
 );
 
-export const [actionRouterIsPattern, effectRouterIsPattern] = createActionAndEffect<
+export const actionRouterIsPattern: DecoratorValueTypedForAction<SomeAction<RouterIsPatternActionPayload | null>> = action(
+  'ROUTER.IS_PATTERN',
+  addStoreToPayload
+);
+export const effectRouterIsPattern: DecoratorValueTyped<SomeEffect<
   RouterIsPatternActionPayload
->('ROUTER.IS_PATTERN');
-export const [actionRouterIsPatternSuccess, effectRouterIsPatternSuccess] = createActionAndEffect<
+>> = effect(actionRouterIsPattern.type);
+export const actionRouterIsPatternSuccess: DecoratorValueTypedForAction<SomeAction<RouterIsPatternSuccessActionPayload | null>> = action(
+  'ROUTER.IS_PATTERN_SUCCESS'
+);
+export const effectRouterIsPatternSuccess: DecoratorValueTyped<SomeEffect<
   RouterIsPatternSuccessActionPayload
->('ROUTER.IS_PATTERN_SUCCESS');
+>> = composePropertyDecorators([
+  effect(actionRouterIsPatternSuccess.type),
+  whenState(pickSameStore),
+]);
 
 export const [actionHistoryPop, effectHistoryPop] = createActionAndEffect<HistoryActionPayload>(
   'HISTORY.POP'
@@ -64,10 +94,6 @@ const DEFAULT_OPTIONS: Options = {
   exact: true,
   strict: true,
 };
-
-function returnTrue() {
-  return true;
-}
 
 export function historyChange(
   urlPattern: string,

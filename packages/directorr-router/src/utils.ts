@@ -90,7 +90,12 @@ export function calcParams(patterns: string[], keys: Key[]) {
 }
 
 export function calcPath(path: string, queryObject?: ParsedQuery) {
-  return queryObject ? `${path}?${qs.stringify(queryObject)}` : path;
+  if (queryObject) {
+    const query = qs.stringify(queryObject);
+
+    return query ? `${path}?${query}` : path;
+  }
+  return path;
 }
 
 function compilePath(path: string) {

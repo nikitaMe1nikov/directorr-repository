@@ -1,4 +1,4 @@
-import { whenDestroy, EMPTY_FUNC } from '@nimel/directorr';
+import { whenDestroy, EMPTY_FUNC, EMPTY_OBJECT } from '@nimel/directorr';
 import { createBrowserHistory } from 'history';
 import qs from 'query-string';
 import {
@@ -107,14 +107,14 @@ export default class HistoryStore {
   };
 
   @actionRouterPush
-  push = (path: string, queryObject?: QueryObject, state?: LocationState) => ({
+  push = (path: string, queryObject: QueryObject = EMPTY_OBJECT, state?: LocationState) => ({
     path,
     queryObject,
     state,
   });
 
   @actionRouterReplace
-  replace = (path: string, queryObject?: QueryObject, state?: LocationState) => ({
+  replace = (path: string, queryObject: QueryObject = EMPTY_OBJECT, state?: LocationState) => ({
     path,
     queryObject,
     state,

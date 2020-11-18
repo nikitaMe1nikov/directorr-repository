@@ -59,9 +59,7 @@ describe('HistoryStore', () => {
     const store: any = new HistoryStore(history);
     jest.spyOn(store, 'unsubHistory');
 
-    store[DISPATCH_EFFECTS_FIELD_NAME](
-      createAction(DIRECTORR_DESTROY_STORE_ACTION, { StoreConstructor: HistoryStore })
-    );
+    store[DISPATCH_EFFECTS_FIELD_NAME](createAction(DIRECTORR_DESTROY_STORE_ACTION, { store }));
 
     expect(store.unsubHistory).toBeCalledTimes(1);
   });
@@ -170,7 +168,7 @@ describe('HistoryStore', () => {
     const store: any = new HistoryStore(history);
     jest.spyOn(history, 'push');
 
-    expect(store.push(path)).toStrictEqual({ path, queryObject: undefined, state: undefined });
+    expect(store.push(path)).toStrictEqual({ path, queryObject: {}, state: undefined });
     expect(history.push).toBeCalledTimes(1);
     expect(history.push).lastCalledWith(path, undefined);
 
@@ -188,7 +186,7 @@ describe('HistoryStore', () => {
     const store: any = new HistoryStore(history);
     jest.spyOn(history, 'replace');
 
-    expect(store.replace(path)).toStrictEqual({ path, queryObject: undefined, state: undefined });
+    expect(store.replace(path)).toStrictEqual({ path, queryObject: {}, state: undefined });
     expect(history.replace).toBeCalledTimes(1);
     expect(history.replace).lastCalledWith(path, undefined);
 
@@ -376,6 +374,6 @@ describe('HistoryStore', () => {
     const history = createMemoryHistory();
     const store: any = new HistoryStore(history);
 
-    expect(store.toJSON()).toBeUndefined();
+    expect(JSON.stringify(store)).toBeUndefined();
   });
 });

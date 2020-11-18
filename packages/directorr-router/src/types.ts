@@ -28,7 +28,7 @@ export type HistoryRouterHandler = (rt: HistoryRouterTask) => void;
 
 export interface HistoryActionPayload {
   path: string;
-  queryObject?: QueryObject;
+  queryObject: QueryObject;
   state?: LocationState;
   action: Action;
   pattern?: string;
@@ -62,9 +62,10 @@ export interface Options {
 
 export interface RouterIsPatternActionPayload {
   pattern: string;
+  store?: any;
 }
 
 export interface RouterIsPatternSuccessActionPayload extends RouterIsPatternActionPayload {
   path: string;
-  queryObject?: QueryObject;
+  queryObject: QueryObject;
 }
