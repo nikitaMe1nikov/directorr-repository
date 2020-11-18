@@ -11,7 +11,11 @@ export const callWithArg: MessageFunc = (moduleName, arg, errorMessage) =>
   `${moduleName}: call decorator with arg=${arg} ${errorMessage}`;
 
 export const callDecoratorWithNotActionType: MessageFunc = (moduleName, arg) =>
-  callWithArg(moduleName, arg, 'not equal to string or array of strings');
+  callWithArg(
+    moduleName,
+    arg,
+    'not equal to string/class/MSTModel or array of string/class/MSTModel'
+  );
 
 export const callDecoratorWithNotConsrtactorType: MessageFunc = (moduleName, arg) =>
   callWithArg(moduleName, arg, 'not constuctor');
@@ -29,7 +33,10 @@ export const callWithPropNotEquallFunc: MessageFunc = (moduleName, property) =>
   `${moduleName}: use decorator for prop=${property} equal func`;
 
 export const useForPropNotEquallObject: MessageFunc = (moduleName, property) =>
-  `${moduleName}: use decorator for prop=${property} equal object like value`;
+  `${moduleName}: use decorator for prop=${property} equal object`;
+
+export const useForPropNotEquallMTS: MessageFunc = (moduleName, property) =>
+  `${moduleName}: use decorator for prop=${property} not equal MTS Model`;
 
 export const notFoundDirectorrStore: MessageFunc = (moduleName, StoreConstructor) =>
   `${moduleName}: store with constuctor=${StoreConstructor.name} not add to Dirrector`;
@@ -39,7 +46,7 @@ export const notFoundStoreInDirectorrStore: MessageFunc = (
   StoreConstructor,
   currentStore
 ) =>
-  `${moduleName}: for some reason, not found store with constuctor=${StoreConstructor.name}, may be worth adding storage=${StoreConstructor.name} earlier than the current=${currentStore.name}`;
+  `${moduleName}: for some reason, not found store or model with constuctor=${StoreConstructor.name}, may be worth adding storage=${StoreConstructor.name} earlier than the current=${currentStore.name}`;
 
 export const callWithNotAction: MessageFunc = (moduleName, action) =>
   `${moduleName}: call with action=${JSON.stringify(action)} not like action type`;

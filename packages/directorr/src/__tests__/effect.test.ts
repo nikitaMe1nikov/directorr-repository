@@ -24,18 +24,18 @@ describe('effect', () => {
     const addFields = jest.fn();
     const secondProp = 'secondProp';
 
-    expect(() => initializer(store, someValue, someProperty, actionType)).toThrowError(
+    expect(() => initializer(store, someValue, someProperty, [actionType])).toThrowError(
       callWithPropNotEquallFunc(MODULE_NAME, someProperty)
     );
 
-    expect(initializer(store, someFunc, someProperty, actionType, addFields)).toBe(someFunc);
+    expect(initializer(store, someFunc, someProperty, [actionType], addFields)).toBe(someFunc);
 
     expect(addFields).toBeCalledTimes(1);
     expect(addFields).lastCalledWith(store);
 
     expect(store[EFFECTS_FIELD_NAME].get(actionType)).toStrictEqual([someProperty]);
 
-    expect(initializer(store, someFunc, secondProp, actionType, addFields)).toBe(someFunc);
+    expect(initializer(store, someFunc, secondProp, [actionType], addFields)).toBe(someFunc);
 
     expect(store[EFFECTS_FIELD_NAME].get(actionType)).toStrictEqual([someProperty, secondProp]);
   });

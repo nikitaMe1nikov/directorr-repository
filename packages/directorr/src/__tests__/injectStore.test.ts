@@ -1,3 +1,4 @@
+import { types, Instance } from 'mobx-state-tree';
 import injectStore, { injectStoreDecorator, createInjectStore, MODULE_NAME } from '../injectStore';
 import { STORES_FIELD_NAME, INJECTED_STORES_FIELD_NAME } from '../utils';
 import {
@@ -6,7 +7,6 @@ import {
   notFoundStoreInDirectorrStore,
   dontUseWithAnotherDecorator,
 } from '../messages';
-import { DirectorrStoreClass, DirectorrStoreClassConstructor } from '../types';
 import { someValue, SomeClass, someProperty } from '../__mocks__/mocks';
 
 describe('injectStore', () => {
@@ -16,10 +16,7 @@ describe('injectStore', () => {
     const emptyStoreMap = new Map();
     const storesMap = new Map([[SomeClass.name, someValue]]);
 
-    const descriptor: any = Object.assign(
-      {},
-      injectStoreDecorator(SomeClass as DirectorrStoreClassConstructor, MODULE_NAME)
-    );
+    const descriptor: any = Object.assign({}, injectStoreDecorator(SomeClass, MODULE_NAME));
 
     descriptor.name = storeName;
 
@@ -62,19 +59,19 @@ describe('injectStore', () => {
   });
 
   it('injectStore set injected stores field in class', () => {
-    class InjectStore1 implements DirectorrStoreClass {}
+    class InjectStore1 {}
     class InjectStore2 {
       some = '12';
     }
 
     class SomeClass1 {
-      @injectStore(InjectStore1) store: any;
+      @injectStore(InjectStore1) store: InjectStore1;
     }
 
     class SomeClass2 extends SomeClass1 {
-      @injectStore(InjectStore1) store1: any;
+      @injectStore(InjectStore1) store1: InjectStore1;
 
-      @injectStore(InjectStore2) store2: any;
+      @injectStore(InjectStore2) store2: InjectStore2;
     }
 
     expect((SomeClass1 as any)[INJECTED_STORES_FIELD_NAME]).toStrictEqual([InjectStore1]);
@@ -84,7 +81,37 @@ describe('injectStore', () => {
     ]);
   });
 
-  it('use injectStore in class', () => {
+  it('use injectStore in class for class or model', () => {
+    class InjectStore {}
+    const MSTStoreModel = types.model('MSTStore');
+    const MSTstore = MSTStoreModel.create();
+    const storesMap = new Map<string, any>([
+      [InjectStore.name, someValue],
+      [MSTStoreModel.name, MSTstore],
+    ]);
+
+    class SomeClass {
+      @injectStore(InjectStore) store: InjectStore;
+
+      @injectStore(MSTStoreModel) storeSecond: Instance<typeof MSTStoreModel>;
+    }
+
+    const obj: any = new SomeClass();
+
+    expect(() => obj.store).toThrowError(notFoundDirectorrStore(MODULE_NAME, InjectStore));
+
+    obj[STORES_FIELD_NAME] = null;
+
+    expect(() => obj.store).toThrowError(notFoundDirectorrStore(MODULE_NAME, InjectStore));
+
+    obj[STORES_FIELD_NAME] = storesMap;
+
+    expect(() => obj.store).not.toThrow();
+    expect(obj.store).toBe(someValue);
+    expect(obj.storeSecond).toBe(MSTstore);
+  });
+
+  it('use injectStore in class with same store', () => {
     class InjectStore {}
     const storesMap = new Map([[InjectStore.name, someValue]]);
 
@@ -94,7 +121,7 @@ describe('injectStore', () => {
       @injectStore(InjectStore) storeSecond: InjectStore;
     }
 
-    const obj = new SomeClass();
+    const obj: any = new SomeClass();
 
     expect(() => obj.store).toThrowError(notFoundDirectorrStore(MODULE_NAME, InjectStore));
 

@@ -13,9 +13,9 @@ describe('whenReload', () => {
       effect = effect;
     }
 
-    const obj = new SomeClass();
+    const obj: any = new SomeClass();
 
-    (obj as any)[DISPATCH_ACTION_FIELD_NAME](action);
+    obj[DISPATCH_ACTION_FIELD_NAME](action);
 
     expect(effect).toBeCalledTimes(1);
     expect(effect).lastCalledWith(someValue);

@@ -1,3 +1,9 @@
+import { isModelType, applyAction, isStateTreeNode } from 'mobx-state-tree';
+export {
+  destroy as MSTDestroy,
+  applySnapshot as applyMSTSnapshot,
+  onAction as onMSTAction,
+} from 'mobx-state-tree';
 import {
   Action,
   SomeFunction,
@@ -17,7 +23,6 @@ import {
   CheckObjectPattern,
   AfterwareMap,
   Afterware,
-  DirectorrStoreClassConstructor,
   CheckPayload,
   ConvertPayloadFunction,
   DecoratorValueTypedForAction,
@@ -26,6 +31,8 @@ import {
   Executor,
   Rejector,
   InitPayload,
+  AnyMSTModelType,
+  MTSStateTreeNode,
 } from './types';
 import { notFindStoreName } from './messages';
 
@@ -55,11 +62,11 @@ export const EMPTY_STRING = '';
 
 export const EMPTY_OBJECT = Object.freeze({});
 
-export const DIRECTORR_INIT_STORE_ACTION = '@@DIRECTORR.INIT_STORE_ACTION';
+export const DIRECTORR_INIT_STORE_ACTION = '@@DIRECTORR.INIT_STORE';
 
-export const DIRECTORR_DESTROY_STORE_ACTION = '@@DIRECTORR.DESTROY_STORE_ACTION';
+export const DIRECTORR_DESTROY_STORE_ACTION = '@@DIRECTORR.DESTROY_STORE';
 
-export const DIRECTORR_RELOAD_STORE_ACTION = '@@DIRECTORR.RELOAD_STORE_ACTION';
+export const DIRECTORR_RELOAD_STORE_ACTION = '@@DIRECTORR.RELOAD_STORE';
 
 export const ACTION_TYPE_DIVIDER = '.';
 
@@ -160,6 +167,18 @@ export function hasOwnProperty(target: any, prop: string | symbol) {
   return hasOwnPropertyFromPrototype.call(target, prop);
 }
 
+export function pickSameStore(payload: InitPayload, store: any) {
+  return store === payload.store;
+}
+
+export function isMSTModelType(model: any): model is AnyMSTModelType {
+  return isModelType(model);
+}
+
+export function isMSTModelNode(node: any): node is MTSStateTreeNode {
+  return isStateTreeNode(node);
+}
+
 export function isLikeActionType(actionType?: any): actionType is ActionType {
   if (!actionType) return false;
 
@@ -169,13 +188,13 @@ export function isLikeActionType(actionType?: any): actionType is ActionType {
     for (let i = 0, l = actionType.length, at: any; i < l; ++i) {
       at = actionType[i];
 
-      if (!isString(at) && !isFunction(at) && !isLikeActionType(at)) return false;
+      if (!isLikeActionType(at)) return false;
     }
 
     return true;
   }
 
-  return isString(actionType) || isFunction(actionType);
+  return isString(actionType) || isFunction(actionType) || isMSTModelType(actionType);
 }
 
 export function isLikeAction(action?: any): action is Action {
@@ -184,10 +203,12 @@ export function isLikeAction(action?: any): action is Action {
   return isObject(action) && action.type !== undefined;
 }
 
-export function getStoreName(v: DirectorrStoreClassConstructor<any> | SomeObject): string {
-  if (isFunction(v)) return v.storeName || v.name;
+export function getStoreName(classOrModel: any): string {
+  if (isFunction(classOrModel)) return classOrModel.storeName || classOrModel.name;
 
-  if (v.constructor) return getStoreName(v.constructor);
+  if (isMSTModelType(classOrModel)) return classOrModel.name;
+
+  if (classOrModel.constructor) return getStoreName(classOrModel.constructor);
 
   throw new Error(notFindStoreName());
 }
@@ -200,6 +221,8 @@ export function calcActionType(someActionType: SomeActionType): string {
   if (isFunction(someActionType)) {
     return isDecoratorWithCtx(someActionType) ? someActionType.type : getStoreName(someActionType);
   }
+
+  if (isMSTModelType(someActionType)) return getStoreName(someActionType);
 
   return someActionType;
 }
@@ -246,6 +269,25 @@ export function dispatchEffects(this: any, action: Action): void {
   if (effectsForActionType) {
     for (let i = 0, l = effectsForActionType.length; i < l; ++i) {
       this[effectsForActionType[i]](action.payload);
+    }
+  }
+}
+
+export function isGeneratedMSTNodeAction(action: Action) {
+  return action.payload?.name && action.payload?.args;
+}
+
+export function dispatchEffectsInModel(
+  store: any,
+  modelName: string,
+  actionTypeDivider: string,
+  action: Action
+): void {
+  if (!isGeneratedMSTNodeAction(action)) {
+    const [prefix, postfix] = action.type.split(actionTypeDivider);
+
+    if (prefix === modelName) {
+      applyAction(store, { name: postfix, path: EMPTY_STRING, args: [action.payload] });
     }
   }
 }
@@ -335,7 +377,9 @@ export function composePropertyDecorators(decorators: Decorator[]): Decorator {
 }
 
 export function isStoreReady(store: DirectorrStoreClass): boolean {
-  return store.isReady === undefined || store.isReady;
+  return (
+    store.isReady === undefined || (isFunction(store.isReady) ? store.isReady() : store.isReady)
+  );
 }
 
 export function checkStoresState(
@@ -391,8 +435,8 @@ export function mergeStateToStore(storeState: DirectorrStoreState, directorrStor
   }
 }
 
-export function hydrateStoresToState(directorrStores: DirectorrStores) {
-  const obj: any = {};
+export function hydrateStoresToState(directorrStores: DirectorrStores): SomeObject {
+  const obj: SomeObject = {};
 
   for (const [storeName, store] of directorrStores.entries()) {
     obj[storeName] = store;
@@ -440,8 +484,8 @@ export function isActionHave(
   return false;
 }
 
-export function clearTimersEffect(payload: InitPayload) {
-  if (this.constructor === payload.StoreConstructor) {
+export function clearTimersEffect(this: any, payload: InitPayload) {
+  if (this === payload.store) {
     const timers: (number | SomeFunction)[] = this[TIMERS_FIELD_NAME];
 
     for (const timer of timers) {

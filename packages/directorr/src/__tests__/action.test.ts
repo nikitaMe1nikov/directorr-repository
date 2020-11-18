@@ -21,21 +21,29 @@ describe('action', () => {
   it('runDispatcher', () => {
     const valueFuncWithEmptyReturn = jest.fn().mockImplementation(() => null);
     const valueFuncWithFullReturn = jest.fn().mockImplementation(() => someValue);
+    const addToPayload = jest.fn().mockImplementation(v => v);
     const store = {
       [DISPATCH_ACTION_FIELD_NAME]: jest.fn(),
     };
     const args = [1];
 
-    expect(runDispatcher(args, actionType, valueFuncWithEmptyReturn, store)).toBe(null);
+    expect(runDispatcher(args, actionType, valueFuncWithEmptyReturn, store, addToPayload)).toBe(
+      null
+    );
 
     expect(valueFuncWithEmptyReturn).toBeCalledTimes(1);
     expect(valueFuncWithEmptyReturn).lastCalledWith(...args);
+    expect(addToPayload).toBeCalledTimes(0);
     expect(store[DISPATCH_ACTION_FIELD_NAME]).toBeCalledTimes(0);
 
-    expect(runDispatcher(args, actionType, valueFuncWithFullReturn, store)).toBe(someValue);
+    expect(runDispatcher(args, actionType, valueFuncWithFullReturn, store, addToPayload)).toBe(
+      someValue
+    );
 
     expect(valueFuncWithFullReturn).toBeCalledTimes(1);
     expect(valueFuncWithFullReturn).lastCalledWith(...args);
+    expect(addToPayload).toBeCalledTimes(1);
+    expect(addToPayload).lastCalledWith(someValue, store);
     expect(store[DISPATCH_ACTION_FIELD_NAME]).toBeCalledTimes(1);
     expect(store[DISPATCH_ACTION_FIELD_NAME]).lastCalledWith(someAction);
   });
@@ -43,19 +51,34 @@ describe('action', () => {
   it('initializer', () => {
     const dispatcher = jest.fn();
     const addFieds = jest.fn();
+    const addToPayload = jest.fn();
     const store = {};
     const args = [1];
 
     expect(() =>
-      initializer(store, someValue, someProperty, actionType, dispatcher, addFieds)(...args)
+      initializer(
+        store,
+        someValue,
+        someProperty,
+        [actionType, addToPayload],
+        dispatcher,
+        addFieds
+      )(...args)
     ).toThrowError(callWithPropNotEquallFunc(MODULE_NAME, someProperty));
 
-    initializer(store, someFunc, someProperty, actionType, dispatcher, addFieds)(...args);
+    initializer(
+      store,
+      someFunc,
+      someProperty,
+      [actionType, addToPayload],
+      dispatcher,
+      addFieds
+    )(...args);
 
     expect(addFieds).toBeCalledTimes(1);
     expect(addFieds).lastCalledWith(store);
     expect(dispatcher).toBeCalledTimes(1);
-    expect(dispatcher).lastCalledWith(args, actionType, someFunc, store);
+    expect(dispatcher).lastCalledWith(args, actionType, someFunc, store, addToPayload);
   });
 
   it('call action with wrong arg', () => {

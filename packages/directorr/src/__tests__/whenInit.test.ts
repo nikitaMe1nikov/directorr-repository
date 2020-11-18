@@ -11,15 +11,15 @@ describe('whenInit', () => {
       effect = effect;
     }
 
+    const store: any = new SomeClass();
+
     const action = config.createAction(DIRECTORR_INIT_STORE_ACTION, {
-      StoreConstructor: SomeClass,
+      store,
     });
 
-    const obj = new SomeClass();
-
-    (obj as any)[DISPATCH_ACTION_FIELD_NAME](action);
+    store[DISPATCH_ACTION_FIELD_NAME](action);
 
     expect(effect).toBeCalledTimes(1);
-    expect(effect).lastCalledWith(undefined);
+    expect(effect).lastCalledWith(action.payload);
   });
 });

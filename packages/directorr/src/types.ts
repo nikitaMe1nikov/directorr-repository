@@ -1,5 +1,16 @@
 import { Middleware as ReduxMiddleware } from 'redux';
+import { IModelType, Instance, IStateTreeNode, IAnyType } from 'mobx-state-tree';
 
+export type MSTInstance<T> = Instance<T>;
+export type AnyMSTModelType = IModelType<
+  {
+    [key: string]: IAnyType;
+  },
+  {
+    [key: string]: any;
+  }
+>;
+export type MTSStateTreeNode = IStateTreeNode;
 export type Resolver<T = any> = (value?: T | PromiseLike<T>) => void;
 export type Rejector = (reason?: any) => void;
 export type WhenCancel = (callback: () => void) => void;
@@ -12,28 +23,27 @@ export interface PromiseCancelable<T = any> extends Promise<T> {
   cancel: () => void;
 }
 
-export interface DirectorrStoreClass<I = any> {
-  isReady?: boolean;
+export interface DirectorrStoreClass {
+  isReady?: boolean | SomeFunction;
   isError?: boolean;
-  fromJSON?: (classInstance: I) => void;
+  fromJSON?: (parsedClassInstance: any) => void;
+  [key: string]: any;
 }
 
-export interface DirectorrStoreClassConstructor<I = DirectorrStoreClass, O = any>
-  extends DirectorrStoreClass<I> {
+export interface DirectorrStoreClassConstructor<I = DirectorrStoreClass, O = any> {
   new (options?: O): I;
   storeName?: string;
   storeInitOptions?: O;
   afterware?: Afterware;
 }
 
-export interface SomeObject {
-  [key: string]: any;
-}
+export type SomeObject = Record<string, any>;
 
 export type SomeActionType =
   | string
   | DirectorrStoreClassConstructor<any>
-  | DecoratorValueTypedForAction<any, string>;
+  | DecoratorValueTypedForAction<any, string>
+  | AnyMSTModelType;
 
 export type ActionType = SomeActionType | SomeActionType[] | ActionType[];
 
@@ -151,6 +161,11 @@ export type CreateDecoratorValueTypedWithTypeAction<A = any> = <P = any>(
   arg: A
 ) => DecoratorValueTypedForAction<SomeAction<P | null>>;
 
+export type CreateDecoratorValueTypedWithTypeActionTwoOptions<A1 = any, A2 = any> = <P = any>(
+  arg1: A1,
+  arg2?: A2
+) => DecoratorValueTypedForAction<SomeAction<P | null>>;
+
 export type CreateContext = (moduleName: string, arg1: any, arg2?: any) => any;
 
 export type ConvertDecorator<D = any> = (decorator: D, context: any) => D;
@@ -162,7 +177,7 @@ export interface InitializerContext {
 
 export type CheckObjectPattern = SomeObject;
 
-export type ConvertPayloadFunction = (arg?: any) => any;
+export type ConvertPayloadFunction = (payload: Action['payload']) => any;
 
 export type CheckPayloadFunc = (payload: Action['payload']) => boolean;
 
@@ -170,13 +185,21 @@ export type CheckPayloadPropFunc = (payload: Action['payload'], prop: string) =>
 
 export type CheckPayload = CheckObjectPattern | CheckPayloadFunc;
 
-export type CheckStateFunc = (store: DirectorrStoreClass, payload: Action['payload']) => boolean;
+export type CheckStateFunc = (payload: Action['payload'], store: any) => boolean;
 
-export type CheckState = CheckObjectPattern | CheckPayloadFunc;
+export type CheckState = CheckObjectPattern | CheckStateFunc;
+
+export type AddToPayload = (payload: Action['payload'], store: any) => any;
 
 export type MessageFunc = (sourceName: string, arg?: any, errorMessage?: any) => string;
 
-export type RunDispatcher = (args: any[], actionType: string, valueFunc: any, store: any) => any;
+export type RunDispatcher = (
+  args: any[],
+  actionType: string,
+  valueFunc: any,
+  store: any,
+  addToPayload: AddToPayload
+) => any;
 
 export type DispatchProxyAction = (
   action: Action,
@@ -219,11 +242,8 @@ export type Configure = (config: {
   mergeStateToStore?: MergeStateToStores;
 }) => void;
 
-export interface DirectorrStore {
-  [key: string]: any;
-}
-
 export type DirectorrStores = Map<string, any>;
+export type DirectorrStore = Instance<AnyMSTModelType> | DirectorrStoreClass;
 
 export type JSONLikeData = string | number | boolean | DirectorrStoreState;
 
@@ -237,16 +257,26 @@ export interface DirectorrStoresState {
 
 export type DepencyName = symbol | SomeObject;
 
+export interface DirectorrOptions {
+  initState?: DirectorrStoresState;
+  context?: SomeObject;
+}
+
 export interface DirectorrInterface {
-  addInitState: (initStoreState: DirectorrStoresState) => void;
-  addStores: (...storeClasses: DirectorrStoreClassConstructor[]) => void;
-  addStore: <I>(StoreConstructor: DirectorrStoreClassConstructor<I>) => I;
-  removeStore: (StoreConstructor: DirectorrStoreClassConstructor) => void;
-  addReduxMiddlewares: (...middlewares: ReduxMiddleware[]) => void;
-  addMiddlewares: (...middlewares: Middleware[]) => void;
+  addStores(models: AnyMSTModelType[]): void;
+  addStores(storeConstructors: DirectorrStoreClassConstructor<any>[]): void;
+  addStore<I>(storeConstructor: DirectorrStoreClassConstructor<I>): I;
+  addStore<I extends AnyMSTModelType>(modelType: I): I;
+  removeStore(storeConstructor: DirectorrStoreClassConstructor<any>): void;
+  removeStore(modelType: AnyMSTModelType): void;
+  addReduxMiddlewares: (middlewares: ReduxMiddleware[]) => void;
+  addMiddlewares: (middlewares: Middleware[]) => void;
   dispatch: DispatchAction;
   dispatchType: (type: string, payload?: any) => Action;
-  getStore: <I>(StoreConstructor: DirectorrStoreClassConstructor<I, any>) => I | undefined;
+  getStore<C>(StoreConstructor: DirectorrStoreClassConstructor<C>): C | undefined;
+  getStore<C extends AnyMSTModelType>(modelType: C): MSTInstance<C> | undefined;
+  getStore<C>(StoreConstructor: DirectorrStoreClassConstructor<C>): C | undefined;
+  getStore<C extends AnyMSTModelType>(modelType: C): MSTInstance<C> | undefined;
   getHydrateStoresState: () => DirectorrStoresState;
   mergeStateToStore: (storeState: DirectorrStoresState) => void;
   waitAllStoresState: (checkStoreState?: CheckStoreState) => PromiseCancelable<any>;
@@ -255,14 +285,16 @@ export interface DirectorrInterface {
     checkStoreState?: CheckStoreState
   ) => PromiseCancelable<any>;
   findStoreState: (checkStoreState?: CheckStoreState) => PromiseCancelable<any>;
-  addStoreDependency: <I>(
+  addStoreDependency<I>(
     StoreConstructor: DirectorrStoreClassConstructor<I>,
     depName: DepencyName
-  ) => I;
-  removeStoreDependency: (
+  ): I;
+  addStoreDependency<I extends AnyMSTModelType>(modelType: I, depName: DepencyName): I;
+  removeStoreDependency(
     StoreConstructor: DirectorrStoreClassConstructor<any>,
     depName: DepencyName
-  ) => void;
+  ): void;
+  removeStoreDependency(modelType: AnyMSTModelType, depName: DepencyName): void;
 }
 
 export type SubscribeHandler = (store: DirectorrStores) => void;
@@ -272,10 +304,5 @@ export type UnsubscribeHandler = () => void;
 export type CheckStoreState = (someCalss: DirectorrStoreClass) => boolean;
 
 export interface InitPayload {
-  StoreConstructor: DirectorrStoreClass;
-}
-
-export interface OptionsPayload {
-  StoreConstructor: DirectorrStoreClass;
-  initOptions?: any;
+  store: DirectorrStoreClass;
 }

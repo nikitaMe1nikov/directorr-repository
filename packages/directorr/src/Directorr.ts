@@ -1,5 +1,4 @@
 import { Middleware as ReduxMiddleware, Store } from 'redux';
-
 import {
   DISPATCH_ACTION_FIELD_NAME,
   DISPATCH_EFFECTS_FIELD_NAME,
@@ -22,6 +21,12 @@ import {
   hasOwnProperty,
   isObject,
   createPromiseCancelable,
+  dispatchEffectsInModel,
+  MSTDestroy,
+  isMSTModelNode,
+  applyMSTSnapshot,
+  isMSTModelType,
+  onMSTAction,
 } from './utils';
 import config from './config';
 import { callWithNotAction, haveCycleInjectedStore, notObserver } from './messages';
@@ -29,7 +34,6 @@ import {
   FindNextMiddleware,
   DispatchAction,
   Action,
-  DirectorrStoreClass,
   Middleware,
   DirectorrInterface,
   DirectorrStores,
@@ -40,17 +44,36 @@ import {
   Afterware,
   DirectorrStoreClassConstructor,
   DepencyName,
+  DirectorrOptions,
+  SomeObject,
+  AnyMSTModelType,
+  MSTInstance,
+  MTSStateTreeNode,
+  DirectorrStore,
 } from './types';
 import { ReduxMiddlewareAdapter, MiddlewareAdapter } from './MiddlewareAdapters';
 
 export const MODULE_NAME = 'Directorr';
 export const GLOBAL_DEP = { global: true };
+export const ON_AFTER_INIT_NAME = '__onAfterInit';
 
 export class Directorr implements DirectorrInterface {
+  constructor({
+    initState = EMPTY_OBJECT,
+    context = EMPTY_OBJECT,
+  }: DirectorrOptions = EMPTY_OBJECT) {
+    this.initState = initState;
+    this.context = context;
+  }
+
+  private initState: DirectorrStoresState;
+  private context: SomeObject;
   stores: DirectorrStores = new Map();
 
-  getStore<C>(StoreConstructor: DirectorrStoreClassConstructor<C>): C {
-    return this.stores.get(getStoreName(StoreConstructor));
+  getStore<C>(StoreConstructor: DirectorrStoreClassConstructor<C>): C | undefined;
+  getStore<C extends AnyMSTModelType>(modelType: C): MSTInstance<C> | undefined;
+  getStore(modelOrConstructor: any): any {
+    return this.stores.get(getStoreName(modelOrConstructor));
   }
 
   getHydrateStoresState(): DirectorrStoresState {
@@ -60,34 +83,42 @@ export class Directorr implements DirectorrInterface {
   mergeStateToStore(storeState: DirectorrStoresState) {
     for (const [storeName, store] of this.stores.entries()) {
       if (storeName in storeState) {
-        config.mergeStateToStore(storeState[storeName], store);
+        if (isMSTModelNode(store)) {
+          applyMSTSnapshot(store, storeState[storeName]);
+        } else {
+          config.mergeStateToStore(storeState[storeName], store);
+        }
       }
     }
   }
 
-  private initStoreState: DirectorrStoresState = EMPTY_OBJECT;
-
-  addInitState(initStoreState: DirectorrStoresState) {
-    this.initStoreState = initStoreState;
+  addStores(models: AnyMSTModelType[]): void;
+  addStores(storeConstructors: DirectorrStoreClassConstructor<any>[]): void;
+  addStores(modelOrConstructor: any[]) {
+    modelOrConstructor.forEach(sm => this.addStore(sm));
   }
 
-  addStores(...storeConstructors: DirectorrStoreClassConstructor<any>[]) {
-    storeConstructors.forEach(sc => this.addStore(sc));
+  addStore<I>(storeConstructor: DirectorrStoreClassConstructor<I>): I;
+  addStore<I extends AnyMSTModelType>(modelType: I): I;
+  addStore(modelOrConstructor: any): any {
+    return this.addStoreDependency(modelOrConstructor, GLOBAL_DEP);
   }
 
-  addStore<I>(storeConstructor: DirectorrStoreClassConstructor<I>): I {
-    return this.addStoreDependency(storeConstructor, GLOBAL_DEP);
-  }
-
-  removeStore(storeConstructor: DirectorrStoreClassConstructor<any>) {
-    return this.removeStoreDependency(storeConstructor, GLOBAL_DEP);
+  removeStore(storeConstructor: DirectorrStoreClassConstructor<any>): void;
+  removeStore(modelType: AnyMSTModelType): void;
+  removeStore(modelOrConstructor: any) {
+    return this.removeStoreDependency(modelOrConstructor, GLOBAL_DEP);
   }
 
   addStoreDependency<I>(
     StoreConstructor: DirectorrStoreClassConstructor<I>,
     depName: DepencyName
-  ): I {
-    const store = this.initStore(StoreConstructor);
+  ): I;
+  addStoreDependency<I extends AnyMSTModelType>(modelType: I, depName: DepencyName): I;
+  addStoreDependency(modelOrConstructor: any, depName: DepencyName): any {
+    const store = isMSTModelType(modelOrConstructor)
+      ? this.initModel(modelOrConstructor)
+      : this.initStore(modelOrConstructor);
 
     store[DEPENDENCY_FIELD_NAME].push(depName);
 
@@ -97,8 +128,10 @@ export class Directorr implements DirectorrInterface {
   removeStoreDependency(
     StoreConstructor: DirectorrStoreClassConstructor<any>,
     depName: DepencyName
-  ) {
-    const store = this.getStore(StoreConstructor);
+  ): void;
+  removeStoreDependency(modelType: AnyMSTModelType, depName: DepencyName): void;
+  removeStoreDependency(modelOrConstructor: any, depName: DepencyName) {
+    const store = this.getStore(modelOrConstructor);
 
     if (store) {
       const dependency: any[] = store[DEPENDENCY_FIELD_NAME];
@@ -107,24 +140,30 @@ export class Directorr implements DirectorrInterface {
 
       if (index !== -1) dependency.splice(index, 1);
 
-      if (!dependency.length) this.destroyStore(StoreConstructor);
+      if (!dependency.length)
+        isMSTModelType(modelOrConstructor)
+          ? this.destroyModel(modelOrConstructor)
+          : this.destroyStore(modelOrConstructor);
     }
   }
 
-  private initStore<I>(StoreConstructor: DirectorrStoreClassConstructor<I>): I {
+  private initStore<I = any>(StoreConstructor: DirectorrStoreClassConstructor<I>): I {
     const storeName = getStoreName(StoreConstructor);
 
     if (this.stores.has(storeName)) return this.stores.get(storeName);
 
     // add injected stores
     if (hasOwnProperty(StoreConstructor, INJECTED_STORES_FIELD_NAME)) {
-      const InjectedStores: DirectorrStoreClassConstructor[] = (StoreConstructor as any)[
+      const injectedModelsOrConstructors: any[] = (StoreConstructor as any)[
         INJECTED_STORES_FIELD_NAME
       ];
 
       try {
-        for (const injectedStore of InjectedStores) {
-          this.initStore(injectedStore)[INJECTED_FROM_FIELD_NAME].push(StoreConstructor);
+        for (const modelOrConstructor of injectedModelsOrConstructors) {
+          const store = isMSTModelType(modelOrConstructor)
+            ? this.initModel(modelOrConstructor)
+            : this.initStore(modelOrConstructor);
+          store[INJECTED_FROM_FIELD_NAME].push(StoreConstructor);
         }
       } catch (e) {
         if (e instanceof RangeError) {
@@ -136,7 +175,7 @@ export class Directorr implements DirectorrInterface {
     }
 
     // add afterware
-    if (StoreConstructor.afterware) this.addStoreAfterware(StoreConstructor.afterware);
+    if (StoreConstructor.afterware) this.addAfterware(StoreConstructor.afterware);
 
     // create store
     const store = new StoreConstructor(StoreConstructor.storeInitOptions);
@@ -157,16 +196,28 @@ export class Directorr implements DirectorrInterface {
     this.stores.set(storeName, store);
 
     // merge init state
-    if (storeName in this.initStoreState)
-      config.mergeStateToStore(this.initStoreState[storeName], store);
+    if (storeName in this.initState) {
+      config.mergeStateToStore(this.initState[storeName], store);
+      // remove outdated data
+      delete this.initState[storeName];
+    }
 
     // call init action
     if (hasOwnProperty(StoreConstructor, INJECTED_STORES_FIELD_NAME)) {
-      this.waitStoresState((StoreConstructor as any)[INJECTED_STORES_FIELD_NAME]).then(() => {
-        this.dispatchType(DIRECTORR_INIT_STORE_ACTION, { StoreConstructor });
-      });
+      const injectedModelsOrConstructors: DirectorrStore[] = (StoreConstructor as any)[
+        INJECTED_STORES_FIELD_NAME
+      ];
+      const storeNames = injectedModelsOrConstructors.map(s => getStoreName(s));
+
+      if (checkStoresState(this.stores, isStoreReady, storeNames)) {
+        this.dispatchType(DIRECTORR_INIT_STORE_ACTION, { store });
+      } else {
+        this.waitStoresState(injectedModelsOrConstructors).then(() => {
+          this.dispatchType(DIRECTORR_INIT_STORE_ACTION, { store });
+        });
+      }
     } else {
-      this.dispatchType(DIRECTORR_INIT_STORE_ACTION, { StoreConstructor });
+      this.dispatchType(DIRECTORR_INIT_STORE_ACTION, { store });
     }
 
     return store;
@@ -174,19 +225,23 @@ export class Directorr implements DirectorrInterface {
 
   private destroyStore(
     StoreConstructor: DirectorrStoreClassConstructor,
-    FromStoreConstructor?: DirectorrStoreClass
+    FromStoreConstructor?: DirectorrStoreClassConstructor
   ) {
     const storeName = getStoreName(StoreConstructor);
     const store = this.stores.get(storeName);
 
     if (store) {
       // remove injected stores
-      if (INJECTED_STORES_FIELD_NAME in StoreConstructor) {
-        const InjectedStores = (StoreConstructor as any)[INJECTED_STORES_FIELD_NAME];
+      if (hasOwnProperty(StoreConstructor, INJECTED_STORES_FIELD_NAME)) {
+        const injectedModelsOrConstructors: any[] = (StoreConstructor as any)[
+          INJECTED_STORES_FIELD_NAME
+        ];
 
         try {
-          for (const injectedStore of InjectedStores) {
-            this.destroyStore(injectedStore, StoreConstructor);
+          for (const modelOrConstructor of injectedModelsOrConstructors) {
+            isMSTModelType(modelOrConstructor)
+              ? this.destroyModel(modelOrConstructor)
+              : this.destroyStore(modelOrConstructor, StoreConstructor);
           }
         } catch (e) {
           if (e instanceof RangeError) {
@@ -199,7 +254,7 @@ export class Directorr implements DirectorrInterface {
 
       // remove injected from stores
       if (FromStoreConstructor) {
-        const injectedFrom: DirectorrStoreClass[] = store[INJECTED_FROM_FIELD_NAME];
+        const injectedFrom: any[] = store[INJECTED_FROM_FIELD_NAME];
         const index = injectedFrom.indexOf(FromStoreConstructor);
 
         injectedFrom.splice(index, 1);
@@ -208,13 +263,65 @@ export class Directorr implements DirectorrInterface {
       // remove store
       if (!store[INJECTED_FROM_FIELD_NAME].length && !store[DEPENDENCY_FIELD_NAME].length) {
         // remove afterware
-        if (StoreConstructor.afterware) this.removeStoreAfterware(StoreConstructor.afterware);
+        if (StoreConstructor.afterware) this.removeAfterware(StoreConstructor.afterware);
 
-        this.dispatchType(DIRECTORR_DESTROY_STORE_ACTION, { StoreConstructor });
+        this.dispatchType(DIRECTORR_DESTROY_STORE_ACTION, { store });
 
-        delete this.initStoreState[storeName];
         this.stores.delete(storeName);
       }
+    }
+  }
+
+  private initModel<I extends AnyMSTModelType>(modelType: I): MTSStateTreeNode {
+    const modelName = getStoreName(modelType);
+
+    if (this.stores.has(modelName)) return this.stores.get(modelName);
+
+    const initState = this.initState[modelName];
+
+    // create store
+    const store = modelType.create(initState, this.context);
+
+    delete this.initState[modelName];
+
+    // listen actions
+    onMSTAction(store, call => {
+      if (call.name === ON_AFTER_INIT_NAME) {
+        this.dispatchType(DIRECTORR_INIT_STORE_ACTION, { store });
+      } else {
+        this.dispatchType(`${modelName}.${call.name}`, call);
+      }
+    });
+
+    defineProperty(store, INJECTED_FROM_FIELD_NAME, createValueDescriptor([]));
+    defineProperty(store, DEPENDENCY_FIELD_NAME, createValueDescriptor([]));
+    defineProperty(
+      store,
+      DISPATCH_EFFECTS_FIELD_NAME,
+      createValueDescriptor((action: Action) =>
+        dispatchEffectsInModel(store, modelName, config.actionTypeDivider, action)
+      )
+    );
+    defineProperty(store, DISPATCH_ACTION_FIELD_NAME, createValueDescriptor(this.dispatch));
+
+    // add store
+    this.stores.set(modelName, store);
+
+    return store;
+  }
+
+  private destroyModel(modelType: AnyMSTModelType) {
+    const modelName = getStoreName(modelType);
+    const store = this.stores.get(modelName);
+
+    if (store && !store[DEPENDENCY_FIELD_NAME].length) {
+      this.dispatchType(DIRECTORR_DESTROY_STORE_ACTION, { store });
+
+      // remove store
+      this.stores.delete(modelName);
+
+      // destroy node
+      MSTDestroy(store);
     }
   }
 
@@ -247,10 +354,7 @@ export class Directorr implements DirectorrInterface {
     });
   }
 
-  waitStoresState(
-    stores: DirectorrStoreClassConstructor<any>[],
-    isStoreState: CheckStoreState = isStoreReady
-  ) {
+  waitStoresState(stores: DirectorrStore[], isStoreState: CheckStoreState = isStoreReady) {
     const storeNames = stores.map(s => getStoreName(s));
 
     return createPromiseCancelable<any>((res, rej, whenCancel) => {
@@ -307,17 +411,17 @@ export class Directorr implements DirectorrInterface {
           this.findNextMiddleware,
           totalMiddlewares + i,
           this,
-          this.reduxStores
+          this.reduxStore
         )
       );
     }
   }
 
-  addReduxMiddlewares(...middlewares: ReduxMiddleware[]) {
+  addReduxMiddlewares(middlewares: ReduxMiddleware[]) {
     this.addSomeMiddlewares(middlewares, ReduxMiddlewareAdapter);
   }
 
-  addMiddlewares(...middlewares: Middleware[]) {
+  addMiddlewares(middlewares: Middleware[]) {
     this.addSomeMiddlewares(middlewares, MiddlewareAdapter);
   }
 
@@ -333,11 +437,11 @@ export class Directorr implements DirectorrInterface {
 
   private afterwares: Afterware[] = [];
 
-  private addStoreAfterware(afterware: Afterware) {
+  private addAfterware(afterware: Afterware) {
     this.afterwares.push(afterware);
   }
 
-  private removeStoreAfterware(afterware: Afterware) {
+  private removeAfterware(afterware: Afterware) {
     const index = this.afterwares.indexOf(afterware);
 
     this.afterwares.splice(index, 1);
@@ -353,7 +457,7 @@ export class Directorr implements DirectorrInterface {
 
   dispatchType = (type: string, payload?: any) => this.dispatch(config.createAction(type, payload));
 
-  reduxStores: Store = {
+  reduxStore: Store = {
     getState: () => this.stores,
     dispatch: this.dispatch,
     subscribe: this.subscribe,

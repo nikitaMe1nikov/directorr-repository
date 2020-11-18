@@ -603,14 +603,14 @@ describe('utils', () => {
       clearTimersEffect = clearTimersEffect;
     }
 
-    const obj = new SomeClass();
+    const store = new SomeClass();
 
-    obj.clearTimersEffect({ StoreConstructor: {} as any });
+    store.clearTimersEffect({ store: {} });
 
     expect(timer).not.toBeCalled();
     expect(intimer).not.toBeCalled();
 
-    obj.clearTimersEffect({ StoreConstructor: SomeClass as any });
+    store.clearTimersEffect({ store });
 
     expect(timer).toBeCalledTimes(1);
     expect(intimer).not.toBeCalled();

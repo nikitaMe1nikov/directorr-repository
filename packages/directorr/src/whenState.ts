@@ -1,13 +1,6 @@
 import { isFunction } from './utils';
 import { callWithPropNotEquallFunc } from './messages';
-import {
-  CheckState,
-  StateChecker,
-  CheckStateFunc,
-  CheckObjectPattern,
-  SomeFunction,
-  CreateDecoratorOneArg,
-} from './types';
+import { CheckState, StateChecker, SomeFunction, CreateDecoratorOneArg } from './types';
 import decorator from './decorator';
 import createDecoratorFactory from './createDecoratorFactory';
 import createCheckerContext from './createCheckerContext';
@@ -20,11 +13,12 @@ export function stateChecker(
   store: any,
   [checker]: [CheckState]
 ) {
-  if (isFunction(checker))
-    return (checker as CheckStateFunc)(store, payload) ? valueFunc(payload) : undefined;
+  if (!payload) return valueFunc(payload);
+
+  if (isFunction(checker)) return checker(payload, store) ? valueFunc(payload) : undefined;
 
   for (const prop in checker) {
-    const value = (checker as CheckObjectPattern)[prop];
+    const value = checker[prop];
 
     if (isFunction(value)) {
       if (!(prop in store) || !value(store, payload, prop)) return;

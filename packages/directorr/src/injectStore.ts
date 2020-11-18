@@ -8,6 +8,7 @@ import {
   defineProperty,
   createValueDescriptor,
   hasOwnProperty,
+  isMSTModelType,
 } from './utils';
 import {
   callDecoratorWithNotConsrtactorType,
@@ -18,18 +19,19 @@ import {
 import {
   DirectorrStoreClassConstructor,
   Decorator,
-  CreateDecoratorOneArg,
   BabelDescriptor,
+  AnyMSTModelType,
+  MSTInstance,
+  DecoratorValueTyped,
+  DirectorrStoreClass,
+  SomeObject,
 } from './types';
 
 export const MODULE_NAME = 'injectStore';
 
-export function injectStoreDecorator(
-  StoreConstructor: DirectorrStoreClassConstructor,
-  moduleName: string
-) {
+export function injectStoreDecorator(StoreConstructor: any, moduleName: string) {
   function get(this: any) {
-    if (!(STORES_FIELD_NAME in this) || this[STORES_FIELD_NAME] === null)
+    if (!this[STORES_FIELD_NAME])
       throw new Error(notFoundDirectorrStore(moduleName, StoreConstructor));
 
     const store = this[STORES_FIELD_NAME].get(getStoreName(StoreConstructor));
@@ -43,8 +45,8 @@ export function injectStoreDecorator(
 }
 
 export function createInjectStore(moduleName: string, decorator: Decorator) {
-  return function injector(StoreConstructor: DirectorrStoreClassConstructor) {
-    if (!isFunction(StoreConstructor))
+  return function injector(StoreConstructor: any) {
+    if (!isFunction(StoreConstructor) && !isMSTModelType(StoreConstructor))
       throw new Error(callDecoratorWithNotConsrtactorType(moduleName, StoreConstructor));
 
     return (target: any, property: string, descriptor?: BabelDescriptor) => {
@@ -70,7 +72,13 @@ export function createInjectStore(moduleName: string, decorator: Decorator) {
   };
 }
 
-export const injectStore: CreateDecoratorOneArg = createInjectStore(
+export type CreateDecoratorValueTypedEffect<
+  I = DirectorrStoreClass | SomeObject,
+  MI = AnyMSTModelType,
+  A = DirectorrStoreClassConstructor<I> | MI
+> = (arg: A) => DecoratorValueTyped<I | MSTInstance<MI>>;
+
+export const injectStore: CreateDecoratorValueTypedEffect = createInjectStore(
   MODULE_NAME,
   injectStoreDecorator
 );

@@ -1,11 +1,12 @@
-import { isFunction, DISPATCH_ACTION_FIELD_NAME } from './utils';
+import { isFunction, DISPATCH_ACTION_FIELD_NAME, RETURN_ARG_FUNC } from './utils';
 import config from './config';
 import { callWithPropNotEquallFunc } from './messages';
 import {
   RunDispatcher,
   ActionType,
-  CreateDecoratorValueTypedWithTypeAction,
+  CreateDecoratorValueTypedWithTypeActionTwoOptions,
   DecoratorValueTypedForAction,
+  AddToPayload,
 } from './types';
 import decorator from './decorator';
 import createDecoratorFactory from './createDecoratorFactory';
@@ -14,10 +15,17 @@ import addInitFields from './initFields';
 
 export const MODULE_NAME = 'action';
 
-export function runDispatcher(args: any[], actionType: string, valueFunc: any, store: any) {
+export function runDispatcher(
+  args: any[],
+  actionType: string,
+  valueFunc: any,
+  store: any,
+  addToPayload: AddToPayload
+) {
   const result = valueFunc(...args);
 
-  if (result !== null) store[DISPATCH_ACTION_FIELD_NAME](config.createAction(actionType, result));
+  if (result !== null)
+    store[DISPATCH_ACTION_FIELD_NAME](config.createAction(actionType, addToPayload(result, store)));
 
   return result;
 }
@@ -26,7 +34,7 @@ export function initializer(
   initObject: any,
   value: any,
   property: string,
-  actionType: string,
+  [actionType, addToPayload = RETURN_ARG_FUNC]: [string, AddToPayload | undefined],
   dispatcher: RunDispatcher = runDispatcher,
   addFields = addInitFields
 ) {
@@ -34,16 +42,22 @@ export function initializer(
 
   addFields(initObject);
 
-  return (...args: any[]) => dispatcher(args, actionType, value, initObject);
+  return (...args: any[]) => dispatcher(args, actionType, value, initObject, addToPayload);
 }
 
-export function addTypeToDecorator(decorator: DecoratorValueTypedForAction, context: any) {
-  decorator.type = context;
+export function addTypeToDecorator(
+  decorator: DecoratorValueTypedForAction,
+  context: [string, AddToPayload]
+) {
+  decorator.type = context[0];
 
   return decorator;
 }
 
-export const action: CreateDecoratorValueTypedWithTypeAction<ActionType> = createDecoratorFactory(
+export const action: CreateDecoratorValueTypedWithTypeActionTwoOptions<
+  ActionType,
+  AddToPayload
+> = createDecoratorFactory(
   MODULE_NAME,
   decorator,
   initializer,

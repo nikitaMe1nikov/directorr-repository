@@ -73,10 +73,10 @@ describe('delay', () => {
       actionTwo = actionTwo;
     }
 
-    const obj = new SomeClass();
+    const store = new SomeClass();
 
-    obj.actionOne(someValue);
-    obj.actionTwo(someValue);
+    store.actionOne(someValue);
+    store.actionTwo(someValue);
 
     expect(actionOne).not.toBeCalled();
     expect(actionTwo).not.toBeCalled();
@@ -88,10 +88,10 @@ describe('delay', () => {
     expect(actionTwo).toBeCalledTimes(1);
     expect(actionTwo).lastCalledWith(someValue);
 
-    obj.actionOne(someValue);
-    obj.actionTwo(someValue);
-    (obj as any)[DISPATCH_ACTION_FIELD_NAME](
-      createAction(DIRECTORR_DESTROY_STORE_ACTION, { StoreConstructor: SomeClass })
+    store.actionOne(someValue);
+    store.actionTwo(someValue);
+    (store as any)[DISPATCH_ACTION_FIELD_NAME](
+      createAction(DIRECTORR_DESTROY_STORE_ACTION, { store })
     );
 
     await flushTimeouts();

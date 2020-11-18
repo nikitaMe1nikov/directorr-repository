@@ -40,9 +40,11 @@ export {
   EMPTY_OBJECT,
   EMPTY_FUNC,
   isString,
+  getStoreName,
 } from './utils';
 export { callWithPropNotEquallFunc } from './messages';
 export * from './__mocks__/DirectorrMock';
+export * from './testUtils';
 export * from './types';
 
 export {

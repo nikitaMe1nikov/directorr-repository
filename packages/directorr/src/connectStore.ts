@@ -5,9 +5,10 @@ import {
   defineProperty,
   createValueDescriptor,
   getStoreName,
+  isMSTModelNode,
 } from './utils';
 import config from './config';
-import { useForPropNotEquallObject } from './messages';
+import { useForPropNotEquallObject, useForPropNotEquallMTS } from './messages';
 import {
   Action,
   DispatchProxyAction,
@@ -68,6 +69,8 @@ export function initializer(
   addFields = addInitFields
 ) {
   if (isFunction(store)) throw new Error(useForPropNotEquallObject(MODULE_NAME, property));
+
+  if (isMSTModelNode(store)) throw new Error(useForPropNotEquallMTS(MODULE_NAME, property));
 
   addFields(initObject);
 

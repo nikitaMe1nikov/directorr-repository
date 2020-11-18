@@ -1,14 +1,11 @@
-import { DirectorrStoreClass, InitPayload } from './types';
 import effect from './effect';
 import whenState from './whenState';
-import { composePropertyDecorators, DIRECTORR_DESTROY_STORE_ACTION } from './utils';
+import { composePropertyDecorators, DIRECTORR_DESTROY_STORE_ACTION, pickSameStore } from './utils';
+import { DecoratorValueTyped, SomeEffect, InitPayload } from './types';
 
-export const whenDestroy = composePropertyDecorators([
+export const whenDestroy: DecoratorValueTyped<SomeEffect<InitPayload>> = composePropertyDecorators([
   effect(DIRECTORR_DESTROY_STORE_ACTION),
-  whenState(
-    (store: DirectorrStoreClass, payload: InitPayload) =>
-      store.constructor === payload.StoreConstructor
-  ),
+  whenState(pickSameStore),
 ]);
 
 export default whenDestroy;

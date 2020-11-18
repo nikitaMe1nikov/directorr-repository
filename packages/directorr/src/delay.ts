@@ -51,7 +51,7 @@ export function initializer(
     const timerID = (setTimeout(() => {
       timers.splice(timers.indexOf(timerID), 1);
 
-      value.apply(this, args);
+      value(...args);
     }, delay) as unknown) as number;
 
     timers.push(timerID);

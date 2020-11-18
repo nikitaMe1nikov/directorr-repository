@@ -12,7 +12,7 @@ export function initializer(
   initObject: any,
   value: any,
   property: string,
-  actionType: string,
+  [actionType]: [string],
   addFields = addInitFields
 ) {
   if (!isFunction(value)) throw new Error(callWithPropNotEquallFunc(MODULE_NAME, property));
