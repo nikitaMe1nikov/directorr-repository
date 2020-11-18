@@ -12,8 +12,8 @@ import sagas from './sagas';
 const sagaMiddleware = createSagaMiddleware();
 const director = new Directorr();
 
-director.addMiddlewares(logMiddleware);
-director.addReduxMiddlewares(sagaMiddleware);
+director.addMiddlewares([logMiddleware]);
+director.addReduxMiddlewares([sagaMiddleware]);
 sagaMiddleware.run(sagas);
 
 const app = (
