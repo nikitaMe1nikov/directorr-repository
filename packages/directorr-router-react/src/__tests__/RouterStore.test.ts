@@ -24,7 +24,7 @@ describe('RouterStore', () => {
 
   it('subscribe logic', () => {
     const handler = jest.fn();
-    const handlersStack = [];
+    const handlersStack: CallableFunction[] = [];
     const store = new RouterStore();
 
     Object.defineProperty(store, 'handlersStack', {

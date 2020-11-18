@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, FC } from 'react';
 import { Directorr } from '@nimel/directorr';
 import { DirectorrProvider } from '@nimel/directorr-react';
 import { HistoryStore } from '@nimel/directorr-router';
@@ -15,12 +15,12 @@ class HistoryStoreWithHistory extends HistoryStore {
 export function createDirectorr(history: History) {
   HistoryStoreWithHistory.storeInitOptions = history;
   const directorr = new Directorr();
-  directorr.addStores(HistoryStoreWithHistory);
+  directorr.addStores([HistoryStoreWithHistory]);
   return directorr;
 }
 
 export function mountWithDirectorr(children: ReactElement<any>, directorr: Directorr) {
-  const wrappingComponent = ({ children }) => (
+  const wrappingComponent: FC = ({ children }) => (
     <DirectorrProvider value={directorr}>{children}</DirectorrProvider>
   );
   const root = mount(children, { wrappingComponent });

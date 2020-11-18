@@ -31,7 +31,7 @@ describe('Router', () => {
   it('render with empty routes', () => {
     const history = createMemoryHistory();
     const directorr = createDirectorr(history);
-    const routesEmpty = [];
+    const routesEmpty: any[] = [];
 
     const wrapper = mountWithDirectorr(<Router routes={routesEmpty} />, directorr);
 
@@ -42,7 +42,7 @@ describe('Router', () => {
     const className = 'className';
     const history = createMemoryHistory();
     const directorr = createDirectorr(history);
-    const routesEmpty = [];
+    const routesEmpty: any[] = [];
 
     const wrapper = mountWithDirectorr(
       <Router className={className} routes={routesEmpty} />,
@@ -70,7 +70,7 @@ describe('Router', () => {
     ];
 
     const wrapper = mountWithDirectorr(<Router routes={routes} />, directorr);
-    const routerStore = directorr.getStore(RouterStore);
+    const routerStore = directorr.addStore(RouterStore);
     jest.spyOn(routerStore, 'unsubscribe');
     jest.spyOn(global, 'clearTimeout');
 
@@ -109,7 +109,7 @@ describe('Router', () => {
   it('not switch component with empty routes', async () => {
     const history = createMemoryHistory();
     const directorr = createDirectorr(history);
-    const routesEmpty = [];
+    const routesEmpty: any[] = [];
 
     const wrapper = mountWithDirectorr(<Router routes={routesEmpty} />, directorr);
 
