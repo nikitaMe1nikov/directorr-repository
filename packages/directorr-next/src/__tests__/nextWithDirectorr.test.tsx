@@ -158,7 +158,7 @@ describe('nextWithDirectorr', () => {
         directorr,
         toJSON,
       },
-      initialProps: {
+      pageProps: {
         pageProps: {},
       },
       initialState: undefined,
@@ -166,7 +166,6 @@ describe('nextWithDirectorr', () => {
 
     expect(createDirectorr).toBeCalledTimes(1);
     expect(createDirectorr).lastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
-    expect(appCtx.directorr).toBe(directorr);
 
     expect(directorr.findStoreState).toBeCalledTimes(1);
     expect(directorr.findStoreState).lastCalledWith(isStoreError);
@@ -206,7 +205,7 @@ describe('nextWithDirectorr', () => {
         directorr,
         toJSON,
       },
-      initialProps: {
+      pageProps: {
         pageProps: {},
       },
       initialState: undefined,
@@ -214,7 +213,6 @@ describe('nextWithDirectorr', () => {
 
     expect(createDirectorr).toBeCalledTimes(1);
     expect(createDirectorr).lastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
-    expect(appCtx.directorr).toBe(directorr);
 
     expect(ComponentWithStatic.whenServerLoadDirectorr).toBeCalledTimes(1);
     expect(ComponentWithStatic.whenServerLoadDirectorr).lastCalledWith(directorr, appCtx);
@@ -267,7 +265,7 @@ describe('nextWithDirectorr', () => {
         directorr,
         toJSON,
       },
-      initialProps: {
+      pageProps: {
         pageProps: {},
       },
       initialState: undefined,
@@ -275,7 +273,6 @@ describe('nextWithDirectorr', () => {
 
     expect(createDirectorr).toBeCalledTimes(1);
     expect(createDirectorr).lastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
-    expect(appCtx.directorr).toBe(directorr);
 
     expect(ComponentWithStatic.whenServerLoadDirectorr).toBeCalledTimes(1);
     expect(ComponentWithStatic.whenServerLoadDirectorr).lastCalledWith(directorr, appCtx);
@@ -327,7 +324,7 @@ describe('nextWithDirectorr', () => {
         directorr,
         toJSON,
       },
-      initialProps: {
+      pageProps: {
         pageProps: {},
       },
       initialState: undefined,
@@ -335,7 +332,6 @@ describe('nextWithDirectorr', () => {
 
     expect(createDirectorr).toBeCalledTimes(1);
     expect(createDirectorr).lastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
-    expect(appCtx.directorr).toBe(directorr);
 
     expect(ComponentWithStatic.whenServerLoadDirectorr).toBeCalledTimes(1);
     expect(ComponentWithStatic.whenServerLoadDirectorr).lastCalledWith(directorr, appCtx);
@@ -384,7 +380,7 @@ describe('nextWithDirectorr', () => {
         directorr,
         toJSON,
       },
-      initialProps: {
+      pageProps: {
         pageProps: {},
       },
       initialState: undefined,
@@ -392,7 +388,6 @@ describe('nextWithDirectorr', () => {
 
     expect(createDirectorr).toBeCalledTimes(1);
     expect(createDirectorr).lastCalledWith(makeDirectorr, appCtx.ctx, appCtx.router);
-    expect(appCtx.directorr).toBe(directorr);
 
     expect(ComponentWithStatic.whenServerLoadDirectorr).toBeCalledTimes(0);
     expect(ComponentWithStatic.whenServerDirectorrReady).toBeCalledTimes(0);

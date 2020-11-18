@@ -14,8 +14,8 @@ export function reloadWindow() {
   window.location.reload();
 }
 
-export function convertBracketToColonParams(pattern: string) {
-  return pattern.replace(SQUERE_LEFT_RGXP, COLON_MARK).replace(SQUERE_RIGHT_RGXP, EMPTY_STRING);
+export function convertBracketToColonParams(pattern?: string) {
+  return pattern?.replace(SQUERE_LEFT_RGXP, COLON_MARK).replace(SQUERE_RIGHT_RGXP, EMPTY_STRING);
 }
 
 function filterExist(segment: string) {

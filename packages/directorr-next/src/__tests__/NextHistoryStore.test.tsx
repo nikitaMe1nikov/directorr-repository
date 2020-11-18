@@ -62,9 +62,7 @@ describe('NextHistoryStore', () => {
     const router = (new RouterMock() as unknown) as SingletonRouter;
     const store: any = new NextHistoryStore(router);
 
-    store[DISPATCH_EFFECTS_FIELD_NAME](
-      createAction(DIRECTORR_DESTROY_STORE_ACTION, { StoreConstructor: NextHistoryStore })
-    );
+    store[DISPATCH_EFFECTS_FIELD_NAME](createAction(DIRECTORR_DESTROY_STORE_ACTION, { store }));
 
     expect(router.events.off).toBeCalledTimes(1);
     expect(router.events.off).lastCalledWith(ROUTER_EVENT, store.dispatchAction);

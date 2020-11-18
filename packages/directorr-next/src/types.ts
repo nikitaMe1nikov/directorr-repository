@@ -10,7 +10,6 @@ export declare type MakeDirectorr = (
 ) => Directorr;
 
 export interface NextWithDirectorrInitialProps {
-  initialProps: Record<string, any>;
   initialState?: DirectorrStoresState;
   directorr?: Directorr;
   directorrWrapper?: {

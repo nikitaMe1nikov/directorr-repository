@@ -1,4 +1,4 @@
-import { whenDestroy } from '@nimel/directorr';
+import { whenDestroy, EMPTY_STRING, EMPTY_OBJECT } from '@nimel/directorr';
 import Router, { SingletonRouter } from 'next/router';
 import {
   ACTION,
@@ -25,9 +25,9 @@ import { reloadWindow, convertBracketToColonParams } from './utils';
 export const ROUTER_EVENT = 'routeChangeComplete';
 
 export default class NextHistoryStore {
-  path: string;
+  path = EMPTY_STRING;
   nextRouter: SingletonRouter;
-  queryObject?: QueryObject;
+  queryObject: QueryObject = EMPTY_OBJECT;
   pattern?: string;
 
   constructor(nextRouter = Router) {
@@ -45,13 +45,13 @@ export default class NextHistoryStore {
   }
 
   @actionRouterPush
-  push = (path: string, queryObject?: QueryObject) => ({
+  push = (path: string, queryObject: QueryObject = EMPTY_OBJECT) => ({
     path,
     queryObject,
   });
 
   @actionRouterReplace
-  replace = (path: string, queryObject?: QueryObject) => ({
+  replace = (path: string, queryObject: QueryObject = EMPTY_OBJECT) => ({
     path,
     queryObject,
   });
@@ -69,16 +69,18 @@ export default class NextHistoryStore {
   toHistoryPop = (payload: HistoryActionPayload) => payload;
 
   @effectRouterState
-  toSetState = ({ pattern, path, queryObject }: RouterActionPayload) => {
+  toSetState = ({ pattern, path, queryObject = EMPTY_OBJECT }: RouterActionPayload) => {
     this.path = path;
-    this.pattern = pattern;
+    this.pattern = convertBracketToColonParams(pattern);
     this.queryObject = queryObject;
   };
 
   @effectRouterIsPattern
   @actionRouterIsPatternSuccess
-  checkPattern = ({ pattern }: RouterIsPatternActionPayload) =>
-    this.pattern === pattern ? { pattern, path: this.path, queryObject: this.queryObject } : null;
+  checkPattern = ({ pattern, store }: RouterIsPatternActionPayload) =>
+    this.pattern === pattern
+      ? { pattern, path: this.path, queryObject: this.queryObject, store }
+      : null;
 
   @whenDestroy
   toClear = () => this.nextRouter.events.off(ROUTER_EVENT, this.dispatchAction);

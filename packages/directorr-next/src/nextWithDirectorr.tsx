@@ -1,4 +1,5 @@
 import React from 'react';
+import type { renderToStaticMarkup } from 'react-dom/server';
 import { NextComponentType, NextPage } from 'next';
 import App from 'next/app';
 import { isStoreReady, isStoreError, Directorr } from '@nimel/directorr';
@@ -35,7 +36,8 @@ createMemoDirectorr.memoDirectorr = null;
 
 export default function NextWithDirectorr(
   makeDirectorr: MakeDirectorr,
-  createDirectorr: CreateDirectorr = createMemoDirectorr
+  createDirectorr: CreateDirectorr = createMemoDirectorr,
+  renderOnServer?: typeof renderToStaticMarkup
 ) {
   return function Wrapper(
     Page: NextPage<NextWithDirectorrProps> | (typeof App & { displayName?: string })
@@ -62,12 +64,25 @@ export default function NextWithDirectorr(
     NextWithDirectorrContainer.getInitialProps = async appCtx => {
       const directorr = createDirectorr(makeDirectorr, appCtx.ctx, appCtx.router);
 
-      appCtx.directorr = directorr;
+      const directorrWrapper = {
+        directorr,
+        toJSON,
+      };
 
-      const initialProps = await App.getInitialProps(appCtx);
+      const pageProps = await App.getInitialProps(appCtx);
 
       if (isServer) {
         const { Component } = appCtx;
+        const render = renderOnServer || require('react-dom/server').renderToStaticMarkup; // eslint-disable-line @typescript-eslint/no-var-requires
+
+        render(
+          <NextWithDirectorrContainer
+            Component={Component}
+            pageProps={pageProps}
+            directorrWrapper={directorrWrapper}
+            router={appCtx.router}
+          />
+        );
 
         await Component.whenServerLoadDirectorr?.(directorr, appCtx);
 
@@ -86,12 +101,9 @@ export default function NextWithDirectorr(
       }
 
       return {
-        directorrWrapper: {
-          directorr,
-          toJSON,
-        },
+        directorrWrapper,
         initialState: isServer ? directorr.getHydrateStoresState() : undefined,
-        initialProps,
+        pageProps,
       };
     };
 

@@ -42,7 +42,8 @@
     "@nimel/directorr": "^1.0.0-rc.6",
     "@nimel/directorr-react": "^1.0.0-rc.6",
     "next": ">=9.5.0",
-    "react": ">=16.10.0"
+    "react": ">=16.10.0",
+    "react-dom": ">=16.10.0"
   },
   "dependencies": {
     "@nimel/directorr-router": "^1.0.0-rc.6"
@@ -51,7 +52,8 @@
     "@nimel/directorr": "^1.0.0-rc.6",
     "@nimel/directorr-react": "^1.0.0-rc.6",
     "next": "^9.5.3",
-    "react": "^16.13.1"
+    "react": "^16.13.1",
+    "react-dom": "16.13.1"
   },
   "author": "Nikita Melnikov",
   "license": "MIT",
