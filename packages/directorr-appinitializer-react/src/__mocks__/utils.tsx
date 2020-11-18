@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, FC } from 'react';
 import { Directorr } from '@nimel/directorr';
 import { DirectorrProvider } from '@nimel/directorr-react';
 import { mount } from 'enzyme';
@@ -8,7 +8,7 @@ export function createDirectorr() {
 }
 
 export function mountWithDirectorr(children: ReactElement<any>, directorr: Directorr) {
-  const wrappingComponent = ({ children }) => (
+  const wrappingComponent: FC = ({ children }) => (
     <DirectorrProvider value={directorr}>{children}</DirectorrProvider>
   );
   const root = mount(children, { wrappingComponent });
