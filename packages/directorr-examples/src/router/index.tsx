@@ -17,8 +17,8 @@ class TestStore {
 
 const director = new Directorr();
 
-director.addMiddlewares(logMiddleware);
-director.addStores(TestStore);
+director.addMiddlewares([logMiddleware]);
+director.addStores([TestStore]);
 
 const routes = [
   {
