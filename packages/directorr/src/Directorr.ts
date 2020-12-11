@@ -240,7 +240,7 @@ export class Directorr implements DirectorrInterface {
         try {
           for (const modelOrConstructor of injectedModelsOrConstructors) {
             isMSTModelType(modelOrConstructor)
-              ? this.destroyModel(modelOrConstructor)
+              ? this.destroyModel(modelOrConstructor, StoreConstructor)
               : this.destroyStore(modelOrConstructor, StoreConstructor);
           }
         } catch (e) {
@@ -260,13 +260,14 @@ export class Directorr implements DirectorrInterface {
         injectedFrom.splice(index, 1);
       }
 
-      // remove store
-      if (!store[INJECTED_FROM_FIELD_NAME].length && !store[DEPENDENCY_FIELD_NAME].length) {
+      // when dont have dependencies
+      if (!store[INJECTED_FROM_FIELD_NAME].length) {
         // remove afterware
         if (StoreConstructor.afterware) this.removeAfterware(StoreConstructor.afterware);
 
         this.dispatchType(DIRECTORR_DESTROY_STORE_ACTION, { store });
 
+        // remove store
         this.stores.delete(storeName);
       }
     }
@@ -310,18 +311,32 @@ export class Directorr implements DirectorrInterface {
     return store;
   }
 
-  private destroyModel(modelType: AnyMSTModelType) {
+  private destroyModel(
+    modelType: AnyMSTModelType,
+    FromStoreConstructor?: DirectorrStoreClassConstructor
+  ) {
     const modelName = getStoreName(modelType);
     const store = this.stores.get(modelName);
 
-    if (store && !store[DEPENDENCY_FIELD_NAME].length) {
-      this.dispatchType(DIRECTORR_DESTROY_STORE_ACTION, { store });
+    if (store) {
+      // remove injected from stores
+      if (FromStoreConstructor) {
+        const injectedFrom: any[] = store[INJECTED_FROM_FIELD_NAME];
+        const index = injectedFrom.indexOf(FromStoreConstructor);
 
-      // remove store
-      this.stores.delete(modelName);
+        injectedFrom.splice(index, 1);
+      }
 
-      // destroy node
-      MSTDestroy(store);
+      // when dont have dependencies
+      if (!store[INJECTED_FROM_FIELD_NAME].length) {
+        this.dispatchType(DIRECTORR_DESTROY_STORE_ACTION, { store });
+
+        // remove store
+        this.stores.delete(modelName);
+
+        // destroy node
+        MSTDestroy(store);
+      }
     }
   }
 
