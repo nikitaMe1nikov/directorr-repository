@@ -70,6 +70,8 @@ export const DIRECTORR_RELOAD_STORE_ACTION = '@@DIRECTORR.RELOAD_STORE';
 
 export const ACTION_TYPE_DIVIDER = '.';
 
+export const isDev = process.env.NODE_ENV === 'development';
+
 export const TYPEOF = {
   STRING: 'string',
 };

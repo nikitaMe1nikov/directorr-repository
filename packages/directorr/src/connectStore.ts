@@ -6,6 +6,7 @@ import {
   createValueDescriptor,
   getStoreName,
   isMSTModelNode,
+  isDev,
 } from './utils';
 import config from './config';
 import { useForPropNotEquallObject, useForPropNotEquallMTS } from './messages';
@@ -32,7 +33,7 @@ export function dispatchProxyAction(
 ) {
   fromStore[DISPATCH_EFFECTS_FIELD_NAME](action);
 
-  toStore[DISPATCH_EFFECTS_FIELD_NAME](
+  toStore[isDev ? DISPATCH_ACTION_FIELD_NAME : DISPATCH_EFFECTS_FIELD_NAME](
     config.createAction(
       config.createActionType(
         prefixActionType
