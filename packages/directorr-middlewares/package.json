@@ -1,6 +1,6 @@
 {
   "name": "@nimel/directorr-middlewares",
-  "version": "1.0.0-rc.7",
+  "version": "1.0.0-rc.8",
   "publishConfig": {
     "access": "public"
   },
@@ -39,11 +39,11 @@
     "test-typescript:w": "jest --rootDir='.' --config '../../jest.typescript.config.js' --watchAll"
   },
   "peerDependencies": {
-    "@nimel/directorr": "^1.0.0-rc.7"
+    "@nimel/directorr": "^1.0.0-rc.8"
   },
   "dependencies": {},
   "devDependencies": {
-    "@nimel/directorr": "^1.0.0-rc.7"
+    "@nimel/directorr": "^1.0.0-rc.8"
   },
   "author": "Nikita Melnikov",
   "license": "MIT",
