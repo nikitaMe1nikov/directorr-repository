@@ -4,7 +4,7 @@ import {
   callWithPropNotEquallFunc,
   isLikeAction,
   EMPTY_OBJECT,
-  CreateDecoratorValueTypedWithEffectPayload,
+  CreatePropertyDecoratorFactory,
 } from '@nimel/directorr';
 import { ObjectSchema, ValidationError } from 'yup';
 import FormStoreBase from './FormStore';
@@ -53,7 +53,7 @@ export function initializer(
   return (payload: any) => validate(payload, value, initObject, ctx);
 }
 
-const validateAll: CreateDecoratorValueTypedWithEffectPayload<
+const validateAll: CreatePropertyDecoratorFactory<
   ObjectSchema,
   ValidateOptionsAll,
   validatePayload

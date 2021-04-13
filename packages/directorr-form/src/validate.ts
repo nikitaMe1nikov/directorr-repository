@@ -4,7 +4,7 @@ import {
   callWithPropNotEquallFunc,
   isLikeAction,
   EMPTY_OBJECT,
-  CreateDecoratorValueTypedWithEffectPayload,
+  CreatePropertyDecoratorFactory,
 } from '@nimel/directorr';
 import { ObjectSchema } from 'yup';
 import { useWithEffects } from './messages';
@@ -54,7 +54,7 @@ export function initializer(
   return (payload: any) => validate(payload, value, initObject, ctx);
 }
 
-const validate: CreateDecoratorValueTypedWithEffectPayload<
+const validate: CreatePropertyDecoratorFactory<
   ObjectSchema,
   ValidateOptions,
   validatePayload
