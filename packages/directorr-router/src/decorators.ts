@@ -8,7 +8,7 @@ import {
   effect,
   SomeAction,
   whenState,
-  DecoratorValueTypedForAction,
+  DecoratorValueTypedWithType,
 } from '@nimel/directorr';
 import {
   HistoryActionPayload,
@@ -63,14 +63,14 @@ export const [actionRouterState, effectRouterState] = createActionAndEffect<Rout
   'ROUTER.STATE'
 );
 
-export const actionRouterIsPattern: DecoratorValueTypedForAction<SomeAction<RouterIsPatternActionPayload | null>> = action(
+export const actionRouterIsPattern: DecoratorValueTypedWithType<SomeAction<RouterIsPatternActionPayload | null>> = action(
   'ROUTER.IS_PATTERN',
   addStoreToPayload
 );
 export const effectRouterIsPattern: DecoratorValueTyped<SomeEffect<
   RouterIsPatternActionPayload
 >> = effect(actionRouterIsPattern.type);
-export const actionRouterIsPatternSuccess: DecoratorValueTypedForAction<SomeAction<RouterIsPatternSuccessActionPayload | null>> = action(
+export const actionRouterIsPatternSuccess: DecoratorValueTypedWithType<SomeAction<RouterIsPatternSuccessActionPayload | null>> = action(
   'ROUTER.IS_PATTERN_SUCCESS'
 );
 export const effectRouterIsPatternSuccess: DecoratorValueTyped<SomeEffect<
