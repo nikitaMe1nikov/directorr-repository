@@ -1,10 +1,10 @@
 import './config';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Directorr } from '@nimel/directorr';
 import { DirectorrProvider } from '@nimel/directorr-react';
 import createSagaMiddleware from 'redux-saga';
-import { logMiddleware } from '@nimel/directorr-middlewares';
+import { logMiddleware, createConnectorToReduxDevTool } from '@nimel/directorr-middlewares';
+import { Directorr } from '@nimel/directorr';
 
 import Page from 'page/Page';
 import sagas from './sagas';
@@ -12,9 +12,20 @@ import sagas from './sagas';
 const sagaMiddleware = createSagaMiddleware();
 const director = new Directorr();
 
-director.addMiddlewares([logMiddleware]);
+director.addMiddlewares([logMiddleware, createConnectorToReduxDevTool()]);
 director.addReduxMiddlewares([sagaMiddleware]);
-sagaMiddleware.run(sagas);
+let sagaTask = sagaMiddleware.run(sagas);
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot?.accept('./sagas', () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const getNewSagas = require('./sagas').default;
+    sagaTask.cancel();
+    sagaTask.toPromise().then(() => {
+      sagaTask = sagaMiddleware.run(getNewSagas);
+    });
+  });
+}
 
 const app = (
   <DirectorrProvider value={director}>
