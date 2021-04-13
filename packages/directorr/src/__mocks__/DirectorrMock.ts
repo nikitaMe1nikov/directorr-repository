@@ -54,4 +54,5 @@ export class DirectorrMock implements DirectorrInterface {
   addReduxMiddlewares = jest.fn();
   addMiddlewares = jest.fn();
   mergeStateToStore = jest.fn();
+  setStateToStore = jest.fn();
 }

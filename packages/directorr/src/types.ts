@@ -64,6 +64,8 @@ export type MergeStateToStores = (
   directorrStore: DirectorrStore
 ) => void;
 
+export type SetStateToStore = MergeStateToStores;
+
 export type DispatchAction<A extends Action = Action> = <T extends A>(action: T) => T;
 
 export type GetFunction = () => any;
@@ -240,6 +242,7 @@ export type Configure = (config: {
   dispatchEffects?: DispatchEffects;
   hydrateStoresToState?: HydrateStoresToState;
   mergeStateToStore?: MergeStateToStores;
+  setStateToStore?: SetStateToStore;
 }) => void;
 
 export type DirectorrStores = Map<string, any>;
@@ -279,6 +282,7 @@ export interface DirectorrInterface {
   getStore<C extends AnyMSTModelType>(modelType: C): MSTInstance<C> | undefined;
   getHydrateStoresState: () => DirectorrStoresState;
   mergeStateToStore: (storeState: DirectorrStoresState) => void;
+  setStateToStore: (storeState: DirectorrStoresState) => void;
   waitAllStoresState: (checkStoreState?: CheckStoreState) => PromiseCancelable<any>;
   waitStoresState: (
     stores: DirectorrStoreClassConstructor<any>[],

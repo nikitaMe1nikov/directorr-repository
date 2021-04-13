@@ -80,7 +80,19 @@ export class Directorr implements DirectorrInterface {
     return config.hydrateStoresToState(this.stores);
   }
 
-  mergeStateToStore(storeState: DirectorrStoresState) {
+  setStateToStore = config.batchFunction((storeState: DirectorrStoresState) => {
+    for (const [storeName, store] of this.stores.entries()) {
+      if (storeName in storeState) {
+        if (isMSTModelNode(store)) {
+          applyMSTSnapshot(store, storeState[storeName]);
+        } else {
+          config.setStateToStore(storeState[storeName], store);
+        }
+      }
+    }
+  });
+
+  mergeStateToStore = config.batchFunction((storeState: DirectorrStoresState) => {
     for (const [storeName, store] of this.stores.entries()) {
       if (storeName in storeState) {
         if (isMSTModelNode(store)) {
@@ -90,7 +102,7 @@ export class Directorr implements DirectorrInterface {
         }
       }
     }
-  }
+  });
 
   addStores(models: AnyMSTModelType[]): void;
   addStores(storeConstructors: DirectorrStoreClassConstructor<any>[]): void;
@@ -473,7 +485,7 @@ export class Directorr implements DirectorrInterface {
   dispatchType = (type: string, payload?: any) => this.dispatch(config.createAction(type, payload));
 
   reduxStore: Store = {
-    getState: () => this.stores,
+    getState: () => this.getHydrateStoresState(),
     dispatch: this.dispatch,
     subscribe: this.subscribe,
     replaceReducer: EMPTY_FUNC,

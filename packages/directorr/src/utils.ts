@@ -435,6 +435,22 @@ export function mergeStateToStore(storeState: DirectorrStoreState, directorrStor
   }
 }
 
+export function setStateToStore(storeState: DirectorrStoreState, directorrStore: DirectorrStore) {
+  if (directorrStore.fromJSON) {
+    directorrStore.fromJSON(storeState);
+  } else {
+    for (const prop in storeState) {
+      const store = storeState[prop];
+
+      if (isObject(store) && directorrStore[prop]) {
+        setStateToStore(store as DirectorrStoreState, directorrStore[prop]);
+      } else {
+        directorrStore[prop] = store;
+      }
+    }
+  }
+}
+
 export function hydrateStoresToState(directorrStores: DirectorrStores): SomeObject {
   const obj: SomeObject = {};
 

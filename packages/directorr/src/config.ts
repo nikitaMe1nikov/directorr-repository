@@ -6,6 +6,7 @@ import {
   dispatchEffects,
   hydrateStoresToState,
   mergeStateToStore,
+  setStateToStore,
 } from './utils';
 import {
   BatchFunction,
@@ -15,6 +16,7 @@ import {
   Configure,
   HydrateStoresToState,
   MergeStateToStores,
+  SetStateToStore,
 } from './types';
 
 class Config {
@@ -35,6 +37,8 @@ class Config {
 
   mergeStateToStore: MergeStateToStores = mergeStateToStore;
 
+  setStateToStore: SetStateToStore = setStateToStore;
+
   configure: Configure = ({
     batchFunction,
     createAction,
@@ -43,6 +47,7 @@ class Config {
     dispatchEffects,
     hydrateStoresToState,
     mergeStateToStore,
+    setStateToStore,
   }) => {
     if (batchFunction) {
       this.batchFunction = batchFunction;
@@ -63,6 +68,8 @@ class Config {
     if (hydrateStoresToState) this.hydrateStoresToState = hydrateStoresToState;
 
     if (mergeStateToStore) this.mergeStateToStore = mergeStateToStore;
+
+    if (setStateToStore) this.setStateToStore = setStateToStore;
   };
 }
 

@@ -1018,7 +1018,7 @@ describe('Directorr', () => {
     const { reduxStore, stores, dispatch, subscribe } = new Directorr();
     const next = jest.fn();
 
-    expect(reduxStore.getState()).toBe(stores);
+    expect(reduxStore.getState()).toMatchObject({});
     expect(reduxStore.dispatch).toBe(dispatch);
     expect(reduxStore.subscribe).toBe(subscribe);
     expect(reduxStore.replaceReducer).toBe(EMPTY_FUNC);
