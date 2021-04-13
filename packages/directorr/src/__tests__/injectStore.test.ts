@@ -18,7 +18,7 @@ describe('injectStore', () => {
 
     const descriptor: any = Object.assign({}, injectStoreDecorator(SomeClass, MODULE_NAME));
 
-    descriptor.name = storeName;
+    descriptor.constructor = { name: storeName };
 
     expect(() => descriptor.set()).not.toThrow();
     expect(() => descriptor.get()).toThrowError(notFoundDirectorrStore(MODULE_NAME, SomeClass));

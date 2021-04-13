@@ -36,7 +36,10 @@ export function injectStoreDecorator(StoreConstructor: any, moduleName: string) 
 
     const store = this[STORES_FIELD_NAME].get(getStoreName(StoreConstructor));
 
-    if (!store) throw new Error(notFoundStoreInDirectorrStore(moduleName, StoreConstructor, this));
+    if (!store)
+      throw new Error(
+        notFoundStoreInDirectorrStore(moduleName, StoreConstructor, this.constructor)
+      );
 
     return store;
   }
