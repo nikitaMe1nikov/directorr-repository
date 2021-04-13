@@ -5,9 +5,11 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const postcssInlineSvg = require('postcss-inline-svg');
 const postcssSimpleVars = require('postcss-simple-vars');
 const postcssPresetEnv = require('postcss-preset-env');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 module.exports = {
   mode: 'development',
+  target: 'web',
   entry: {
     main: ['./src/index.tsx'],
   },
@@ -29,6 +31,7 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
+        exclude: /node_modules/,
         use: [
           'style-loader',
           '@teamsupercell/typings-for-css-modules-loader',
@@ -36,7 +39,6 @@ module.exports = {
             loader: 'css-loader',
             options: {
               modules: {
-                mode: 'local',
                 localIdentName: '[path][name]__[local]--[hash:base64:4]',
               },
               importLoaders: 1,
@@ -45,13 +47,16 @@ module.exports = {
           {
             loader: 'postcss-loader',
             options: {
-              plugins: [
-                postcssInlineSvg(),
-                postcssSimpleVars(),
-                postcssPresetEnv({
-                  stage: 0,
-                }),
-              ],
+              postcssOptions: {
+                plugins: [
+                  postcssInlineSvg(),
+                  postcssSimpleVars(),
+                  postcssPresetEnv({
+                    stage: 0,
+                  }),
+                ],
+              },
+              sourceMap: true,
             },
           },
         ],
@@ -59,34 +64,12 @@ module.exports = {
       {
         test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
-        use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              cacheDirectory: true,
-            },
-          },
-        ],
+        use: ['babel-loader'],
       },
-      {
-        test: /\.(svg|png|jpe?g|jpg|gif|ico)$/,
-        loader: 'url-loader',
-        options: {
-          name: '[name].[ext]',
-        },
-      },
-      {
-        test: /\.(ttf|woff|woff2)$/,
-        loader: 'url-loader',
-        options: {
-          name: '[name].[ext]',
-          limit: 1,
-        },
-      },
-      {
-        test: /\.(mp3|wav)$/,
-        loader: 'file-loader',
-      },
+      // Images: Copy image files to build folder
+      { test: /\.(?:ico|gif|png|jpg|jpeg)$/i, type: 'asset/resource' },
+      // Fonts and SVGs: Inline files
+      { test: /\.(woff(2)?|eot|ttf|otf|svg|)$/, type: 'asset/inline' },
     ],
   },
   optimization: {
@@ -99,15 +82,11 @@ module.exports = {
         },
       },
     },
+    moduleIds: 'named',
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.BABEL_ENV': JSON.stringify('development'),
-      'process.env.NODE_ENV': JSON.stringify('development'),
-    }),
     new HtmlWebpackPlugin({
       title: 'ToDo',
-      envProduction: false,
       filename: 'index.html',
       template: './src/index.template.html',
       inject: 'head',
@@ -115,8 +94,10 @@ module.exports = {
     new ScriptExtHtmlWebpackPlugin({
       defaultAttribute: 'defer',
     }),
+    new webpack.HotModuleReplacementPlugin(),
+    new ReactRefreshWebpackPlugin(),
   ],
-  devtool: 'inline-source-map',
+  devtool: 'eval-cheap-module-source-map',
   devServer: {
     host: '0.0.0.0',
     port: 8000,
@@ -125,18 +106,9 @@ module.exports = {
       ignored: /node_modules/,
     },
     disableHostCheck: true,
-    stats: {
-      assets: true,
-      children: false,
-      chunks: false,
-      hash: false,
-      modules: false,
-      publicPath: false,
-      timings: true,
-      version: false,
-      warnings: true,
-    },
+    hot: true,
   },
   bail: false,
   cache: true,
+  stats: 'minimal',
 };
