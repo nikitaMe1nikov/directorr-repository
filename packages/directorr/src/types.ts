@@ -154,10 +154,10 @@ export type CreateDecoratorValueTypedEffect<A = any> = <P = any>(
   arg: A
 ) => DecoratorValueTypedWithType<SomeEffect<P>>;
 
-export type CreateDecoratorValueTypedWithEffectPayload<A1 = any, A2 = any, P = any> = (
+export type CreatePropertyDecoratorFactory<A1 = any, A2 = any, P = any> = (
   arg1: A1,
   arg2?: A2
-) => DecoratorValueTypedWithType<SomeEffect<P>>;
+) => DecoratorValueTyped<SomeEffect<P>>;
 
 export type CreateDecoratorValueTypedWithTypeAction<A = any> = <P = any>(
   arg: A
