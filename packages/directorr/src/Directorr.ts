@@ -452,6 +452,12 @@ export class Directorr implements DirectorrInterface {
     this.addSomeMiddlewares(middlewares, MiddlewareAdapter);
   }
 
+  removeMiddleware(middleware: Middleware) {
+    const idx = this.middlewares.findIndex(m => m.middleware === middleware);
+
+    this.middlewares.slice(idx, 1);
+  }
+
   private findNextMiddleware: FindNextMiddleware = (nextIndex, action) => {
     const nextMiddleware = this.middlewares[nextIndex + 1];
 

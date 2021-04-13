@@ -274,6 +274,7 @@ export interface DirectorrInterface {
   removeStore(modelType: AnyMSTModelType): void;
   addReduxMiddlewares: (middlewares: ReduxMiddleware[]) => void;
   addMiddlewares: (middlewares: Middleware[]) => void;
+  removeMiddleware: (middleware: Middleware) => void;
   dispatch: DispatchAction;
   dispatchType: (type: string, payload?: any) => Action;
   getStore<C>(StoreConstructor: DirectorrStoreClassConstructor<C>): C | undefined;
