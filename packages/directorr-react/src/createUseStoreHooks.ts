@@ -29,6 +29,7 @@ export function useStore(context: Context<any>, StoreConstructor: any): any {
 
   useEffect(
     () => () => {
+      store.current = null;
       dir.removeStoreDependency(StoreConstructor, DEP_NAME);
     },
     []
