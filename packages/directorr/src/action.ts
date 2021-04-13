@@ -5,7 +5,7 @@ import {
   RunDispatcher,
   ActionType,
   CreateDecoratorValueTypedWithTypeActionTwoOptions,
-  DecoratorValueTypedForAction,
+  DecoratorValueTypedWithType,
   AddToPayload,
 } from './types';
 import decorator from './decorator';
@@ -46,7 +46,7 @@ export function initializer(
 }
 
 export function addTypeToDecorator(
-  decorator: DecoratorValueTypedForAction,
+  decorator: DecoratorValueTypedWithType,
   context: [string, AddToPayload]
 ) {
   decorator.type = context[0];

@@ -25,7 +25,7 @@ import {
   Afterware,
   CheckPayload,
   ConvertPayloadFunction,
-  DecoratorValueTypedForAction,
+  DecoratorValueTypedWithType,
   Resolver,
   PromiseCancelable,
   Executor,
@@ -215,7 +215,7 @@ export function getStoreName(classOrModel: any): string {
   throw new Error(notFindStoreName());
 }
 
-export function isDecoratorWithCtx(decorator?: any): decorator is DecoratorValueTypedForAction {
+export function isDecoratorWithCtx(decorator?: any): decorator is DecoratorValueTypedWithType {
   return !!decorator.type;
 }
 

@@ -42,7 +42,7 @@ export type SomeObject = Record<string, any>;
 export type SomeActionType =
   | string
   | DirectorrStoreClassConstructor<any>
-  | DecoratorValueTypedForAction<any, string>
+  | DecoratorValueTypedWithType<any, string>
   | AnyMSTModelType;
 
 export type ActionType = SomeActionType | SomeActionType[] | ActionType[];
@@ -136,7 +136,7 @@ export type DecoratorValueTyped<R = any> = <T extends Record<K, R>, K extends st
   ...args: any[]
 ) => void;
 
-export interface DecoratorValueTypedForAction<R = any, C = any> extends DecoratorValueTyped<R> {
+export interface DecoratorValueTypedWithType<R = any, C = any> extends DecoratorValueTyped<R> {
   type: C;
 }
 
@@ -152,21 +152,21 @@ export type CreateDecoratorOneArg<A = any, D = Decorator> = (arg: A) => D;
 
 export type CreateDecoratorValueTypedEffect<A = any> = <P = any>(
   arg: A
-) => DecoratorValueTyped<SomeEffect<P>>;
+) => DecoratorValueTypedWithType<SomeEffect<P>>;
 
 export type CreateDecoratorValueTypedWithEffectPayload<A1 = any, A2 = any, P = any> = (
   arg1: A1,
   arg2?: A2
-) => DecoratorValueTyped<SomeEffect<P>>;
+) => DecoratorValueTypedWithType<SomeEffect<P>>;
 
 export type CreateDecoratorValueTypedWithTypeAction<A = any> = <P = any>(
   arg: A
-) => DecoratorValueTypedForAction<SomeAction<P | null>>;
+) => DecoratorValueTypedWithType<SomeAction<P | null>>;
 
 export type CreateDecoratorValueTypedWithTypeActionTwoOptions<A1 = any, A2 = any> = <P = any>(
   arg1: A1,
   arg2?: A2
-) => DecoratorValueTypedForAction<SomeAction<P | null>>;
+) => DecoratorValueTypedWithType<SomeAction<P | null>>;
 
 export type CreateContext = (moduleName: string, arg1: any, arg2?: any) => any;
 

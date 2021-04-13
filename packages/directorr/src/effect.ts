@@ -1,6 +1,12 @@
 import { isFunction, EFFECTS_FIELD_NAME } from './utils';
 import { callWithPropNotEquallFunc } from './messages';
-import { ActionType, EffectsMap, CreateDecoratorValueTypedEffect } from './types';
+import {
+  ActionType,
+  EffectsMap,
+  CreateDecoratorValueTypedEffect,
+  DecoratorValueTypedWithType,
+  AddToPayload,
+} from './types';
 import decorator from './decorator';
 import createrDecoratorFactory from './createDecoratorFactory';
 import createActionTypeContext from './createActionTypeContext';
@@ -31,11 +37,21 @@ export function initializer(
   return value;
 }
 
+export function addTypeToDecorator(
+  decorator: DecoratorValueTypedWithType,
+  context: [string, AddToPayload]
+) {
+  decorator.type = context[0];
+
+  return decorator;
+}
+
 export const effect: CreateDecoratorValueTypedEffect<ActionType> = createrDecoratorFactory(
   MODULE_NAME,
   decorator,
   initializer,
-  createActionTypeContext
+  createActionTypeContext,
+  addTypeToDecorator
 );
 
 export default effect;
