@@ -40,12 +40,12 @@
   },
   "peerDependencies": {
     "@nimel/directorr": "^1.0.0-rc.9",
-    "react": ">=16.10.0"
-  },
-  "dependencies": {
-    "hoist-non-react-statics": "^3.3.2",
+    "react": ">=16.10.0",
     "mobx": "5.15.7",
     "mobx-state-tree": "3.17.2"
+  },
+  "dependencies": {
+    "hoist-non-react-statics": "^3.3.2"
   },
   "devDependencies": {
     "@nimel/directorr": "^1.0.0-rc.9",
