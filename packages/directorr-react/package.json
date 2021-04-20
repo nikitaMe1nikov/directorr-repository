@@ -1,6 +1,6 @@
 {
   "name": "@nimel/directorr-react",
-  "version": "1.0.0-rc.9",
+  "version": "1.0.0-rc.10",
   "publishConfig": {
     "access": "public"
   },
@@ -39,7 +39,7 @@
     "test-typescript:w": "jest --rootDir='.' --config '../../jest.typescript.config.js' --watchAll"
   },
   "peerDependencies": {
-    "@nimel/directorr": "^1.0.0-rc.9",
+    "@nimel/directorr": "^1.0.0-rc.10",
     "react": ">=16.10.0",
     "mobx": "5.15.7",
     "mobx-state-tree": "3.17.2"
@@ -48,7 +48,7 @@
     "hoist-non-react-statics": "^3.3.2"
   },
   "devDependencies": {
-    "@nimel/directorr": "^1.0.0-rc.9",
+    "@nimel/directorr": "^1.0.0-rc.10",
     "@types/hoist-non-react-statics": "^3.3.1",
     "react": "^16.13.1",
     "react-test-renderer": "^16.13.1"
