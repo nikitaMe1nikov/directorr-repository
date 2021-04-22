@@ -55,7 +55,7 @@ import { ReduxMiddlewareAdapter, MiddlewareAdapter } from './MiddlewareAdapters'
 
 export const MODULE_NAME = 'Directorr';
 export const GLOBAL_DEP = { global: true };
-export const ON_AFTER_INIT_NAME = '__onAfterInit';
+export const OMIT_ACTIONS = ['@APPLY_SNAPSHOT'];
 
 export class Directorr implements DirectorrInterface {
   constructor({
@@ -299,11 +299,7 @@ export class Directorr implements DirectorrInterface {
 
     // listen actions
     onMSTAction(store, call => {
-      if (call.name === ON_AFTER_INIT_NAME) {
-        this.dispatchType(DIRECTORR_INIT_STORE_ACTION, { store });
-      } else {
-        this.dispatchType(`${modelName}.${call.name}`, call);
-      }
+      if (!OMIT_ACTIONS.includes(call.name)) this.dispatchType(`${modelName}.${call.name}`, call);
     });
 
     defineProperty(store, INJECTED_FROM_FIELD_NAME, createValueDescriptor([]));
@@ -316,6 +312,8 @@ export class Directorr implements DirectorrInterface {
       )
     );
     defineProperty(store, DISPATCH_ACTION_FIELD_NAME, createValueDescriptor(this.dispatch));
+
+    this.dispatchType(DIRECTORR_INIT_STORE_ACTION, { store });
 
     // add store
     this.stores.set(modelName, store);
