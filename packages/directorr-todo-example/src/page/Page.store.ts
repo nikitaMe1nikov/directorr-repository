@@ -1,12 +1,12 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, makeObservable } from 'mobx';
 import { effect, connectStore, injectStore, whenInit } from '@nimel/directorr';
 
 import TextInputStore, {
   actionInputComplate,
   TextInputComplatePayload,
-} from 'components/TextInput/TextInputStore';
-import TodoItemStore from 'page/TodoItem/TodoItemStore';
-import TodosStore from './TodosStore';
+} from 'components/TextInput/TextInput.store';
+import TodoItemStore from 'page/TodoItem/TodoItem.store';
+import TodosStore from './TodosList.store';
 import {
   actionAllTodoComplated,
   effectAllTodoComplated,
@@ -34,7 +34,11 @@ import {
   RemoveTodoSuccessPayload,
 } from 'types';
 
-export default class PageStore {
+export default class Page {
+  constructor() {
+    makeObservable(this);
+  }
+
   @injectStore(TodosStore) todosStore: TodosStore;
   @connectStore() input = new TextInputStore();
   @observable filter = FilterType.ALL;

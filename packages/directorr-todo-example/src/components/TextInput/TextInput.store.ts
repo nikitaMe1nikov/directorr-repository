@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, makeObservable } from 'mobx';
 import { createActionAndEffect } from '@nimel/directorr';
 
 import { EMPTY_STRING } from 'components/utils';
@@ -16,7 +16,11 @@ export const [actionInputComplate, effectInputComplate] = createActionAndEffect<
 >('INPUT.COMPLATE');
 export const [actionInputReset, effectInputReset] = createActionAndEffect<void>('INPUT.RESET');
 
-export default class TextInputStore {
+export default class TextInput {
+  constructor() {
+    makeObservable(this);
+  }
+
   @observable value = EMPTY_STRING;
   @observable disabled = false;
 

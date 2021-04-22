@@ -1,10 +1,14 @@
-import { observable } from 'mobx';
+import { observable, makeObservable } from 'mobx';
 
-import TodoItemStore from 'page/TodoItem/TodoItemStore';
+import TodoItemStore from 'page/TodoItem/TodoItem.store';
 import { actionChangeTodoToggle, effectChangeTodoToggle } from 'decorators';
 import { Todo, ChangeTodoTogglePayload } from 'types';
 
-export default class TodosStore {
+export default class Todos {
+  constructor() {
+    makeObservable(this);
+  }
+
   @observable list: TodoItemStore[] = [];
 
   addTodo = (todo: Todo) => {

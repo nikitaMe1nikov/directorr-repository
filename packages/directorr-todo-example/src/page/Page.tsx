@@ -7,7 +7,7 @@ import Header from './Header/Header';
 import Total from './Total/Total';
 import TodoList from './TodosList';
 import Loading from './Loading/Loading';
-import PageStore from './PageStore';
+import PageStore from './Page.store';
 import styles from './Page.css';
 
 const Page: FC = () => {

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '@nimel/directorr-react';
 
 import TodoItem from './TodoItem/TodoItem';
-import PageStore from './PageStore';
+import PageStore from './Page.store';
 
 const TodosList: FC = () => {
   const { todos, removeTodo, todosStore } = useStore(PageStore);

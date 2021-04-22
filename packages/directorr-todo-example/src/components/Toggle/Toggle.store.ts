@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, makeObservable } from 'mobx';
 import { createActionAndEffect } from '@nimel/directorr';
 
 export interface TogglePayload {
@@ -7,11 +7,12 @@ export interface TogglePayload {
 
 export const [actionToggle, effectToggle] = createActionAndEffect<TogglePayload>('TOGGLE.CHANGE');
 
-export default class ToggleStore {
+export default class Toggle {
   @observable value: boolean;
   @observable disabled = false;
 
   constructor(v = false) {
+    makeObservable(this);
     this.value = v;
   }
 

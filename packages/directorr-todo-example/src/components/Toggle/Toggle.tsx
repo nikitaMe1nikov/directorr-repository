@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 import clsx from 'clsx';
-import ToggleStore from './ToggleStore';
+import ToggleStore from './Toggle.store';
 import styles from './Toggle.css';
 
 interface SimpleToggleProps {

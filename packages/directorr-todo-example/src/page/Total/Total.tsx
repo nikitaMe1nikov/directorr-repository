@@ -4,7 +4,7 @@ import { useStore } from '@nimel/directorr-react';
 import clsx from 'clsx';
 import Toggle from 'components/Toggle/Toggle';
 import { FilterType } from 'types';
-import TotalStore from './TotalStore';
+import TotalStore from './Total.store';
 import styles from './Total.css';
 
 const Total: FC = () => {

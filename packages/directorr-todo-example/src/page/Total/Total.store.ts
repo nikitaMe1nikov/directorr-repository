@@ -1,6 +1,6 @@
 import { effect, connectStore, injectStore } from '@nimel/directorr';
-import ToggleStore, { actionToggle, TogglePayload } from 'components/Toggle/ToggleStore';
-import PageStore from 'page/PageStore';
+import ToggleStore, { actionToggle, TogglePayload } from 'components/Toggle/Toggle.store';
+import PageStore from 'page/Page.store';
 import {
   effectRemoveTodoSuccess,
   actionAllTodoComplated,
@@ -12,7 +12,7 @@ import {
 } from 'decorators';
 import { FilterType } from 'types';
 
-export default class TotalStore {
+export default class Total {
   @injectStore(PageStore) pageStore: PageStore;
 
   @connectStore() allToggle = new ToggleStore();

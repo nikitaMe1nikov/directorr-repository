@@ -9,6 +9,8 @@ import { Directorr } from '@nimel/directorr';
 import Page from 'page/Page';
 import sagas from './sagas';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 const sagaMiddleware = createSagaMiddleware();
 const director = new Directorr();
 
@@ -25,6 +27,10 @@ if (import.meta.webpackHot) {
       sagaTask = sagaMiddleware.run(getNewSagas);
     });
   });
+}
+
+if (isDev) {
+  (window as any).dirtr = director;
 }
 
 const app = (
