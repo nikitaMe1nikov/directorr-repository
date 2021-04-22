@@ -25,6 +25,7 @@ module.exports = {
       page: path.resolve(__dirname, './src/page/'),
       decorators: path.resolve(__dirname, './src/decorators'),
       types: path.resolve(__dirname, './src/types'),
+      stores: path.resolve(__dirname, './src/stores'),
     },
   },
   module: {
@@ -107,6 +108,7 @@ module.exports = {
     },
     disableHostCheck: true,
     hot: true,
+    liveReload: false,
   },
   bail: false,
   cache: true,
