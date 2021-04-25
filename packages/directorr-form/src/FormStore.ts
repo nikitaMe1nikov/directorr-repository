@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, makeObservable } from 'mobx';
 import { EMPTY_OBJECT, EMPTY_STRING } from '@nimel/directorr';
 import {
   Status,
@@ -42,6 +42,8 @@ export class FormStore {
     this.value = value;
     this.status = status;
     this.message = message;
+
+    makeObservable(this);
   }
 
   @computed get isDefault() {

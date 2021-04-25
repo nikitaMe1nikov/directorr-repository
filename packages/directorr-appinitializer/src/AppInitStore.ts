@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, makeObservable } from 'mobx';
 import { Action, DirectorrInterface, isStoreReady, isStoreError } from '@nimel/directorr';
 import {
   initStoreAction,
@@ -33,6 +33,10 @@ export class AppInitStore {
       });
     }
   };
+
+  constructor() {
+    makeObservable(this);
+  }
 
   @observable isInitComplated = false;
 
