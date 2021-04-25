@@ -15,6 +15,12 @@ export default class Todos {
     this.list.push(new TodoItemStore(todo));
   };
 
+  replaceTodos = (todos: Todo[]) => {
+    this.list = [];
+
+    todos.forEach(todo => this.list.push(new TodoItemStore(todo)));
+  };
+
   @actionChangeTodoToggle
   changeTodoToggle = (id: string, checked: boolean) => ({
     id,

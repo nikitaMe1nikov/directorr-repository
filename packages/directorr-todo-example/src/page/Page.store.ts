@@ -34,6 +34,10 @@ import {
   RemoveTodoSuccessPayload,
 } from 'types';
 
+// function wait() {
+//   return new Promise(res => setTimeout(res, 3000));
+// }
+
 export default class Page {
   constructor() {
     makeObservable(this);
@@ -43,6 +47,7 @@ export default class Page {
   @connectStore() input = new TextInputStore();
   @observable filter = FilterType.ALL;
   @observable isLoading = false;
+  // dispatcher = createDispatcher(this);
 
   @computed get todos() {
     if (this.filter === FilterType.ALL) return this.todosStore.list;
@@ -107,7 +112,14 @@ export default class Page {
   @whenInit
   init = () => {
     this.getTodos();
+    // this.test();
   };
+
+  // test = async () => {
+  //   await wait();
+  //   const { payload } = await this.dispatcher<TodosSuccessPayload>([actionGetTodos]);
+  //   console.log('result', payload);
+  // };
 
   @actionGetTodos
   getTodos = () => {};
@@ -115,7 +127,7 @@ export default class Page {
   @effectGetTodosSuccess
   @actionChangeTodosList
   setTodos = ({ todos }: TodosSuccessPayload) => {
-    if (todos) todos.forEach(todo => this.todosStore.addTodo(todo));
+    if (todos) this.todosStore.replaceTodos(todos);
   };
 
   @effectLoading
