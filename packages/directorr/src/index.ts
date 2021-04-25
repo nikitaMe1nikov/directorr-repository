@@ -17,6 +17,7 @@ import injectStore from './injectStore';
 import reloadAction from './reloadAction';
 import whenReload from './whenReload';
 import delay from './delay';
+export * from './allEffect';
 import connectStore from './connectStore';
 export {
   DIRECTORR_INIT_STORE_ACTION,

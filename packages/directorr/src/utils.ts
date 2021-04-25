@@ -58,6 +58,8 @@ export const EMPTY_FUNC = () => {};
 
 export const RETURN_ARG_FUNC = (a: any) => a;
 
+export const TRUPHY_FUNC = () => true;
+
 export const EMPTY_STRING = '';
 
 export const EMPTY_OBJECT = Object.freeze({});
@@ -67,6 +69,8 @@ export const DIRECTORR_INIT_STORE_ACTION = '@@DIRECTORR.INIT_STORE';
 export const DIRECTORR_DESTROY_STORE_ACTION = '@@DIRECTORR.DESTROY_STORE';
 
 export const DIRECTORR_RELOAD_STORE_ACTION = '@@DIRECTORR.RELOAD_STORE';
+
+export const DIRECTORR_ANY_ACTION_TYPE = '@@DIRECTORR.ANY_ACTION';
 
 export const ACTION_TYPE_DIVIDER = '.';
 
@@ -266,11 +270,20 @@ export function isConverter(func?: any): func is ConvertPayloadFunction {
 }
 
 export function dispatchEffects(this: any, action: Action): void {
-  const effectsForActionType = (this[EFFECTS_FIELD_NAME] as EffectsMap).get(action.type);
+  const effectsMap = this[EFFECTS_FIELD_NAME] as EffectsMap;
+  const effectsForActionType = effectsMap.get(action.type);
 
   if (effectsForActionType) {
     for (let i = 0, l = effectsForActionType.length; i < l; ++i) {
       this[effectsForActionType[i]](action.payload);
+    }
+  }
+
+  const effectsForAnyActionType = effectsMap.get(DIRECTORR_ANY_ACTION_TYPE);
+
+  if (effectsForAnyActionType) {
+    for (let i = 0, l = effectsForAnyActionType.length; i < l; ++i) {
+      this[effectsForAnyActionType[i]](action);
     }
   }
 }
