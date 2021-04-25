@@ -1,7 +1,7 @@
 import React, { useCallback, FC } from 'react';
 import { SimpleToggle } from 'components/Toggle/Toggle';
 import { observer } from 'mobx-react-lite';
-import TodoItemStore from 'page/TodoItem/TodoItemStore';
+import TodoItemStore from 'page/TodoItem/TodoItem.store';
 import styles from './TodoItem.css';
 
 const TodoItem: FC<{

@@ -1,7 +1,7 @@
 import React, { useCallback, FC } from 'react';
 import { observer } from 'mobx-react-lite';
 import clsx from 'clsx';
-import TextInputStore from './TextInputStore';
+import TextInputStore from './TextInput.store';
 import styles from './TextInput.css';
 
 interface TextInputProps {
