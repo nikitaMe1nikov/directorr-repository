@@ -1,6 +1,6 @@
 {
   "name": "@nimel/directorr-router-react",
-  "version": "1.0.0-rc.11",
+  "version": "1.0.0-rc.12",
   "publishConfig": {
     "access": "public"
   },
@@ -40,16 +40,16 @@
     "test-typescript:w": "jest --rootDir='.' --config '../../jest.typescript.config.js' --watchAll"
   },
   "peerDependencies": {
-    "@nimel/directorr": "^1.0.0-rc.11",
-    "@nimel/directorr-react": "^1.0.0-rc.11",
+    "@nimel/directorr": "^1.0.0-rc.12",
+    "@nimel/directorr-react": "^1.0.0-rc.12",
     "react": ">=16.10.0"
   },
   "dependencies": {
-    "@nimel/directorr-router": "^1.0.0-rc.11"
+    "@nimel/directorr-router": "^1.0.0-rc.12"
   },
   "devDependencies": {
-    "@nimel/directorr": "^1.0.0-rc.11",
-    "@nimel/directorr-react": "^1.0.0-rc.11",
+    "@nimel/directorr": "^1.0.0-rc.12",
+    "@nimel/directorr-react": "^1.0.0-rc.12",
     "react": "^16.13.1",
     "react-test-renderer": "^16.13.1"
   },
