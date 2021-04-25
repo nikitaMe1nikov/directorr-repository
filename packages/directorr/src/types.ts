@@ -140,7 +140,7 @@ export interface DecoratorValueTypedWithType<R = any, C = any> extends Decorator
   type: C;
 }
 
-export type SomeAction<A = any> = (...args: any[]) => A;
+export type SomeAction<A = any> = (...args: any[]) => A | Promise<A>;
 
 export type SomeEffect<A = any> = (arg: A) => any;
 
