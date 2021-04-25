@@ -176,6 +176,10 @@ export function isFunction(func: any): func is Function {
   return !!(func && func.constructor && func.call && func.apply);
 }
 
+export function isPromise(promise: any): promise is Promise<any> {
+  return !!(promise && promise.then && promise.catch);
+}
+
 export function hasOwnProperty(target: any, prop: string | symbol) {
   return hasOwnPropertyFromPrototype.call(target, prop);
 }

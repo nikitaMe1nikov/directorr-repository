@@ -1,4 +1,4 @@
-import { isFunction, DISPATCH_ACTION_FIELD_NAME, RETURN_ARG_FUNC } from './utils';
+import { isFunction, DISPATCH_ACTION_FIELD_NAME, RETURN_ARG_FUNC, isPromise } from './utils';
 import config from './config';
 import { callWithPropNotEquallFunc } from './messages';
 import {
@@ -24,8 +24,19 @@ export function runDispatcher(
 ) {
   const result = valueFunc(...args);
 
-  if (result !== null)
-    store[DISPATCH_ACTION_FIELD_NAME](config.createAction(actionType, addToPayload(result, store)));
+  if (result !== null) {
+    if (isPromise(result)) {
+      result.then(data =>
+        store[DISPATCH_ACTION_FIELD_NAME](
+          config.createAction(actionType, addToPayload(data, store))
+        )
+      );
+    } else {
+      store[DISPATCH_ACTION_FIELD_NAME](
+        config.createAction(actionType, addToPayload(result, store))
+      );
+    }
+  }
 
   return result;
 }
@@ -34,7 +45,7 @@ export function initializer(
   initObject: any,
   value: any,
   property: string,
-  [actionType, addToPayload = RETURN_ARG_FUNC]: [string, AddToPayload | undefined],
+  [actionType, addToPayload = RETURN_ARG_FUNC]: [string, AddToPayload],
   dispatcher: RunDispatcher = runDispatcher,
   addFields = addInitFields
 ) {
