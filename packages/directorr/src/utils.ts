@@ -33,6 +33,7 @@ import {
   InitPayload,
   AnyMSTModelType,
   MTSStateTreeNode,
+  CheckPayloadFunc,
 } from './types';
 import { notFindStoreName } from './messages';
 
@@ -53,6 +54,12 @@ export const DEPENDENCY_FIELD_NAME = Symbol.for('dirrector: external dependency'
 export const TIMERS_FIELD_NAME = Symbol.for('dirrector: timers');
 
 export const CLEAR_TIMERS_EFFECT_FIELD_NAME = Symbol.for('dirrector: clear timers');
+
+export const SUBSCRIBE_FIELD_NAME = Symbol.for('dirrector: subscribe');
+
+export const DISPATHERS_FIELD_NAME = Symbol.for('dirrector: dispatchers');
+
+export const DISPATHERS_EFFECT_FIELD_NAME = Symbol.for('dirrector: clear dispatchers');
 
 export const EMPTY_FUNC = () => {};
 
@@ -523,4 +530,32 @@ export function clearTimersEffect(this: any, payload: InitPayload) {
       isFunction(timer) ? timer() : clearTimeout(timer);
     }
   }
+}
+
+export function isPayloadChecked(payload: any, checker: CheckPayload = TRUPHY_FUNC): boolean {
+  if (isFunction(checker)) return (checker as CheckPayloadFunc)(payload);
+
+  for (const prop in checker) {
+    const value = (checker as CheckObjectPattern)[prop];
+
+    if (!(prop in payload)) return false;
+
+    if (isFunction(value)) {
+      if (!value(payload, prop)) return false;
+      continue;
+    }
+
+    if (payload[prop] !== value) return false;
+  }
+
+  return true;
+}
+
+export function createActionTypes(type: string) {
+  return {
+    type,
+    typeLoading: `${type}_LOADING`,
+    typeSuccess: `${type}_SUCCESS`,
+    typeError: `${type}_ERROR`,
+  };
 }

@@ -572,14 +572,14 @@ describe('Directorr', () => {
     director.dispatch(action);
 
     expect(subscribeHandler).toBeCalledTimes(1);
-    expect(subscribeHandler).toBeCalledWith(director.stores);
+    expect(subscribeHandler).toBeCalledWith(director.stores, action);
 
     unsub();
 
     director.dispatch(action);
 
     expect(subscribeHandler).toBeCalledTimes(1);
-    expect(subscribeHandler).toBeCalledWith(director.stores);
+    expect(subscribeHandler).toBeCalledWith(director.stores, action);
 
     // double unsub
     director.unsubscribe(subscribeHandler);
@@ -587,7 +587,7 @@ describe('Directorr', () => {
     director.dispatch(action);
 
     expect(subscribeHandler).toBeCalledTimes(1);
-    expect(subscribeHandler).toBeCalledWith(director.stores);
+    expect(subscribeHandler).toBeCalledWith(director.stores, action);
   });
 
   it('unsubscribe when subscribe handler call', () => {

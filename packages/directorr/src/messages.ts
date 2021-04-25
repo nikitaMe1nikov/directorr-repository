@@ -56,3 +56,6 @@ export const dontUseWithAnotherDecorator: MessageFunc = moduleName =>
 
 export const haveCycleInjectedStore: MessageFunc = moduleName =>
   `${moduleName}: call stack out of range, this usually happens with cyclical dependency of injected stores`;
+
+export const callWithStoreNotConnectedToDirrectorr: MessageFunc = (moduleName, store) =>
+  `${moduleName}: call with not connected to directorr store=${store?.construnctor?.name}`;

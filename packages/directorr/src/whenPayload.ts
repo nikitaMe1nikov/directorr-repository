@@ -1,12 +1,10 @@
-import { isFunction, RETURN_ARG_FUNC } from './utils';
+import { isFunction, RETURN_ARG_FUNC, isPayloadChecked } from './utils';
 import { callWithPropNotEquallFunc } from './messages';
 import {
   CheckPayload,
   CreateDecorator,
   PayloadChecker,
   ConvertPayloadFunction,
-  CheckPayloadFunc,
-  CheckObjectPattern,
   SomeFunction,
 } from './types';
 import decorator from './decorator';
@@ -22,20 +20,7 @@ export function payloadChecker(
 ) {
   if (!payload) return valueFunc(converter(payload));
 
-  if (isFunction(checker))
-    return (checker as CheckPayloadFunc)(payload) ? valueFunc(converter(payload)) : undefined;
-
-  for (const prop in checker) {
-    const value = (checker as CheckObjectPattern)[prop];
-
-    if (isFunction(value)) {
-      if (!(prop in payload) || !value(payload, prop)) return;
-    } else if (payload[prop] !== value) {
-      return;
-    }
-  }
-
-  return valueFunc(converter(payload));
+  if (isPayloadChecked(payload, checker)) return valueFunc(converter(payload));
 }
 
 export function initializer(

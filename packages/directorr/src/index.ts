@@ -18,6 +18,7 @@ import reloadAction from './reloadAction';
 import whenReload from './whenReload';
 import delay from './delay';
 export * from './allEffect';
+export * from './createDispatcher';
 import connectStore from './connectStore';
 export {
   DIRECTORR_INIT_STORE_ACTION,

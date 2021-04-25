@@ -6,6 +6,7 @@ import {
   STORES_FIELD_NAME,
   INJECTED_FROM_FIELD_NAME,
   DEPENDENCY_FIELD_NAME,
+  SUBSCRIBE_FIELD_NAME,
   defineProperty,
   createValueDescriptor,
   EMPTY_FUNC,
@@ -200,6 +201,7 @@ export class Directorr implements DirectorrInterface {
     // attach to directorr
     defineProperty(store, STORES_FIELD_NAME, createValueDescriptor(this.stores));
     defineProperty(store, DISPATCH_ACTION_FIELD_NAME, createValueDescriptor(this.dispatch));
+    defineProperty(store, SUBSCRIBE_FIELD_NAME, createValueDescriptor(this.subscribe));
 
     if (!(DISPATCH_EFFECTS_FIELD_NAME in store))
       defineProperty(store, DISPATCH_EFFECTS_FIELD_NAME, createValueDescriptor(EMPTY_FUNC));
@@ -278,6 +280,7 @@ export class Directorr implements DirectorrInterface {
         if (StoreConstructor.afterware) this.removeAfterware(StoreConstructor.afterware);
 
         this.dispatchType(DIRECTORR_DESTROY_STORE_ACTION, { store });
+        defineProperty(store, DISPATCH_ACTION_FIELD_NAME, createValueDescriptor(EMPTY_FUNC));
 
         // remove store
         this.stores.delete(storeName);
@@ -523,7 +526,7 @@ export class Directorr implements DirectorrInterface {
     }
 
     for (const handler of this.subscribeHandlers.concat()) {
-      handler(this.stores);
+      handler(this.stores, action);
     }
   }
 }

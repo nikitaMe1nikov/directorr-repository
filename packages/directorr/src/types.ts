@@ -302,7 +302,7 @@ export interface DirectorrInterface {
   removeStoreDependency(modelType: AnyMSTModelType, depName: DepencyName): void;
 }
 
-export type SubscribeHandler = (store: DirectorrStores) => void;
+export type SubscribeHandler = (store: DirectorrStores, action: Action) => void;
 
 export type UnsubscribeHandler = () => void;
 
