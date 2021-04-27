@@ -26,11 +26,13 @@ export function runDispatcher(
 
   if (result !== null) {
     if (isPromise(result)) {
-      result.then(data =>
-        store[DISPATCH_ACTION_FIELD_NAME](
-          config.createAction(actionType, addToPayload(data, store))
-        )
-      );
+      result.then(data => {
+        if (data !== null) {
+          store[DISPATCH_ACTION_FIELD_NAME](
+            config.createAction(actionType, addToPayload(data, store))
+          );
+        }
+      });
     } else {
       store[DISPATCH_ACTION_FIELD_NAME](
         config.createAction(actionType, addToPayload(result, store))
