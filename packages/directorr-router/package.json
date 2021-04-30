@@ -1,6 +1,6 @@
 {
   "name": "@nimel/directorr-router",
-  "version": "1.0.0-rc.12",
+  "version": "1.0.0-rc.13",
   "publishConfig": {
     "access": "public"
   },
@@ -39,7 +39,7 @@
     "test-typescript:w": "jest --rootDir='.' --config '../../jest.typescript.config.js' --watchAll"
   },
   "peerDependencies": {
-    "@nimel/directorr": "^1.0.0-rc.12"
+    "@nimel/directorr": "^1.0.0-rc.13"
   },
   "dependencies": {
     "history": "^5.0.0",
@@ -47,7 +47,7 @@
     "query-string": "^6.13.1"
   },
   "devDependencies": {
-    "@nimel/directorr": "^1.0.0-rc.12"
+    "@nimel/directorr": "^1.0.0-rc.13"
   },
   "author": "Nikita Melnikov",
   "license": "MIT",
