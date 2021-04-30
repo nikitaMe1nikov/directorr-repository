@@ -83,7 +83,7 @@ export class Directorr implements DirectorrInterface {
 
   setStateToStore = config.batchFunction((storeState: DirectorrStoresState) => {
     for (const [storeName, store] of this.stores.entries()) {
-      if (storeName in storeState) {
+      if (hasOwnProperty(storeState, storeName)) {
         if (isMSTModelNode(store)) {
           applyMSTSnapshot(store, storeState[storeName]);
         } else {
@@ -95,7 +95,7 @@ export class Directorr implements DirectorrInterface {
 
   mergeStateToStore = config.batchFunction((storeState: DirectorrStoresState) => {
     for (const [storeName, store] of this.stores.entries()) {
-      if (storeName in storeState) {
+      if (hasOwnProperty(storeState, storeName)) {
         if (isMSTModelNode(store)) {
           applyMSTSnapshot(store, storeState[storeName]);
         } else {
@@ -191,9 +191,9 @@ export class Directorr implements DirectorrInterface {
     if (StoreConstructor.afterware) this.addAfterware(StoreConstructor.afterware);
 
     // create store
-    const store = new StoreConstructor(StoreConstructor.storeInitOptions);
+    const store: any = new StoreConstructor(StoreConstructor.storeInitOptions);
 
-    if (!(INJECTED_FROM_FIELD_NAME in store)) {
+    if (!hasOwnProperty(store, INJECTED_FROM_FIELD_NAME)) {
       defineProperty(store, INJECTED_FROM_FIELD_NAME, createValueDescriptor([]));
       defineProperty(store, DEPENDENCY_FIELD_NAME, createValueDescriptor([]));
     }
@@ -203,14 +203,14 @@ export class Directorr implements DirectorrInterface {
     defineProperty(store, DISPATCH_ACTION_FIELD_NAME, createValueDescriptor(this.dispatch));
     defineProperty(store, SUBSCRIBE_FIELD_NAME, createValueDescriptor(this.subscribe));
 
-    if (!(DISPATCH_EFFECTS_FIELD_NAME in store))
+    if (!hasOwnProperty(store, DISPATCH_EFFECTS_FIELD_NAME))
       defineProperty(store, DISPATCH_EFFECTS_FIELD_NAME, createValueDescriptor(EMPTY_FUNC));
 
     // add store
     this.stores.set(storeName, store);
 
     // merge init state
-    if (storeName in this.initState) {
+    if (hasOwnProperty(this.initState, storeName)) {
       config.mergeStateToStore(this.initState[storeName], store);
       // remove outdated data
       delete this.initState[storeName];

@@ -448,7 +448,7 @@ export function mergeStateToStore(storeState: DirectorrStoreState, directorrStor
     directorrStore.fromJSON(storeState);
   } else {
     for (const prop in storeState) {
-      if (prop in directorrStore) {
+      if (hasOwnProperty(directorrStore, prop)) {
         const store = storeState[prop];
 
         if (isObject(store) && directorrStore[prop]) {
@@ -542,7 +542,7 @@ export function isPayloadChecked(payload: any, checker: CheckPayload = TRUPHY_FU
   for (const prop in checker) {
     const value = (checker as CheckObjectPattern)[prop];
 
-    if (!(prop in payload)) return false;
+    if (!hasOwnProperty(payload, prop)) return false;
 
     if (isFunction(value)) {
       if (!value(payload, prop)) return false;

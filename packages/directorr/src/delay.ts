@@ -7,6 +7,7 @@ import {
   clearTimersEffect,
   EFFECTS_FIELD_NAME,
   DIRECTORR_DESTROY_STORE_ACTION,
+  hasOwnProperty,
 } from './utils';
 import { callWithPropNotEquallFunc } from './messages';
 import { CreateDecoratorOneArgOption, EffectsMap } from './types';
@@ -27,7 +28,7 @@ export function initializer(
 
   addFields(initObject);
 
-  if (!(TIMERS_FIELD_NAME in initObject)) {
+  if (!hasOwnProperty(initObject, TIMERS_FIELD_NAME)) {
     const effectsMap: EffectsMap = initObject[EFFECTS_FIELD_NAME];
     const effects = effectsMap.get(DIRECTORR_DESTROY_STORE_ACTION);
 

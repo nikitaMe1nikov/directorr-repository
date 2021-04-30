@@ -10,6 +10,7 @@ import {
   createValueDescriptor,
   isPayloadChecked,
   createActionTypes,
+  hasOwnProperty,
 } from './utils';
 import config from './config';
 import { callWithStoreNotConnectedToDirrectorr } from './messages';
@@ -26,7 +27,7 @@ function clearDispatchers(this: any, payload: InitPayload) {
 }
 
 export function createDispatcher(store: any) {
-  if (!(DISPATHERS_FIELD_NAME in store)) {
+  if (!hasOwnProperty(store, DISPATHERS_FIELD_NAME)) {
     const effectsMap: EffectsMap = store[EFFECTS_FIELD_NAME];
     const effects = effectsMap.get(DIRECTORR_DESTROY_STORE_ACTION);
 

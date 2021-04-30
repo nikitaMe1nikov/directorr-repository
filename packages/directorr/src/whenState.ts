@@ -4,6 +4,7 @@ import { CheckState, StateChecker, SomeFunction, CreateDecoratorOneArg } from '.
 import decorator from './decorator';
 import createDecoratorFactory from './createDecoratorFactory';
 import createCheckerContext from './createCheckerContext';
+import { hasOwnProperty } from './utils';
 
 export const MODULE_NAME = 'whenState';
 
@@ -21,7 +22,7 @@ export function stateChecker(
     const value = checker[prop];
 
     if (isFunction(value)) {
-      if (!(prop in store) || !value(store, payload, prop)) return;
+      if (!hasOwnProperty(store, prop) || !value(store, payload, prop)) return;
     } else if (store[prop] !== value) {
       return;
     }

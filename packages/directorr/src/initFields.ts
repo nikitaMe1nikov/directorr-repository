@@ -7,11 +7,12 @@ import {
   DEPENDENCY_FIELD_NAME,
   INJECTED_FROM_FIELD_NAME,
   STORES_FIELD_NAME,
+  hasOwnProperty,
 } from './utils';
 import config from './config';
 
 export default function addInitFields(initObject: any) {
-  if (!(DISPATCH_EFFECTS_FIELD_NAME in initObject)) {
+  if (!hasOwnProperty(initObject, DISPATCH_EFFECTS_FIELD_NAME)) {
     defineProperty(
       initObject,
       DISPATCH_EFFECTS_FIELD_NAME,
