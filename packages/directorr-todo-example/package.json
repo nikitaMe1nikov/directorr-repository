@@ -11,7 +11,8 @@
     "lint": "eslint \"./**/*.{tsx,ts}\" --fix",
     "test-coverage": "echo 'skip'",
     "test:all": "yarn run check-ts && yarn run lint",
-    "start": "NODE_ENV=development webpack serve --config ./webpack.dev.js"
+    "start": "NODE_ENV=development webpack serve --config ./webpack.dev.js",
+    "start-ie": "NODE_ENV=development BROWSER_ENV=ie webpack serve --config ./webpack.dev.js"
   },
   "author": "Nikita Melnikov",
   "license": "MIT",

@@ -1,16 +1,26 @@
+const isDevIE = process.env.BROWSER_ENV === 'ie';
+
 module.exports = {
   env: {
     development: {
       presets: [
-        ['@babel/preset-env', { useBuiltIns: 'usage', corejs: { version: 3 } }],
-        ['@babel/preset-react'],
+        [
+          '@babel/preset-env',
+          {
+            modules: 'commonjs',
+            useBuiltIns: 'usage',
+            corejs: { version: 3, proposal: true },
+            targets: `${isDevIE ? 'ie >= 11, ' : ''}last 4 Chrome versions`,
+          },
+        ],
+        '@babel/preset-react',
         '@babel/preset-typescript',
       ],
       plugins: [
         '@babel/plugin-proposal-export-default-from',
         ['@babel/plugin-proposal-decorators', { legacy: true }],
-        ['@babel/plugin-proposal-class-properties', { loose: true }],
-        ['@babel/plugin-proposal-private-methods', { loose: true }],
+        ['@babel/plugin-proposal-class-properties', { loose: false }],
+        ['@babel/plugin-proposal-private-methods', { loose: false }],
         'react-refresh/babel',
       ],
     },

@@ -7,9 +7,12 @@ const postcssSimpleVars = require('postcss-simple-vars');
 const postcssPresetEnv = require('postcss-preset-env');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
+const isDev = process.env.NODE_ENV === 'development';
+const isDevIE = isDev && process.env.BROWSER_ENV === 'ie';
+
 module.exports = {
   mode: 'development',
-  target: 'web',
+  target: isDevIE ? ['web', 'es5'] : 'web',
   entry: {
     main: ['./src/index.tsx'],
   },
@@ -18,8 +21,8 @@ module.exports = {
     publicPath: '/',
   },
   resolve: {
-    mainFields: ['module', 'main', 'browser'],
-    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+    mainFields: ['module', 'browser', 'main'],
+    extensions: ['.ts', '.tsx', '.json', '.js'],
     alias: {
       components: path.resolve(__dirname, './src/components/'),
       page: path.resolve(__dirname, './src/page/'),
@@ -64,7 +67,8 @@ module.exports = {
       },
       {
         test: /\.(js|jsx|ts|tsx)$/,
-        exclude: /node_modules/,
+        include: isDevIE ? [/src/, /node_modules/] : /src/,
+        exclude: isDevIE ? /@babel(?:\/|\\{1,2})runtime|core-js/ : undefined,
         use: ['babel-loader'],
       },
       // Images: Copy image files to build folder
@@ -108,7 +112,6 @@ module.exports = {
     },
     disableHostCheck: true,
     hot: true,
-    liveReload: false,
   },
   bail: false,
   cache: true,
