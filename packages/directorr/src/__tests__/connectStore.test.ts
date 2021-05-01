@@ -42,7 +42,7 @@ describe('connectStore', () => {
 
     expect(outerStore[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(1);
     expect(outerStore[DISPATCH_EFFECTS_FIELD_NAME]).lastCalledWith(
-      createAction(createActionType([InnerStoreNameOne.name, action.type], ACTION_TYPE_DIVIDER), {
+      createAction(createActionType(action.type, ACTION_TYPE_DIVIDER), {
         ...action.payload,
         connectStoreProperty,
       })
@@ -55,16 +55,10 @@ describe('connectStore', () => {
 
     expect(outerStore[DISPATCH_EFFECTS_FIELD_NAME]).toBeCalledTimes(2);
     expect(outerStore[DISPATCH_EFFECTS_FIELD_NAME]).lastCalledWith(
-      createAction(
-        createActionType(
-          [prefixActionType, InnerStoreNameTwo.storeName, action.type],
-          ACTION_TYPE_DIVIDER
-        ),
-        {
-          ...action.payload,
-          connectStoreProperty,
-        }
-      )
+      createAction(createActionType([prefixActionType, action.type], ACTION_TYPE_DIVIDER), {
+        ...action.payload,
+        connectStoreProperty,
+      })
     );
   });
 
@@ -144,10 +138,10 @@ describe('connectStore', () => {
       connectedStore = someConnectStore;
     }
     const connectStoreAction = createAction(actionType, { someValue });
-    const action = createAction(
-      createActionType([SomeConnectStore, actionType], ACTION_TYPE_DIVIDER),
-      { someValue, connectStoreProperty: conectedStorePropName }
-    );
+    const action = createAction(createActionType(actionType, ACTION_TYPE_DIVIDER), {
+      someValue,
+      connectStoreProperty: conectedStorePropName,
+    });
 
     const obj = new SomeClass();
 
@@ -176,10 +170,10 @@ describe('connectStore', () => {
       connectedStore = someConnectStore;
     }
     const connectStoreAction = createAction(actionType, { someValue });
-    const action = createAction(
-      createActionType([prefix, SomeConnectStore, actionType], ACTION_TYPE_DIVIDER),
-      { someValue, connectStoreProperty: conectedStorePropName }
-    );
+    const action = createAction(createActionType([prefix, actionType], ACTION_TYPE_DIVIDER), {
+      someValue,
+      connectStoreProperty: conectedStorePropName,
+    });
 
     const obj = new SomeClass();
 

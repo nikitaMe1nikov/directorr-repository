@@ -4,9 +4,7 @@ import {
   DISPATCH_EFFECTS_FIELD_NAME,
   defineProperty,
   createValueDescriptor,
-  getStoreName,
   isMSTModelNode,
-  isDev,
 } from './utils';
 import config from './config';
 import { useForPropNotEquallObject, useForPropNotEquallMTS } from './messages';
@@ -33,13 +31,9 @@ export function dispatchProxyAction(
 ) {
   fromStore[DISPATCH_EFFECTS_FIELD_NAME](action);
 
-  toStore[isDev ? DISPATCH_ACTION_FIELD_NAME : DISPATCH_EFFECTS_FIELD_NAME](
+  toStore[DISPATCH_EFFECTS_FIELD_NAME](
     config.createAction(
-      config.createActionType(
-        prefixActionType
-          ? [prefixActionType, getStoreName(fromStore), action.type]
-          : [getStoreName(fromStore), action.type]
-      ),
+      config.createActionType(prefixActionType ? [prefixActionType, action.type] : action.type),
       { ...action.payload, connectStoreProperty }
     )
   );
@@ -71,9 +65,11 @@ export function initializer(
 ) {
   if (isFunction(store)) throw new Error(useForPropNotEquallObject(MODULE_NAME, property));
 
-  if (isMSTModelNode(store)) throw new Error(useForPropNotEquallMTS(MODULE_NAME, property));
-
   addFields(initObject);
+
+  if (!store) return store;
+
+  if (isMSTModelNode(store)) throw new Error(useForPropNotEquallMTS(MODULE_NAME, property));
 
   return addDispatchActionInStore(store, initObject, property, prefixActionType);
 }
