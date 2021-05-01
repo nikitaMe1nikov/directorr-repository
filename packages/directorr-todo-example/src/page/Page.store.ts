@@ -1,8 +1,8 @@
 import { observable, computed, makeObservable } from 'mobx';
-import { effect, connectStore, injectStore, whenInit } from '@nimel/directorr';
+import { connectStore, injectStore, whenInit } from '@nimel/directorr';
 
 import TextInputStore, {
-  actionInputComplate,
+  effectInputComplate,
   TextInputComplatePayload,
 } from 'components/TextInput/TextInput.store';
 import TodoItemStore from 'page/TodoItem/TodoItem.store';
@@ -94,7 +94,7 @@ export default class Page {
   @effectAllTodoActive
   toAllActive = () => this.todosStore.allTodoActive();
 
-  @effect<TextInputComplatePayload>([TextInputStore, actionInputComplate])
+  @effectInputComplate
   onComplateInput = ({ value }: TextInputComplatePayload) => {
     if (value && !this.isLoading) this.addTodo(value);
   };
