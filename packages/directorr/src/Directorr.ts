@@ -368,13 +368,13 @@ export class Directorr implements DirectorrInterface {
 
   waitAllStoresState(isStoreState: CheckStoreState = isStoreReady) {
     return createPromiseCancelable<any>((res, rej, whenCancel) => {
-      if (checkStoresState(this.stores, isStoreState)) return res();
+      if (checkStoresState(this.stores, isStoreState)) return res(undefined);
 
       const unsub = this.subscribe(stores => {
         if (checkStoresState(stores, isStoreState)) {
           unsub();
 
-          return res();
+          return res(undefined);
         }
       });
 
@@ -386,13 +386,13 @@ export class Directorr implements DirectorrInterface {
     const storeNames = stores.map(s => getStoreName(s));
 
     return createPromiseCancelable<any>((res, rej, whenCancel) => {
-      if (checkStoresState(this.stores, isStoreState, storeNames)) return res();
+      if (checkStoresState(this.stores, isStoreState, storeNames)) return res(undefined);
 
       const unsub = this.subscribe(stores => {
         if (checkStoresState(stores, isStoreState, storeNames)) {
           unsub();
 
-          return res();
+          return res(undefined);
         }
       });
 

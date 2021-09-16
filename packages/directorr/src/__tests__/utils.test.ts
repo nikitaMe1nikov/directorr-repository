@@ -60,6 +60,14 @@ import {
 } from '../__mocks__/mocks';
 import { flushPromises, flushTimeouts } from '../../../../tests/utils';
 
+function createDecorator() {
+  function someActionDecorator() {}
+  someActionDecorator.type = 'type';
+  someActionDecorator.createAction = jest.fn();
+
+  return someActionDecorator;
+}
+
 describe('utils', () => {
   it('symbols', () => {
     expect(typeof EFFECTS_FIELD_NAME).toBe('symbol');
@@ -120,16 +128,14 @@ describe('utils', () => {
   });
 
   it('isDecoratorWithCtx', () => {
-    function someActionDecorator() {}
-    someActionDecorator.type = 'type';
+    const someActionDecorator = createDecorator();
 
     expect(isDecoratorWithCtx(someActionDecorator)).toBeTruthy();
     expect(isDecoratorWithCtx(EMPTY_FUNC)).toBeFalsy();
   });
 
   it('createActionType', () => {
-    function someActionDecorator() {}
-    someActionDecorator.type = 'type';
+    const someActionDecorator = createDecorator();
 
     expect(createActionType(actionType, ACTION_TYPE_DIVIDER)).toBe(actionType);
     expect(createActionType(actionTypeArray, ACTION_TYPE_DIVIDER)).toBe(
