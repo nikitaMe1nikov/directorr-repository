@@ -267,7 +267,9 @@ export function batchFunction(f: SomeFunction): SomeFunction {
 }
 
 export function createAction<T = string, P = any>(type: T, payload?: P): Action<T, P> {
-  return { type, payload };
+  if (payload) return { type, payload } as Action<T, P>;
+
+  return { type } as Action<T, P>;
 }
 
 export function isChecker(sample?: any): sample is CheckPayload {

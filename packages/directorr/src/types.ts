@@ -49,11 +49,16 @@ export type ActionType = SomeActionType | SomeActionType[] | ActionType[];
 
 export type DispatcherActionType = DecoratorValueTypedWithType<any, any, string>;
 
-export interface Action<T = string, P = any> {
-  type: T;
-  payload?: P;
-  [extraProps: string]: any;
-}
+export type Action<T = string, P = undefined> = undefined extends P
+  ? {
+      type: T;
+      [extraProps: string]: any;
+    }
+  : {
+      type: T;
+      payload: P;
+      [extraProps: string]: any;
+    };
 
 export type EffectsMap = Map<string, (string | symbol)[]>;
 
@@ -78,7 +83,7 @@ export type SomeFunction = (...args: any[]) => any;
 
 export type BatchFunction = (f: SomeFunction) => SomeFunction;
 
-export type CreateActionFunction = <T = string, P = any>(type: T, payload?: P) => Action<T, P>;
+export type CreateActionFunction = <T = string, P = never>(type: T, payload?: P) => Action<T, P>;
 
 export type CreateActionTypeFunction = (actionType: ActionType) => string;
 
