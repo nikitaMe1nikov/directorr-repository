@@ -14,7 +14,14 @@ import {
 } from './utils';
 import config from './config';
 import { callWithStoreNotConnectedToDirrectorr } from './messages';
-import { Action, EffectsMap, InitPayload, SomeFunction, CheckPayload, ActionType } from './types';
+import {
+  Action,
+  EffectsMap,
+  InitPayload,
+  SomeFunction,
+  CheckPayload,
+  DispatcherActionType,
+} from './types';
 
 const MODULE_NAME = 'createDispatcher';
 
@@ -41,28 +48,33 @@ export function createDispatcher(store: any) {
     defineProperty(store, DISPATHERS_EFFECT_FIELD_NAME, createValueDescriptor(clearDispatchers));
   }
 
-  function dispatcher<P = any>(actionType: ActionType, data?: any): Action<P>;
-  function dispatcher<P = any>(
-    actionTypes: [ActionType] | [ActionType, ActionType] | [ActionType, ActionType, ActionType],
-    data?: any,
+  function dispatcher<P extends DispatcherActionType>(
+    actionType: P,
+    payload?: ReturnType<Parameters<P>[0][Parameters<P>[1]]>
+  ): Action<P>;
+  function dispatcher<P extends DispatcherActionType>(
+    actionTypes: [P] | [P, DispatcherActionType] | [P, DispatcherActionType, DispatcherActionType],
+    payload?: ReturnType<Parameters<P>[0][Parameters<P>[1]]>,
     checker?: CheckPayload
   ): Promise<Action<P>>;
-  function dispatcher(actionTypes: any, data?: any, checker?: CheckPayload) {
+  function dispatcher(actionTypes: any, payload?: any, checker?: CheckPayload) {
     if (!store[SUBSCRIBE_FIELD_NAME])
       throw new Error(callWithStoreNotConnectedToDirrectorr(MODULE_NAME, store));
 
     if (!Array.isArray(actionTypes))
       return store[DISPATCH_ACTION_FIELD_NAME](
-        config.createAction(config.createActionType(actionTypes), data)
+        config.createAction(config.createActionType(actionTypes), payload)
       );
 
     const [firstActionType, secondActionType, thirdActionType] = actionTypes;
     const types = createActionTypes(config.createActionType(firstActionType));
+
     const type = types.type;
     const typeSuccess = secondActionType
       ? config.createActionType(secondActionType)
       : types.typeSuccess;
     const typeError = thirdActionType ? config.createActionType(thirdActionType) : types.typeError;
+
     const dispatchers: any[] = store[DISPATHERS_FIELD_NAME];
     const allTypes = [typeSuccess, typeError];
 
@@ -83,7 +95,7 @@ export function createDispatcher(store: any) {
 
     dispatchers.push(promise.cancel);
 
-    store[DISPATCH_ACTION_FIELD_NAME](config.createAction(type, data));
+    store[DISPATCH_ACTION_FIELD_NAME](config.createAction(type, payload));
 
     return promise;
   }

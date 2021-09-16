@@ -1,5 +1,5 @@
 import { observable, computed, makeObservable } from 'mobx';
-import { connectStore, injectStore, whenInit } from '@nimel/directorr';
+import { connectStore, injectStore, whenInit, createDispatcher } from '@nimel/directorr';
 
 import TextInputStore, {
   effectInputComplate,
@@ -34,9 +34,9 @@ import {
   RemoveTodoSuccessPayload,
 } from 'types';
 
-// function wait() {
-//   return new Promise(res => setTimeout(res, 3000));
-// }
+function wait() {
+  return new Promise(res => setTimeout(res, 3000));
+}
 
 export default class Page {
   constructor() {
@@ -47,7 +47,7 @@ export default class Page {
   @connectStore() input = new TextInputStore();
   @observable filter = FilterType.ALL;
   @observable isLoading = false;
-  // dispatcher = createDispatcher(this);
+  dispatcher = createDispatcher(this);
 
   @computed get todos() {
     if (this.filter === FilterType.ALL) return this.todosStore.list;
@@ -115,11 +115,15 @@ export default class Page {
     // this.test();
   };
 
-  // test = async () => {
-  //   await wait();
-  //   const { payload } = await this.dispatcher<TodosSuccessPayload>([actionGetTodos]);
-  //   console.log('result', payload);
-  // };
+  test = async () => {
+    await wait();
+    const { payload } = await this.dispatcher([actionAddTodo], {
+      id: 'string',
+      text: 'string',
+      checked: false,
+    });
+    console.log('result', payload);
+  };
 
   @actionGetTodos
   getTodos = () => {};
