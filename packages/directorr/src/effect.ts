@@ -1,5 +1,6 @@
 import { isFunction, EFFECTS_FIELD_NAME } from './utils';
 import { callWithPropNotEquallFunc } from './messages';
+import config from './config';
 import {
   ActionType,
   EffectsMap,
@@ -42,6 +43,7 @@ export function addTypeToDecorator(
   context: [string, AddToPayload]
 ) {
   decorator.type = context[0];
+  decorator.createAction = payload => config.createAction(context[0], payload);
 
   return decorator;
 }

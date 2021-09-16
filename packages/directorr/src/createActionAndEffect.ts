@@ -4,17 +4,17 @@ import { createActionTypes } from './utils';
 import config from './config';
 import { DecoratorValueTypedWithType, SomeAction, SomeEffect, ActionType } from './types';
 
-export function createActionAndEffect<P = any, SP = any, EP = any, LP = any>(
+export function createActionAndEffect<P = any, SP = any, EP = { error: Error }, LP = any>(
   actionType: ActionType
 ): [
-  DecoratorValueTypedWithType<SomeAction<P | null>>,
-  DecoratorValueTypedWithType<SomeEffect<P>>,
-  DecoratorValueTypedWithType<SomeAction<SP | null>>,
-  DecoratorValueTypedWithType<SomeEffect<SP>>,
-  DecoratorValueTypedWithType<SomeAction<EP | null>>,
-  DecoratorValueTypedWithType<SomeEffect<EP>>,
-  DecoratorValueTypedWithType<SomeAction<LP | null>>,
-  DecoratorValueTypedWithType<SomeEffect<LP>>
+  DecoratorValueTypedWithType<P, SomeAction<P | null>>,
+  DecoratorValueTypedWithType<P, SomeEffect<P>>,
+  DecoratorValueTypedWithType<SP, SomeAction<SP | null>>,
+  DecoratorValueTypedWithType<SP, SomeEffect<SP>>,
+  DecoratorValueTypedWithType<EP, SomeAction<EP | null>>,
+  DecoratorValueTypedWithType<EP, SomeEffect<EP>>,
+  DecoratorValueTypedWithType<LP, SomeAction<LP | null>>,
+  DecoratorValueTypedWithType<LP, SomeEffect<LP>>
 ] {
   const { type, typeSuccess, typeError, typeLoading } = createActionTypes(
     config.createActionType(actionType)

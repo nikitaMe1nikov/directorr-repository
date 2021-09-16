@@ -11,7 +11,7 @@ export type AnyMSTModelType = IModelType<
   }
 >;
 export type MTSStateTreeNode = IStateTreeNode;
-export type Resolver<T = any> = (value?: T | PromiseLike<T>) => void;
+export type Resolver<T = any> = (value: T | PromiseLike<T>) => void;
 export type Rejector = (reason?: any) => void;
 export type WhenCancel = (callback: () => void) => void;
 export type Executor<T = any> = (
@@ -42,12 +42,12 @@ export type SomeObject = Record<string, any>;
 export type SomeActionType =
   | string
   | DirectorrStoreClassConstructor<any>
-  | DecoratorValueTypedWithType<any, string>
+  | DecoratorValueTypedWithType<any, any, string>
   | AnyMSTModelType;
 
 export type ActionType = SomeActionType | SomeActionType[] | ActionType[];
 
-export type DispatcherActionType = DecoratorValueTypedWithType<any, string>;
+export type DispatcherActionType = DecoratorValueTypedWithType<any, any, string>;
 
 export interface Action<T = string, P = any> {
   type: T;
@@ -78,7 +78,7 @@ export type SomeFunction = (...args: any[]) => any;
 
 export type BatchFunction = (f: SomeFunction) => SomeFunction;
 
-export type CreateActionFunction = (type: string, payload?: any) => Action;
+export type CreateActionFunction = <T = string, P = any>(type: T, payload?: P) => Action<T, P>;
 
 export type CreateActionTypeFunction = (actionType: ActionType) => string;
 
@@ -138,8 +138,13 @@ export type DecoratorValueTyped<R = any> = <T extends Record<K, R>, K extends st
   ...args: any[]
 ) => void;
 
-export interface DecoratorValueTypedWithType<R = any, C = any> extends DecoratorValueTyped<R> {
+export interface DecoratorValueTypedWithType<
+  P = any,
+  R extends (...args: any) => any = (...args: any) => any,
+  C = string
+> extends DecoratorValueTyped<R> {
   type: C;
+  createAction: (payload: P) => Action<C, P>;
 }
 
 export type SomeAction<A = any> = (...args: any[]) => A | Promise<A>;
@@ -154,7 +159,7 @@ export type CreateDecoratorOneArg<A = any, D = Decorator> = (arg: A) => D;
 
 export type CreateDecoratorValueTypedEffect<A = any> = <P = any>(
   arg: A
-) => DecoratorValueTypedWithType<SomeEffect<P>>;
+) => DecoratorValueTypedWithType<P, SomeEffect<P>>;
 
 export type CreatePropertyDecoratorFactory<A1 = any, A2 = any, P = any> = (
   arg1: A1,
@@ -163,12 +168,12 @@ export type CreatePropertyDecoratorFactory<A1 = any, A2 = any, P = any> = (
 
 export type CreateDecoratorValueTypedWithTypeAction<A = any> = <P = any>(
   arg: A
-) => DecoratorValueTypedWithType<SomeAction<P | null>>;
+) => DecoratorValueTypedWithType<P, SomeAction<P | null>>;
 
 export type CreateDecoratorValueTypedWithTypeActionTwoOptions<A1 = any, A2 = any> = <P = any>(
   arg1: A1,
   arg2?: A2
-) => DecoratorValueTypedWithType<SomeAction<P | null>>;
+) => DecoratorValueTypedWithType<P, SomeAction<P | null>>;
 
 export type CreateContext = (moduleName: string, arg1: any, arg2?: any) => any;
 

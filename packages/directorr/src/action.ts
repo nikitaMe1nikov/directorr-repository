@@ -63,6 +63,7 @@ export function addTypeToDecorator(
   context: [string, AddToPayload]
 ) {
   decorator.type = context[0];
+  decorator.createAction = payload => config.createAction(context[0], payload);
 
   return decorator;
 }

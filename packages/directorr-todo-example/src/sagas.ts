@@ -1,5 +1,5 @@
 import { put, takeEvery, delay } from 'redux-saga/effects';
-import { createActionFactory } from '@nimel/directorr';
+import { Action } from '@nimel/directorr';
 import localforage from 'localforage';
 
 import {
@@ -14,73 +14,52 @@ import {
   actionRemoveTodoSuccess,
   actionRemoveTodoError,
 } from 'decorators';
-import {
-  TodosSuccessPayload,
-  AddTodoSuccessPayload,
-  RemoveTodoSuccessPayload,
-  AddTodoPayload,
-  RemoveTodoPayload,
-  Todo,
-} from 'types';
+import { AddTodoPayload, RemoveTodoPayload, Todo } from 'types';
 
 localforage.config({ name: 'directorr-todo' });
-
-export const createActionLoading = createActionFactory<void>(actionLoading.type);
-export const createActionGetTodosSuccess = createActionFactory<TodosSuccessPayload>(
-  actionGetTodosSuccess.type
-);
-export const createGetTodosError = createActionFactory<void>(actionGetTodosError.type);
-export const createActionAddTodoSuccess = createActionFactory<AddTodoSuccessPayload>(
-  actionAddTodoSuccess.type
-);
-export const createActionAddTodoError = createActionFactory<void>(actionAddTodoError.type);
-export const createActionRemoveTodoSuccess = createActionFactory<RemoveTodoSuccessPayload>(
-  actionRemoveTodoSuccess.type
-);
-export const createActionRemoveTodoError = createActionFactory<void>(actionRemoveTodoError.type);
 
 const DELAY = 600;
 
 function* getTodos() {
-  yield put(createActionLoading());
+  yield put(actionLoading.createAction());
 
   try {
     yield delay(DELAY);
-    const length = yield localforage.length();
+    const length: number = yield localforage.length();
     let todos: Todo[] = [];
     todos = yield localforage.iterate((data: string, id, idx) => {
       todos.push({ id, ...JSON.parse(data) });
 
       if (idx === length) return todos;
     });
-    yield put(createActionGetTodosSuccess({ todos }));
+    yield put(actionGetTodosSuccess.createAction({ todos }));
   } catch (e) {
-    yield put(createGetTodosError());
+    yield put(actionGetTodosError.createAction());
   }
 }
 
-function* addTodo({ payload }: { payload: AddTodoPayload }) {
-  yield put(createActionLoading());
+function* addTodo({ payload }: Action<string, AddTodoPayload>) {
+  yield put(actionLoading.createAction());
   try {
     yield delay(DELAY);
     yield localforage.setItem(
       payload.id,
       JSON.stringify({ text: payload.text, checked: payload.checked })
     );
-    yield put(createActionAddTodoSuccess(payload));
+    yield put(actionAddTodoSuccess.createAction(payload));
   } catch (e) {
-    yield put(createActionAddTodoError());
+    yield put(actionAddTodoError.createAction());
   }
 }
 
-function* removeTodo({ payload }: { payload: RemoveTodoPayload }) {
-  yield put(createActionLoading());
+function* removeTodo({ payload }: Action<string, RemoveTodoPayload>) {
+  yield put(actionLoading.createAction());
   try {
     yield delay(DELAY);
     yield localforage.removeItem(payload.id);
-    yield put(createActionRemoveTodoSuccess(payload));
+    yield put(actionRemoveTodoSuccess.createAction(payload));
   } catch (e) {
-    yield put(createActionRemoveTodoError());
+    yield put(actionRemoveTodoError.createAction());
   }
 }
 
