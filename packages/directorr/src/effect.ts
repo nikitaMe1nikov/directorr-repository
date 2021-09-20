@@ -7,6 +7,7 @@ import {
   CreateDecoratorValueTypedEffect,
   DecoratorValueTypedWithType,
   AddToPayload,
+  Action,
 } from './types';
 import decorator from './decorator';
 import createrDecoratorFactory from './createDecoratorFactory';
@@ -43,7 +44,8 @@ export function addTypeToDecorator(
   context: [string, AddToPayload]
 ) {
   decorator.type = context[0];
-  decorator.createAction = payload => config.createAction(context[0], payload);
+  decorator.createAction = payload => config.createAction(decorator.type, payload);
+  decorator.isAction = ({ type }: Action) => decorator.type === type;
 
   return decorator;
 }

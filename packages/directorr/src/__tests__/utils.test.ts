@@ -64,6 +64,7 @@ function createDecorator() {
   function someActionDecorator() {}
   someActionDecorator.type = 'type';
   someActionDecorator.createAction = jest.fn();
+  someActionDecorator.isAction = jest.fn();
 
   return someActionDecorator;
 }

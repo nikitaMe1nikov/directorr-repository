@@ -150,6 +150,7 @@ export interface DecoratorValueTypedWithType<
 > extends DecoratorValueTyped<R> {
   type: C;
   createAction: (payload: P) => Action<C, P>;
+  isAction: (action: Action<string, P>) => boolean;
 }
 
 export type SomeAction<A = any> = (...args: any[]) => A | Promise<A>;
