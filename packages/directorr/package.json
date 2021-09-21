@@ -1,6 +1,6 @@
 {
   "name": "@nimel/directorr",
-  "version": "1.0.0-rc.15",
+  "version": "1.0.0-rc.16",
   "publishConfig": {
     "access": "public"
   },
