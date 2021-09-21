@@ -65,7 +65,7 @@ export function addTypeToDecorator(
 ) {
   decorator.type = context[0];
   decorator.createAction = payload => config.createAction(decorator.type, payload);
-  decorator.isAction = ({ type }: Action) => decorator.type === type;
+  decorator.isAction = (action: Action): action is Action => decorator.type === action.type;
 
   return decorator;
 }

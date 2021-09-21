@@ -2,32 +2,38 @@ import action from './action';
 import effect from './effect';
 import { createActionTypes } from './utils';
 import config from './config';
-import { DecoratorValueTypedWithType, SomeAction, SomeEffect, ActionType } from './types';
+import { DecoratorValueTypedWithType, SomeAction, SomeEffect } from './types';
 
-export function createActionAndEffect<P = any, SP = any, EP = { error: Error }, LP = any>(
-  actionType: ActionType
+export function createActionAndEffect<
+  P = any,
+  SP = any,
+  EP = { error: Error },
+  LP = any,
+  T = string
+>(
+  actionType: T
 ): [
-  DecoratorValueTypedWithType<P, SomeAction<P | null>>,
-  DecoratorValueTypedWithType<P, SomeEffect<P>>,
-  DecoratorValueTypedWithType<SP, SomeAction<SP | null>>,
-  DecoratorValueTypedWithType<SP, SomeEffect<SP>>,
-  DecoratorValueTypedWithType<EP, SomeAction<EP | null>>,
-  DecoratorValueTypedWithType<EP, SomeEffect<EP>>,
-  DecoratorValueTypedWithType<LP, SomeAction<LP | null>>,
-  DecoratorValueTypedWithType<LP, SomeEffect<LP>>
+  DecoratorValueTypedWithType<P, SomeAction<P | null>, T>,
+  DecoratorValueTypedWithType<P, SomeEffect<P>, T>,
+  DecoratorValueTypedWithType<SP, SomeAction<SP | null>, T>,
+  DecoratorValueTypedWithType<SP, SomeEffect<SP>, T>,
+  DecoratorValueTypedWithType<EP, SomeAction<EP | null>, T>,
+  DecoratorValueTypedWithType<EP, SomeEffect<EP>, T>,
+  DecoratorValueTypedWithType<LP, SomeAction<LP | null>, T>,
+  DecoratorValueTypedWithType<LP, SomeEffect<LP>, T>
 ] {
   const { type, typeSuccess, typeError, typeLoading } = createActionTypes(
-    config.createActionType(actionType)
+    config.createActionType((actionType as unknown) as string)
   );
 
   return [
-    action<P>(type),
-    effect<P>(type),
-    action<SP>(typeSuccess),
-    effect<SP>(typeSuccess),
-    action<EP>(typeError),
-    effect<EP>(typeError),
-    action<LP>(typeLoading),
-    effect<LP>(typeLoading),
+    action<P, T>(type),
+    effect<P, T>(type),
+    action<SP, T>(typeSuccess),
+    effect<SP, T>(typeSuccess),
+    action<EP, T>(typeError),
+    effect<EP, T>(typeError),
+    action<LP, T>(typeLoading),
+    effect<LP, T>(typeLoading),
   ];
 }

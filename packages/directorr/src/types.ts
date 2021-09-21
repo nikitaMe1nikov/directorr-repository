@@ -150,7 +150,7 @@ export interface DecoratorValueTypedWithType<
 > extends DecoratorValueTyped<R> {
   type: C;
   createAction: (payload: P) => Action<C, P>;
-  isAction: (action: Action<string, P>) => boolean;
+  isAction: (action: any) => action is Action<string, P>;
 }
 
 export type SomeAction<A = any> = (...args: any[]) => A | Promise<A>;
@@ -163,9 +163,9 @@ export type CreateDecoratorOneArgOption<A1 = any> = (arg?: A1) => Decorator;
 
 export type CreateDecoratorOneArg<A = any, D = Decorator> = (arg: A) => D;
 
-export type CreateDecoratorValueTypedEffect<A = any> = <P = any>(
+export type CreateDecoratorValueTypedEffect<A = any> = <P = any, T = string>(
   arg: A
-) => DecoratorValueTypedWithType<P, SomeEffect<P>>;
+) => DecoratorValueTypedWithType<P, SomeEffect<P>, T>;
 
 export type CreatePropertyDecoratorFactory<A1 = any, A2 = any, P = any> = (
   arg1: A1,
@@ -176,10 +176,13 @@ export type CreateDecoratorValueTypedWithTypeAction<A = any> = <P = any>(
   arg: A
 ) => DecoratorValueTypedWithType<P, SomeAction<P | null>>;
 
-export type CreateDecoratorValueTypedWithTypeActionTwoOptions<A1 = any, A2 = any> = <P = any>(
+export type CreateDecoratorValueTypedWithTypeActionTwoOptions<A1 = any, A2 = any> = <
+  P = any,
+  T = string
+>(
   arg1: A1,
   arg2?: A2
-) => DecoratorValueTypedWithType<P, SomeAction<P | null>>;
+) => DecoratorValueTypedWithType<P, SomeAction<P | null>, T>;
 
 export type CreateContext = (moduleName: string, arg1: any, arg2?: any) => any;
 
