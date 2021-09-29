@@ -275,7 +275,7 @@ export class Directorr implements DirectorrInterface {
       }
 
       // when dont have dependencies
-      if (!store[INJECTED_FROM_FIELD_NAME].length) {
+      if (!store[INJECTED_FROM_FIELD_NAME].length && !store[DEPENDENCY_FIELD_NAME].length) {
         // remove afterware
         if (StoreConstructor.afterware) this.removeAfterware(StoreConstructor.afterware);
 
