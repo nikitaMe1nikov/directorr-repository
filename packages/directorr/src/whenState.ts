@@ -1,34 +1,34 @@
-import { isFunction } from './utils';
-import { callWithPropNotEquallFunc } from './messages';
-import { CheckState, StateChecker, SomeFunction, CreateDecoratorOneArg } from './types';
-import decorator from './decorator';
-import createDecoratorFactory from './createDecoratorFactory';
-import createCheckerContext from './createCheckerContext';
-import { hasOwnProperty } from './utils';
+import { isFunction } from './utils'
+import { callWithPropNotEquallFunc } from './messages'
+import { CheckState, StateChecker, SomeFunction, CreateDecoratorOneArg } from './types'
+import decorator from './decorator'
+import createDecoratorFactory from './createDecoratorFactory'
+import createCheckerContext from './createCheckerContext'
+import { hasOwnProperty } from './utils'
 
-export const MODULE_NAME = 'whenState';
+export const MODULE_NAME = 'whenState'
 
 export function stateChecker(
   payload: any,
   valueFunc: SomeFunction,
   store: any,
-  [checker]: [CheckState]
+  [checker]: [CheckState],
 ) {
-  if (!payload) return valueFunc(payload);
+  if (!payload) return valueFunc(payload)
 
-  if (isFunction(checker)) return checker(payload, store) ? valueFunc(payload) : undefined;
+  if (isFunction(checker)) return checker(payload, store) ? valueFunc(payload) : undefined
 
   for (const prop in checker) {
-    const value = checker[prop];
+    const value = checker[prop]
 
     if (isFunction(value)) {
-      if (!hasOwnProperty(store, prop) || !value(store, payload, prop)) return;
+      if (!hasOwnProperty(store, prop) || !value(store, payload, prop)) return
     } else if (store[prop] !== value) {
-      return;
+      return
     }
   }
 
-  return valueFunc(payload);
+  return valueFunc(payload)
 }
 
 export function initializer(
@@ -36,18 +36,18 @@ export function initializer(
   value: any,
   property: string,
   checker: any,
-  stateCheckFunc: StateChecker = stateChecker
+  stateCheckFunc: StateChecker = stateChecker,
 ) {
-  if (!isFunction(value)) throw new Error(callWithPropNotEquallFunc(MODULE_NAME, property));
+  if (!isFunction(value)) throw new Error(callWithPropNotEquallFunc(MODULE_NAME, property))
 
-  return (payload: any) => stateCheckFunc(payload, value, initObject, checker);
+  return (payload: any) => stateCheckFunc(payload, value, initObject, checker)
 }
 
 export const whenState: CreateDecoratorOneArg<CheckState> = createDecoratorFactory(
   MODULE_NAME,
   decorator,
   initializer,
-  createCheckerContext
-);
+  createCheckerContext,
+)
 
-export default whenState;
+export default whenState

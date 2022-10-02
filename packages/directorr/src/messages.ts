@@ -1,61 +1,58 @@
-import { MessageFunc } from './types';
+import { MessageFunc } from './types'
 
 export const errorWhenWrongEnv = () =>
-  "Directorr requires Symbol and Map objects. If your environment doesn't support, magic won`t work.";
+  "Directorr requires Symbol and Map objects. If your environment doesn't support, magic won`t work."
 
-export const notFindStoreName = () => 'Store name not found';
+export const notFindStoreName = () => 'Store name not found'
 
-export const notObserver = () => 'Expected the observer to be an object';
+export const notObserver = () => 'Expected the observer to be an object'
 
 export const callWithArg: MessageFunc = (moduleName, arg, errorMessage) =>
-  `${moduleName}: call decorator with arg=${arg} ${errorMessage}`;
+  `${moduleName}: call decorator with arg=${arg} ${errorMessage}`
 
 export const callDecoratorWithNotActionType: MessageFunc = (moduleName, arg) =>
   callWithArg(
     moduleName,
     arg,
-    'not equal to string/class/MSTModel or array of string/class/MSTModel'
-  );
+    'not equal to string/class/MSTModel or array of string/class/MSTModel',
+  )
 
 export const callDecoratorWithNotConsrtactorType: MessageFunc = (moduleName, arg) =>
-  callWithArg(moduleName, arg, 'not constuctor');
+  callWithArg(moduleName, arg, 'not constuctor')
 
 export const callDecoratorWithNotActionChecker: MessageFunc = (moduleName, checker) =>
-  callWithArg(moduleName, checker, 'not like object or function');
+  callWithArg(moduleName, checker, 'not like object or function')
 
 export const callDecoratorWithNotConvertPayload: MessageFunc = (moduleName, converter) =>
-  callWithArg(moduleName, converter, 'not like function');
+  callWithArg(moduleName, converter, 'not like function')
 
 export const useForNotPropDecorator: MessageFunc = (moduleName, property) =>
-  `${moduleName}: use for property=${property} not like property decorator`;
+  `${moduleName}: use for property=${property} not like property decorator`
 
 export const callWithPropNotEquallFunc: MessageFunc = (moduleName, property) =>
-  `${moduleName}: use decorator for prop=${property} equal func`;
+  `${moduleName}: use decorator for prop=${property} equal func`
 
 export const useForPropNotEquallObject: MessageFunc = (moduleName, property) =>
-  `${moduleName}: use decorator for prop=${property} equal object`;
-
-export const useForPropNotEquallMTS: MessageFunc = (moduleName, property) =>
-  `${moduleName}: use decorator for prop=${property} not equal MTS Model`;
+  `${moduleName}: use decorator for prop=${property} equal object`
 
 export const notFoundDirectorrStore: MessageFunc = (moduleName, StoreConstructor) =>
-  `${moduleName}: store with constuctor=${StoreConstructor.name} not add to Dirrector`;
+  `${moduleName}: store with constuctor=${StoreConstructor.name} not add to Dirrector`
 
 export const notFoundStoreInDirectorrStore: MessageFunc = (
   moduleName,
   StoreConstructor,
-  currentStore
+  currentStore,
 ) =>
-  `${moduleName}: for some reason, not found store or model with constuctor=${StoreConstructor.name}, may be worth adding storage=${StoreConstructor.name} earlier than the current=${currentStore.name}`;
+  `${moduleName}: for some reason, not found store or model with constuctor=${StoreConstructor.name}, may be worth adding storage=${StoreConstructor.name} earlier than the current=${currentStore.name}`
 
 export const callWithNotAction: MessageFunc = (moduleName, action) =>
-  `${moduleName}: call with action=${JSON.stringify(action)} not like action type`;
+  `${moduleName}: call with action=${JSON.stringify(action)} not like action type`
 
 export const dontUseWithAnotherDecorator: MessageFunc = moduleName =>
-  `${moduleName}: dont use with another decorators`;
+  `${moduleName}: dont use with another decorators`
 
 export const haveCycleInjectedStore: MessageFunc = moduleName =>
-  `${moduleName}: call stack out of range, this usually happens with cyclical dependency of injected stores`;
+  `${moduleName}: call stack out of range, this usually happens with cyclical dependency of injected stores`
 
 export const callWithStoreNotConnectedToDirrectorr: MessageFunc = (moduleName, store) =>
-  `${moduleName}: call with not connected to directorr store=${store?.construnctor?.name}`;
+  `${moduleName}: call with not connected to directorr store=${store?.construnctor?.name}`

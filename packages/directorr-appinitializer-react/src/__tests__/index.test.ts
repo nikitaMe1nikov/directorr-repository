@@ -1,7 +1,7 @@
-import { AppInit } from '../index';
+import { AppInit } from '../index'
 
 describe('index', () => {
   it('check exports', () => {
-    expect(AppInit).not.toBeUndefined();
-  });
-});
+    expect(AppInit).not.toBeUndefined()
+  })
+})

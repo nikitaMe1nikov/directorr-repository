@@ -42,8 +42,9 @@
   "peerDependencies": {
     "@nimel/directorr": "^1.0.0-rc.17",
     "@nimel/directorr-react": "^1.0.0-rc.17",
+    "mobx": "^6.2.0",
     "mobx-react-lite": "3.2.0",
-    "react": ">=16.10.0"
+    "react": ">=16.14"
   },
   "dependencies": {
     "@nimel/directorr-appinitializer": "^1.0.0-rc.17"
@@ -51,9 +52,8 @@
   "devDependencies": {
     "@nimel/directorr": "^1.0.0-rc.17",
     "@nimel/directorr-react": "^1.0.0-rc.17",
-    "mobx-react-lite": "^3.2.0",
-    "react": "^16.13.1",
-    "react-test-renderer": "^16.13.1"
+    "mobx": "^6.2.0",
+    "mobx-react-lite": "^3.2.0"
   },
   "author": "Nikita Melnikov",
   "license": "MIT",

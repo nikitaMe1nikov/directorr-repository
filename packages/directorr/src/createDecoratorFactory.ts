@@ -1,8 +1,8 @@
-import { RETURN_ARG_FUNC } from './utils';
-import { BabelDescriptor, Initializer, Decorator, CreateContext, ConvertDecorator } from './types';
+import { RETURN_ARG_FUNC } from './utils'
+import { BabelDescriptor, Initializer, Decorator, CreateContext, ConvertDecorator } from './types'
 
 function returnArgs(moduleName: any, arg1: any, arg2: any) {
-  return [arg1, arg2];
+  return [arg1, arg2]
 }
 
 export function createDecoratorFactory(
@@ -10,17 +10,17 @@ export function createDecoratorFactory(
   decorator: Decorator,
   initializer: Initializer,
   createContext: CreateContext = returnArgs,
-  convertDecorator: ConvertDecorator = RETURN_ARG_FUNC
+  convertDecorator: ConvertDecorator = RETURN_ARG_FUNC,
 ) {
   return function decoratorFactory(arg1?: any, arg2?: any) {
-    const context = createContext(moduleName, arg1, arg2);
+    const context = createContext(moduleName, arg1, arg2)
 
     return convertDecorator(
       (target: any, property: string, descriptor?: BabelDescriptor) =>
         decorator(target, property, descriptor, moduleName, initializer, context),
-      context
-    );
-  };
+      context,
+    )
+  }
 }
 
-export default createDecoratorFactory;
+export default createDecoratorFactory

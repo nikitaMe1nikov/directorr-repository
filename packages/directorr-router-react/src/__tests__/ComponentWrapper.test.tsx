@@ -1,13 +1,12 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import ComponentWrapper from '../ComponentWrapper';
+import { shallow } from 'enzyme'
+import ComponentWrapper from '../ComponentWrapper'
 
 describe('ComponentWrapper', () => {
   it('render', () => {
-    const SomeComponent = () => null;
+    const SomeComponent = () => null
 
-    const nodes = shallow(<ComponentWrapper component={SomeComponent} />);
+    const nodes = shallow(<ComponentWrapper component={SomeComponent} />)
 
-    expect(nodes.find(SomeComponent)).toHaveLength(1);
-  });
-});
+    expect(nodes.find(SomeComponent)).toHaveLength(1)
+  })
+})

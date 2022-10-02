@@ -1,4 +1,4 @@
-import decorator from '../decorator';
+import decorator from '../decorator'
 import {
   someValue,
   someFunc,
@@ -7,24 +7,24 @@ import {
   someDescriptor,
   context,
   somePropertyDescriptor,
-} from '../__mocks__/mocks';
-import { useForNotPropDecorator } from '../messages';
+} from '../__mocks__/mocks'
+import { useForNotPropDecorator } from '../messages'
 
 describe('decorator', () => {
   it('call with not property descriptor', () => {
-    const ctx = {};
+    const ctx = {}
 
     expect(() =>
-      decorator(someValue, someProperty, undefined, moduleName, someFunc, ctx)
-    ).not.toThrow();
+      decorator(someValue, someProperty, undefined, moduleName, someFunc, ctx),
+    ).not.toThrow()
 
     expect(() =>
-      decorator(someValue, someProperty, somePropertyDescriptor, moduleName, someFunc, ctx)
-    ).toThrowError(useForNotPropDecorator(moduleName, someProperty));
-  });
+      decorator(someValue, someProperty, somePropertyDescriptor, moduleName, someFunc, ctx),
+    ).toThrowError(useForNotPropDecorator(moduleName, someProperty))
+  })
 
   it('call with property descriptor', () => {
-    const buildDescriptor = jest.fn();
+    const buildDescriptor = jest.fn()
 
     decorator(
       someValue,
@@ -33,10 +33,10 @@ describe('decorator', () => {
       moduleName,
       someFunc,
       context,
-      buildDescriptor
-    );
+      buildDescriptor,
+    )
 
-    expect(buildDescriptor).toBeCalledTimes(1);
-    expect(buildDescriptor).lastCalledWith(someDescriptor, someProperty, someFunc, context);
-  });
-});
+    expect(buildDescriptor).toBeCalledTimes(1)
+    expect(buildDescriptor).lastCalledWith(someDescriptor, someProperty, someFunc, context)
+  })
+})

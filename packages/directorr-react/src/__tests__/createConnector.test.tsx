@@ -1,16 +1,17 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import { DirectorrMock, getStoreName } from '@nimel/directorr';
-import createConnector, { lowercaseFirstLetter } from '../createConnector';
+import { Component } from 'react'
+import { shallow } from 'enzyme'
+import { DirectorrMock, getStoreName } from '@nimel/directorr'
+import createConnector, { lowercaseFirstLetter } from '../createConnector'
 
 const someProps = {
   someProp: 'someProp',
-};
+}
 
-class SomeComponent extends React.Component<typeof someProps> {
-  static someStaticProp = 'someStaticProp';
+class SomeComponent extends Component<typeof someProps> {
+  static someStaticProp = 'someStaticProp'
+
   render() {
-    return null;
+    return null
   }
 }
 
@@ -18,30 +19,27 @@ class SomeStore {}
 
 describe('createConnector', () => {
   it('lowercaseFirstLetter', () => {
-    const str = 'SomeWord';
-    const strLow = 'someWord';
+    const str = 'SomeWord'
+    const strLow = 'someWord'
 
-    expect(lowercaseFirstLetter(str)).toBe(strLow);
-    expect(lowercaseFirstLetter(strLow)).toBe(strLow);
-  });
+    expect(lowercaseFirstLetter(str)).toBe(strLow)
+    expect(lowercaseFirstLetter(strLow)).toBe(strLow)
+  })
 
   it('render with store SomeStore', () => {
-    const directorr = new DirectorrMock();
-    const store = directorr.addStore(SomeStore);
-    const useStoreHook = jest.fn().mockReturnValue(store);
-    const Connector = createConnector(useStoreHook)(SomeStore)(SomeComponent);
-    const someProps = {
-      someProp: 'someProp',
-    };
+    const directorr = new DirectorrMock()
+    const store = directorr.addStore(SomeStore)
+    const useStoreHook = jest.fn().mockReturnValue(store)
+    const Connector = createConnector(useStoreHook)(SomeStore)(SomeComponent)
 
-    expect((Connector as any).someStaticProp).toBe(SomeComponent.someStaticProp);
+    expect((Connector as any).someStaticProp).toBe(SomeComponent.someStaticProp)
 
-    const connector = shallow(<Connector {...someProps} />);
+    const connector = shallow(<Connector {...someProps} />)
 
-    expect(useStoreHook).lastCalledWith(SomeStore);
+    expect(useStoreHook).lastCalledWith(SomeStore)
     expect(connector.find(SomeComponent).props()).toStrictEqual({
       ...someProps,
       [lowercaseFirstLetter(getStoreName(SomeStore))]: store,
-    });
-  });
-});
+    })
+  })
+})

@@ -39,10 +39,12 @@
     "test-typescript:w": "jest --rootDir='.' --config '../../jest.typescript.config.js' --watchAll"
   },
   "peerDependencies": {
+    "mobx": "^6.2.0",
     "@nimel/directorr": "^1.0.0-rc.17"
   },
   "dependencies": {},
   "devDependencies": {
+    "mobx": "^6.2.0",
     "@nimel/directorr": "^1.0.0-rc.17"
   },
   "author": "Nikita Melnikov",

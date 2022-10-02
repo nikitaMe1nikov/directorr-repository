@@ -1,45 +1,44 @@
-import { observable, makeObservable } from 'mobx';
-import { createActionAndEffect } from '@nimel/directorr';
+import { observable, makeObservable } from 'mobx'
+import { createActionAndEffect } from '@nimel/directorr'
 
-import { EMPTY_STRING } from 'components/utils';
+import { EMPTY_STRING } from 'components/utils'
 
 export interface TextInputChangePayload {
-  value: string;
+  value: string
 }
-export type TextInputComplatePayload = TextInputChangePayload;
+export type TextInputComplatePayload = TextInputChangePayload
 
-export const [actionInputChange, effectInputChange] = createActionAndEffect<TextInputChangePayload>(
-  'INPUT.CHANGE'
-);
-export const [actionInputComplate, effectInputComplate] = createActionAndEffect<
-  TextInputComplatePayload
->('INPUT.COMPLATE');
-export const [actionInputReset, effectInputReset] = createActionAndEffect<void>('INPUT.RESET');
+export const [actionInputChange, effectInputChange] =
+  createActionAndEffect<TextInputChangePayload>('INPUT.CHANGE')
+export const [actionInputComplate, effectInputComplate] =
+  createActionAndEffect<TextInputComplatePayload>('INPUT.COMPLATE')
+export const [actionInputReset, effectInputReset] = createActionAndEffect<void>('INPUT.RESET')
 
 export default class TextInput {
   constructor() {
-    makeObservable(this);
+    makeObservable(this)
   }
 
-  @observable value = EMPTY_STRING;
-  @observable disabled = false;
+  @observable value = EMPTY_STRING
+
+  @observable disabled = false
 
   @actionInputChange
-  onChange = ({ target }: any) => ({ value: target.value });
+  onChange = ({ target }: any) => ({ value: target.value })
 
   @effectInputChange
   toChange = ({ value }: TextInputChangePayload) => {
-    this.value = value;
-  };
+    this.value = value
+  }
 
   @actionInputComplate
-  onComplate = () => ({ value: this.value });
+  onComplate = () => ({ value: this.value })
 
   @actionInputReset
-  reset = () => {};
+  reset = () => {}
 
   @effectInputReset
   toReset = () => {
-    this.value = EMPTY_STRING;
-  };
+    this.value = EMPTY_STRING
+  }
 }

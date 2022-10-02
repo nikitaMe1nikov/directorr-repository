@@ -1,6 +1,6 @@
-import { isFunction, EFFECTS_FIELD_NAME } from './utils';
-import { callWithPropNotEquallFunc } from './messages';
-import config from './config';
+import { isFunction, EFFECTS_FIELD_NAME } from './utils'
+import { callWithPropNotEquallFunc } from './messages'
+import config from './config'
 import {
   ActionType,
   EffectsMap,
@@ -8,46 +8,46 @@ import {
   DecoratorValueTypedWithType,
   AddToPayload,
   Action,
-} from './types';
-import decorator from './decorator';
-import createrDecoratorFactory from './createDecoratorFactory';
-import createActionTypeContext from './createActionTypeContext';
-import addInitFields from './initFields';
+} from './types'
+import decorator from './decorator'
+import createrDecoratorFactory from './createDecoratorFactory'
+import createActionTypeContext from './createActionTypeContext'
+import addInitFields from './initFields'
 
-export const MODULE_NAME = 'effect';
+export const MODULE_NAME = 'effect'
 
 export function initializer(
   initObject: any,
   value: any,
   property: string,
   [actionType]: [string],
-  addFields = addInitFields
+  addFields = addInitFields,
 ) {
-  if (!isFunction(value)) throw new Error(callWithPropNotEquallFunc(MODULE_NAME, property));
+  if (!isFunction(value)) throw new Error(callWithPropNotEquallFunc(MODULE_NAME, property))
 
-  addFields(initObject);
+  addFields(initObject)
 
-  const effectsMap: EffectsMap = initObject[EFFECTS_FIELD_NAME];
-  const effects = effectsMap.get(actionType);
+  const effectsMap: EffectsMap = initObject[EFFECTS_FIELD_NAME]
+  const effects = effectsMap.get(actionType)
 
   if (effects) {
-    effects.push(property);
+    effects.push(property)
   } else {
-    effectsMap.set(actionType, [property]);
+    effectsMap.set(actionType, [property])
   }
 
-  return value;
+  return value
 }
 
 export function addTypeToDecorator(
   decorator: DecoratorValueTypedWithType,
-  context: [string, AddToPayload]
+  context: [string, AddToPayload],
 ) {
-  decorator.type = context[0];
-  decorator.createAction = payload => config.createAction(decorator.type, payload);
-  decorator.isAction = (action: Action): action is Action => decorator.type === action.type;
+  decorator.type = context[0]
+  decorator.createAction = payload => config.createAction(decorator.type, payload)
+  decorator.isAction = (action: Action): action is Action => decorator.type === action.type
 
-  return decorator;
+  return decorator
 }
 
 export const effect: CreateDecoratorValueTypedEffect<ActionType> = createrDecoratorFactory(
@@ -55,7 +55,7 @@ export const effect: CreateDecoratorValueTypedEffect<ActionType> = createrDecora
   decorator,
   initializer,
   createActionTypeContext,
-  addTypeToDecorator
-);
+  addTypeToDecorator,
+)
 
-export default effect;
+export default effect

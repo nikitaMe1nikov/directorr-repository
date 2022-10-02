@@ -1,7 +1,6 @@
-export * from './FormStore';
-import validate from './validate';
-import validateAll from './validateAll';
-export * from './decorators';
-export * from './types';
-export { EMPTY_OBJECT, EMPTY_STRING } from '@nimel/directorr';
-export { validate, validateAll };
+export * from './FormStore'
+export * from './decorators'
+export * from './types'
+export { EMPTY_OBJECT, EMPTY_STRING } from '@nimel/directorr'
+export { default as validate } from './validate'
+export { default as validateAll } from './validateAll'

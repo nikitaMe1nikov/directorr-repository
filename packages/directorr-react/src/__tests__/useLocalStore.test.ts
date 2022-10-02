@@ -1,38 +1,38 @@
-import { renderHook } from '@testing-library/react-hooks';
-import useLocalStore, { HOOK_MODULE_NAME } from '../useLocalStore';
-import { whenNotStoreConstructor } from '../messages';
+import { renderHook } from '@testing-library/react-hooks'
+import useLocalStore, { HOOK_MODULE_NAME } from '../useLocalStore'
+import { whenNotStoreConstructor } from '../messages'
 
 describe('useLocalStore', () => {
   it('should useLocalStore throw when call with not constructor', () => {
-    const SomeStore: any = 1;
+    const SomeStore: any = 1
 
     expect(() => renderHook(() => useLocalStore(SomeStore)).result.current).toThrowError(
-      whenNotStoreConstructor(HOOK_MODULE_NAME, SomeStore)
-    );
-  });
+      whenNotStoreConstructor(HOOK_MODULE_NAME, SomeStore),
+    )
+  })
 
-  it('should useLocalStore return store', async () => {
+  it('should useLocalStore return store', () => {
     class SomeStore {}
 
     const {
       result: { current: store },
-    } = renderHook(() => useLocalStore(SomeStore));
+    } = renderHook(() => useLocalStore(SomeStore))
 
-    expect(store).toBeInstanceOf(SomeStore);
-  });
+    expect(store).toBeInstanceOf(SomeStore)
+  })
 
-  it('should useLocalStore return store when rerender', async () => {
+  it('should useLocalStore return store when rerender', () => {
     class SomeStore {}
 
     const {
       result: { current: store },
       rerender,
-    } = renderHook(() => useLocalStore(SomeStore));
+    } = renderHook(() => useLocalStore(SomeStore))
 
-    expect(store).toBeInstanceOf(SomeStore);
+    expect(store).toBeInstanceOf(SomeStore)
 
-    rerender();
+    rerender()
 
-    expect(store).toBeInstanceOf(SomeStore);
-  });
-});
+    expect(store).toBeInstanceOf(SomeStore)
+  })
+})

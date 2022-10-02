@@ -1,71 +1,73 @@
-import { injectStore } from '@nimel/directorr';
+import { injectStore } from '@nimel/directorr'
 import {
   HistoryStore,
   effectHistoryPop,
   effectHistoryPush,
   effectHistoryReplace,
   HistoryActionPayload,
-} from '@nimel/directorr-router';
-import { RouterHandler, RouterTask } from './types';
+} from '@nimel/directorr-router'
+import { RouterHandler, RouterTask } from './types'
 
 export class RouterStore {
-  historyQueue: RouterTask[] = [];
-  handlersStack: RouterHandler[] = [];
+  historyQueue: RouterTask[] = []
 
-  @injectStore(HistoryStore) historyStore: HistoryStore;
+  handlersStack: RouterHandler[] = []
+
+  @injectStore(HistoryStore) historyStore: HistoryStore
 
   get path() {
-    return this.historyStore.path;
+    return this.historyStore.path
   }
 
   get action() {
-    return this.historyStore.action;
+    return this.historyStore.action
   }
 
-  subscribe = (handler: RouterHandler) => this.handlersStack.push(handler);
+  subscribe = (handler: RouterHandler) => {
+    this.handlersStack = [...this.handlersStack, handler]
+  }
 
   unsubscribe = (handler: RouterHandler) => {
-    const index = this.handlersStack.indexOf(handler);
-    if (index !== -1) this.handlersStack.splice(index, 1);
-  };
+    this.handlersStack = this.handlersStack.filter(h => h !== handler)
+  }
 
   @effectHistoryPop
   @effectHistoryPush
   @effectHistoryReplace
   whenChangeHistory = (task: HistoryActionPayload) => {
-    this.historyQueue.push(task);
+    this.historyQueue.push(task)
 
-    if (this.historyQueue.length === 1) this.findNextTask();
-  };
+    if (this.historyQueue.length === 1) this.findNextTask()
+  }
 
   private findNextTask() {
     const {
       historyQueue: [newRouterState],
       handlersStack,
-    } = this;
+    } = this
 
-    const routersTookTask: Promise<any>[] = [];
+    const routersTookTask: Promise<any>[] = []
 
-    for (const handler of handlersStack.concat()) {
-      const task = handler(newRouterState);
+    for (const handler of handlersStack) {
+      const task = handler(newRouterState)
 
       if (task) {
-        routersTookTask.push(task);
+        routersTookTask.push(task)
       }
     }
 
     if (routersTookTask.length) {
-      Promise.all(routersTookTask).then(this.runNextTask);
+      void Promise.all(routersTookTask).then(this.runNextTask)
     } else {
-      this.runNextTask();
+      this.runNextTask()
     }
   }
 
   private runNextTask = () => {
-    this.historyQueue.shift();
+    this.historyQueue.shift()
 
-    if (this.historyQueue.length) this.findNextTask();
-  };
+    if (this.historyQueue.length) this.findNextTask()
+  }
 }
 
-export default RouterStore;
+export default RouterStore

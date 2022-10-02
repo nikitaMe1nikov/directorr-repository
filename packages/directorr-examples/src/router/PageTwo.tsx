@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
-import { Router, ANIMATIONS, HistoryStore } from '@nimel/directorr-router-react';
-import { useStore } from '@nimel/directorr-react';
-import PageThree from './PageThree';
-import PageFour from './PageFour';
+import { FC } from 'react'
+import { Router, ANIMATIONS, HistoryStore } from '@nimel/directorr-router-react'
+import { useStore } from '@nimel/directorr-react'
+import PageThree from './PageThree'
+import PageFour from './PageFour'
 // eslint-disable-next-line css-modules/no-unused-class
-import styles from './index.css';
+import styles from './index.css'
 
 const routes = [
   {
@@ -15,10 +15,10 @@ const routes = [
     path: '/two/four',
     component: PageFour,
   },
-];
+]
 
 const PageTwo: FC = () => {
-  const router = useStore(HistoryStore);
+  const router = useStore(HistoryStore)
 
   return (
     <div className={styles.container}>
@@ -27,7 +27,7 @@ const PageTwo: FC = () => {
         <Router animation={ANIMATIONS.FADE} routes={routes} />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PageTwo;
+export default PageTwo

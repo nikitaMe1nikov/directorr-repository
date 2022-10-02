@@ -1,20 +1,20 @@
-import { CSSProperties } from 'react';
+import { CSSProperties } from 'react'
 
 export const containerStyle: CSSProperties = {
   position: 'relative',
   height: '100%',
   width: '100%',
-};
+}
 
 export const childStyle: CSSProperties = {
   position: 'absolute',
   height: '100%',
   width: '100%',
-};
+}
 
 export const hideStyle: CSSProperties = {
   display: 'none',
-};
+}
 
 export const animationStyle: CSSProperties = {
   animationDelay: '16ms',
@@ -22,26 +22,26 @@ export const animationStyle: CSSProperties = {
   animationFillMode: 'both',
   animationTimingFunction: 'cubic-bezier(0.4, 0.0, 0.6, 1)',
   willChange: 'opacity',
-};
+}
 
 export const animationNoneStyle: CSSProperties = {
   animationName: 'router_anim_none',
   animationDuration: '16ms',
   willChange: 'opacity',
-};
+}
 
 export const animationLeaveStyle: CSSProperties = {
   animationName: 'router_opacity_leave',
-};
+}
 
 export const animationEnterStyle: CSSProperties = {
   animationName: 'router_opacity_enter',
-};
+}
 
 export const disableInteractionStyle: CSSProperties = {
   pointerEvents: 'none',
   userSelect: 'none',
-};
+}
 
 export const ANIMATIONS = {
   NONE: {
@@ -86,4 +86,4 @@ export const ANIMATIONS = {
       }
     `,
   },
-};
+}

@@ -1,3 +1,5 @@
-export const flushPromises = () => new Promise(setImmediate);
+import { setImmediate } from 'timers'
 
-export const flushTimeouts = () => new Promise(v => setTimeout(v, 0));
+export const flushPromises = () => new Promise(setImmediate)
+
+export const flushTimeouts = () => new Promise(resolve => setTimeout(resolve, 0))

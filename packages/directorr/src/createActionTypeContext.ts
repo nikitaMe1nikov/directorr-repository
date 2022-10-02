@@ -1,16 +1,16 @@
-import { isLikeActionType } from './utils';
-import config from './config';
-import { callDecoratorWithNotActionType } from './messages';
-import { ActionType } from './types';
+import { isLikeActionType } from './utils'
+import config from './config'
+import { callDecoratorWithNotActionType } from './messages'
+import { ActionType } from './types'
 
 export default function createActionTypeContext(
   moduleName: string,
   actionType: ActionType,
-  options: any
+  options: any,
 ) {
   if (!isLikeActionType(actionType)) {
-    throw new Error(callDecoratorWithNotActionType(moduleName, actionType));
+    throw new Error(callDecoratorWithNotActionType(moduleName, actionType))
   }
 
-  return [config.createActionType(actionType), options];
+  return [config.createActionType(actionType), options]
 }

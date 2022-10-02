@@ -42,7 +42,7 @@
   "peerDependencies": {
     "@nimel/directorr": "^1.0.0-rc.17",
     "@nimel/directorr-react": "^1.0.0-rc.17",
-    "react": ">=16.10.0"
+    "react": ">=16.14"
   },
   "dependencies": {
     "@nimel/directorr-router": "^1.0.0-rc.17"
@@ -50,8 +50,7 @@
   "devDependencies": {
     "@nimel/directorr": "^1.0.0-rc.17",
     "@nimel/directorr-react": "^1.0.0-rc.17",
-    "react": "^16.13.1",
-    "react-test-renderer": "^16.13.1"
+    "history": "^5.0.0"
   },
   "author": "Nikita Melnikov",
   "license": "MIT",

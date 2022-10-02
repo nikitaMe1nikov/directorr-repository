@@ -1,18 +1,18 @@
-import { isChecker, isConverter } from './utils';
-import { callDecoratorWithNotActionChecker, callDecoratorWithNotConvertPayload } from './messages';
-import { CreateContext, ConvertPayloadFunction } from './types';
+import { isChecker, isConverter } from './utils'
+import { callDecoratorWithNotActionChecker, callDecoratorWithNotConvertPayload } from './messages'
+import { CreateContext, ConvertPayloadFunction } from './types'
 
 const createCheckerContext: CreateContext = (
   moduleName: string,
   checker: any,
-  converter: ConvertPayloadFunction
+  converter: ConvertPayloadFunction,
 ) => {
-  if (!isChecker(checker)) throw new Error(callDecoratorWithNotActionChecker(moduleName, checker));
+  if (!isChecker(checker)) throw new Error(callDecoratorWithNotActionChecker(moduleName, checker))
 
   if (converter && !isConverter(converter))
-    throw new Error(callDecoratorWithNotConvertPayload(moduleName, converter));
+    throw new Error(callDecoratorWithNotConvertPayload(moduleName, converter))
 
-  return [checker, converter];
-};
+  return [checker, converter]
+}
 
-export default createCheckerContext;
+export default createCheckerContext

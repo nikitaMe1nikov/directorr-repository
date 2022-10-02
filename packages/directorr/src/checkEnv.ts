@@ -1,5 +1,5 @@
-import { errorWhenWrongEnv } from './messages';
+import { errorWhenWrongEnv } from './messages'
 
 if (typeof Symbol === 'undefined') {
-  throw new Error(errorWhenWrongEnv());
+  throw new TypeError(errorWhenWrongEnv())
 }

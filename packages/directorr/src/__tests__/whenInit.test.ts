@@ -1,25 +1,25 @@
-import whenInit from '../whenInit';
-import { DIRECTORR_INIT_STORE_ACTION, DISPATCH_ACTION_FIELD_NAME } from '../utils';
-import config from '../config';
+import whenInit from '../whenInit'
+import { DIRECTORR_INIT_STORE_ACTION, DISPATCH_ACTION_FIELD_NAME } from '../utils'
+import config from '../config'
 
 describe('whenInit', () => {
   it('use in class', () => {
-    const effect = jest.fn();
+    const effect = jest.fn()
 
     class SomeClass {
       @whenInit
-      effect = effect;
+      effect = effect
     }
 
-    const store: any = new SomeClass();
+    const store: any = new SomeClass()
 
     const action = config.createAction(DIRECTORR_INIT_STORE_ACTION, {
       store,
-    });
+    })
 
-    store[DISPATCH_ACTION_FIELD_NAME](action);
+    store[DISPATCH_ACTION_FIELD_NAME](action)
 
-    expect(effect).toBeCalledTimes(1);
-    expect(effect).lastCalledWith(action.payload);
-  });
-});
+    expect(effect).toBeCalledTimes(1)
+    expect(effect).lastCalledWith(action.payload)
+  })
+})

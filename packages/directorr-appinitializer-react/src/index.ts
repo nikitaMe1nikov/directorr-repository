@@ -1,3 +1,1 @@
-import AppInit from './AppInit';
-
-export { AppInit };
+export { default as AppInit } from './AppInit'

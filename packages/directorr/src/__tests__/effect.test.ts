@@ -1,11 +1,11 @@
-import effect, { initializer, MODULE_NAME } from '../effect';
+import effect, { initializer, MODULE_NAME } from '../effect'
 import {
   EFFECTS_FIELD_NAME,
   DISPATCH_ACTION_FIELD_NAME,
   createAction,
   createActionType,
   ACTION_TYPE_DIVIDER,
-} from '../utils';
+} from '../utils'
 import {
   someValue,
   someValue2,
@@ -13,74 +13,73 @@ import {
   actionType,
   actionType2,
   someProperty,
-} from '../__mocks__/mocks';
-import { callDecoratorWithNotActionType, callWithPropNotEquallFunc } from '../messages';
+} from '../__mocks__/mocks'
+import { callDecoratorWithNotActionType, callWithPropNotEquallFunc } from '../messages'
 
 describe('effect', () => {
   it('initializer', () => {
     const store: any = {
       [EFFECTS_FIELD_NAME]: new Map(),
-    };
-    const addFields = jest.fn();
-    const secondProp = 'secondProp';
+    }
+    const addFields = jest.fn()
+    const secondProp = 'secondProp'
 
     expect(() => initializer(store, someValue, someProperty, [actionType])).toThrowError(
-      callWithPropNotEquallFunc(MODULE_NAME, someProperty)
-    );
+      callWithPropNotEquallFunc(MODULE_NAME, someProperty),
+    )
 
-    expect(initializer(store, someFunc, someProperty, [actionType], addFields)).toBe(someFunc);
+    expect(initializer(store, someFunc, someProperty, [actionType], addFields)).toBe(someFunc)
 
-    expect(addFields).toBeCalledTimes(1);
-    expect(addFields).lastCalledWith(store);
+    expect(addFields).toBeCalledTimes(1)
+    expect(addFields).lastCalledWith(store)
 
-    expect(store[EFFECTS_FIELD_NAME].get(actionType)).toStrictEqual([someProperty]);
+    expect(store[EFFECTS_FIELD_NAME].get(actionType)).toStrictEqual([someProperty])
 
-    expect(initializer(store, someFunc, secondProp, [actionType], addFields)).toBe(someFunc);
+    expect(initializer(store, someFunc, secondProp, [actionType], addFields)).toBe(someFunc)
 
-    expect(store[EFFECTS_FIELD_NAME].get(actionType)).toStrictEqual([someProperty, secondProp]);
-  });
+    expect(store[EFFECTS_FIELD_NAME].get(actionType)).toStrictEqual([someProperty, secondProp])
+  })
 
   it('call effect with wrong arg', () => {
-    const wrongActionType: any = 4;
+    const wrongActionType: any = 4
 
     expect(() => effect(wrongActionType)).toThrowError(
-      callDecoratorWithNotActionType(MODULE_NAME, wrongActionType)
-    );
-  });
+      callDecoratorWithNotActionType(MODULE_NAME, wrongActionType),
+    )
+  })
 
   it('call effect with correct arg', () => {
-    expect(() => effect(actionType)).not.toThrow();
-  });
+    expect(() => effect(actionType)).not.toThrow()
+  })
 
   it('use effect in class', () => {
-    const callEffectOne = jest.fn();
-    const callEffectTwo = jest.fn();
+    const callEffectOne = jest.fn()
+    const callEffectTwo = jest.fn()
 
     class SomeClass {
       @effect(actionType)
       @effect(actionType2)
-      effectOne = callEffectOne;
+      effectOne = callEffectOne
 
       @effect(actionType2)
-      effectTwo = callEffectTwo;
+      effectTwo = callEffectTwo
     }
 
-    const obj = new SomeClass();
+    const obj = new SomeClass()
 
-    (obj as any)[DISPATCH_ACTION_FIELD_NAME](
-      createAction(createActionType(actionType, ACTION_TYPE_DIVIDER), someValue)
-    );
+    ;(obj as any)[DISPATCH_ACTION_FIELD_NAME](
+      createAction(createActionType(actionType, ACTION_TYPE_DIVIDER), someValue),
+    )
 
-    expect(callEffectOne).toBeCalledTimes(1);
-    expect(callEffectOne).lastCalledWith(someValue);
+    expect(callEffectOne).toBeCalledTimes(1)
+    expect(callEffectOne).lastCalledWith(someValue)
+    ;(obj as any)[DISPATCH_ACTION_FIELD_NAME](
+      createAction(createActionType(actionType2, ACTION_TYPE_DIVIDER), someValue2),
+    )
 
-    (obj as any)[DISPATCH_ACTION_FIELD_NAME](
-      createAction(createActionType(actionType2, ACTION_TYPE_DIVIDER), someValue2)
-    );
-
-    expect(callEffectOne).toBeCalledTimes(2);
-    expect(callEffectOne).lastCalledWith(someValue2);
-    expect(callEffectTwo).toBeCalledTimes(1);
-    expect(callEffectTwo).lastCalledWith(someValue2);
-  });
-});
+    expect(callEffectOne).toBeCalledTimes(2)
+    expect(callEffectOne).lastCalledWith(someValue2)
+    expect(callEffectTwo).toBeCalledTimes(1)
+    expect(callEffectTwo).lastCalledWith(someValue2)
+  })
+})

@@ -1,17 +1,17 @@
-import createActionTypeOptionContext from '../createActionTypeOptionContext';
-import { callDecoratorWithNotActionType } from '../messages';
-import { moduleName, actionType } from '../__mocks__/mocks';
+import createActionTypeOptionContext from '../createActionTypeOptionContext'
+import { callDecoratorWithNotActionType } from '../messages'
+import { moduleName, actionType } from '../__mocks__/mocks'
 
 describe('createActionTypeOptionContext', () => {
   it('createActionTypeOptionContext', () => {
-    const wrongActionType: any = 14;
+    const wrongActionType: any = 14
 
-    expect(createActionTypeOptionContext(moduleName)).toBeUndefined();
+    expect(createActionTypeOptionContext(moduleName)).toBeUndefined()
 
     expect(() => createActionTypeOptionContext(moduleName, wrongActionType)).toThrowError(
-      callDecoratorWithNotActionType(moduleName, wrongActionType)
-    );
+      callDecoratorWithNotActionType(moduleName, wrongActionType),
+    )
 
-    expect(createActionTypeOptionContext(moduleName, actionType)).toBe(actionType);
-  });
-});
+    expect(createActionTypeOptionContext(moduleName, actionType)).toBe(actionType)
+  })
+})

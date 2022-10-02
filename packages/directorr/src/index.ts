@@ -1,25 +1,14 @@
-import './checkEnv';
-export * from './Directorr';
-export * from './config';
-export * from './checkers';
-export * from './testUtils';
-export * from './createPropertyDecoratorFactory';
-export * from './createActionAndEffect';
-export * from './createActionFactory';
-export * from './createDecoratorFactory';
-import action from './action';
-import effect from './effect';
-import whenPayload from './whenPayload';
-import whenState from './whenState';
-import whenInit from './whenInit';
-import whenDestroy from './whenDestroy';
-import injectStore from './injectStore';
-import reloadAction from './reloadAction';
-import whenReload from './whenReload';
-import delay from './delay';
-export * from './allEffect';
-export * from './createDispatcher';
-import connectStore from './connectStore';
+import './checkEnv'
+export * from './Directorr'
+export * from './config'
+export * from './checkers'
+export * from './testUtils'
+export * from './createPropertyDecoratorFactory'
+export * from './createActionAndEffect'
+export * from './createActionFactory'
+export * from './createDecoratorFactory'
+export * from './allEffect'
+export * from './createDispatcher'
 export {
   DIRECTORR_INIT_STORE_ACTION,
   DIRECTORR_DESTROY_STORE_ACTION,
@@ -34,7 +23,6 @@ export {
   composePropertyDecorators,
   isFunction,
   isLikeAction,
-  createAfterware,
   isActionHave,
   isStoreReady,
   isStoreError,
@@ -43,22 +31,20 @@ export {
   EMPTY_FUNC,
   isString,
   getStoreName,
-} from './utils';
-export { callWithPropNotEquallFunc } from './messages';
-export * from './__mocks__/DirectorrMock';
-export * from './testUtils';
-export * from './types';
+} from './utils'
+export { callWithPropNotEquallFunc } from './messages'
+export * from './__mocks__/DirectorrMock'
+export * from './testUtils'
+export * from './types'
 
-export {
-  action,
-  effect,
-  injectStore,
-  connectStore,
-  whenPayload,
-  whenState,
-  whenInit,
-  whenDestroy,
-  reloadAction,
-  whenReload,
-  delay,
-};
+export { default as action } from './action'
+export { default as effect } from './effect'
+export { default as whenState } from './whenState'
+export { default as whenPayload } from './whenPayload'
+export { default as whenDestroy } from './whenDestroy'
+export { default as whenInit } from './whenInit'
+export { default as reloadAction } from './reloadAction'
+export { default as injectStore } from './injectStore'
+export { default as delay } from './delay'
+export { default as whenReload } from './whenReload'
+export { default as connectStore } from './connectStore'

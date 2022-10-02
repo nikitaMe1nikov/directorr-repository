@@ -1,7 +1,7 @@
-import { logMiddleware } from '../index';
+import { logMiddleware } from '../index'
 
 describe('index', () => {
   it('check exports', () => {
-    expect(logMiddleware).not.toBeUndefined();
-  });
-});
+    expect(logMiddleware).not.toBeUndefined()
+  })
+})

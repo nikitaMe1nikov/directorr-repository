@@ -1,51 +1,51 @@
-import { ComponentType, CSSProperties } from 'react';
-import { HistoryActionPayload, QueryObject, LocationState } from '@nimel/directorr-router';
+import { ComponentType, CSSProperties } from 'react'
+import { HistoryActionPayload, QueryObject, LocationState } from '@nimel/directorr-router'
 
-export const PERSISTED: { SMART: 'SMART'; ALWAYS: 'ALWAYS'; NEVER: 'NEVER' } = {
+export const PERSISTED = {
   SMART: 'SMART',
   ALWAYS: 'ALWAYS',
   NEVER: 'NEVER',
-};
+} as const
 
-export type Persisted = keyof typeof PERSISTED;
+export type Persisted = keyof typeof PERSISTED
 
 export interface Params {
-  [key: string]: string | number;
+  [key: string]: string | number
 }
 
 export interface RouteComponentProps {
-  params?: Params;
-  queryObject?: QueryObject;
-  historyState?: LocationState;
-  isShowComponent: boolean;
-  TITLE?: string;
+  params?: Params
+  queryObject?: QueryObject
+  historyState?: LocationState
+  isShowComponent: boolean
+  TITLE?: string
 }
 
-export type Route = RouteComponent | RouteRedirect;
+export type Route = RouteComponent | RouteRedirect
 
 export interface RouteComponent {
-  component: ComponentType;
-  path: string;
-  exact?: boolean;
-  strict?: boolean;
-  animation?: Animation;
-  persisted?: Persisted;
+  component: ComponentType
+  path: string
+  exact?: boolean
+  strict?: boolean
+  animation?: Animation
+  persisted?: Persisted
 }
 
 export interface RouteRedirect {
-  path: string;
-  exact?: boolean;
-  strict?: boolean;
-  redirect: string;
-  animation?: Animation;
+  path: string
+  exact?: boolean
+  strict?: boolean
+  redirect: string
+  animation?: Animation
 }
 
-export type RouterTask = HistoryActionPayload;
+export type RouterTask = HistoryActionPayload
 
-export type RouterHandler = (rt: RouterTask) => Promise<any> | void;
+export type RouterHandler = (rt: RouterTask) => Promise<any> | void
 
 export interface Animation {
-  prev: CSSProperties;
-  next: CSSProperties;
-  keyFrames?: string;
+  prev: CSSProperties
+  next: CSSProperties
+  keyFrames?: string
 }

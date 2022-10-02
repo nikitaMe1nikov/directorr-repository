@@ -5,41 +5,41 @@ import {
   isLikeAction,
   EMPTY_OBJECT,
   CreatePropertyDecoratorFactory,
-} from '@nimel/directorr';
-import { ObjectSchema } from 'yup';
-import { useWithEffects } from './messages';
-import createSchemaContext from './createSchemaContext';
-import { ValidateOptions, SomeFunc, ValidateSchema, validatePayload } from './types';
-import calcValues from './calcValues';
+} from '@nimel/directorr'
+import { ObjectSchema } from 'yup'
+import { useWithEffects } from './messages'
+import createSchemaContext from './createSchemaContext'
+import { ValidateOptions, SomeFunc, ValidateSchema, validatePayload } from './types'
+import calcValues from './calcValues'
 
-export const MODULE_NAME = 'validate';
+export const MODULE_NAME = 'validate'
 
 export function validateSchema(
-  payload: any = EMPTY_OBJECT,
+  payload: any,
   valueFunc: SomeFunc,
   store: any,
-  [schema, options, fields]: [ObjectSchema<any>, ValidateOptions, string[]]
+  [schema, options, fields]: [ObjectSchema<any>, ValidateOptions, string[]],
 ) {
-  if (isLikeAction(payload)) throw new Error(useWithEffects(MODULE_NAME));
+  if (isLikeAction(payload)) throw new Error(useWithEffects(MODULE_NAME))
 
-  let resultPayload = payload;
-  const payloadProp = resultPayload[options.payloadProp];
+  let resultPayload = payload || EMPTY_OBJECT
+  const payloadProp = resultPayload[options.payloadProp]
 
-  if (!payloadProp) return;
+  if (!payloadProp) return
 
-  const values = calcValues(MODULE_NAME, fields, store);
+  const values = calcValues(MODULE_NAME, fields, store)
 
   try {
-    schema.validateSyncAt(payloadProp, values, options);
+    schema.validateSyncAt(payloadProp, values, options)
 
-    store[payloadProp].changeStatusToValid();
-  } catch (validationError) {
-    store[payloadProp].changeStatusToInvalid(validationError.errors[0]);
+    store[payloadProp].changeStatusToValid()
+  } catch (validationError: any) {
+    store[payloadProp].changeStatusToInvalid(validationError.errors[0])
 
-    resultPayload = { ...resultPayload, validationError };
+    resultPayload = { ...resultPayload, validationError }
   }
 
-  return valueFunc(resultPayload);
+  return valueFunc(resultPayload)
 }
 
 export function initializer(
@@ -47,17 +47,14 @@ export function initializer(
   value: any,
   property: string,
   ctx: any,
-  validate: ValidateSchema = validateSchema
+  validate: ValidateSchema = validateSchema,
 ) {
-  if (!isFunction(value)) throw new TypeError(callWithPropNotEquallFunc(MODULE_NAME, property));
+  if (!isFunction(value)) throw new TypeError(callWithPropNotEquallFunc(MODULE_NAME, property))
 
-  return (payload: any) => validate(payload, value, initObject, ctx);
+  return (payload: any) => validate(payload, value, initObject, ctx)
 }
 
-const validate: CreatePropertyDecoratorFactory<
-  ObjectSchema,
-  ValidateOptions,
-  validatePayload
-> = createPropertyDecoratorFactory(MODULE_NAME, initializer, createSchemaContext);
+const validate: CreatePropertyDecoratorFactory<ObjectSchema, ValidateOptions, validatePayload> =
+  createPropertyDecoratorFactory(MODULE_NAME, initializer, createSchemaContext)
 
-export default validate;
+export default validate

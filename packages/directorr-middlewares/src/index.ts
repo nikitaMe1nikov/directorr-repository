@@ -1,4 +1,2 @@
-import logMiddleware from './logMiddleware';
-import createConnectorToReduxDevTool from './createConnectorToReduxDevTool';
-
-export { logMiddleware, createConnectorToReduxDevTool };
+export { logMiddleware } from './logMiddleware'
+export { default as createConnectorToReduxDevTool } from './createConnectorToReduxDevTool'

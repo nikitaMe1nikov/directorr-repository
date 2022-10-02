@@ -1,6 +1,6 @@
-import { isLikePropertyDecorator, createDescriptor } from './utils';
-import { useForNotPropDecorator } from './messages';
-import { BabelDescriptor, Initializer } from './types';
+import { isLikePropertyDecorator, createDescriptor } from './utils'
+import { useForNotPropDecorator } from './messages'
+import { BabelDescriptor, Initializer } from './types'
 
 export function decorator(
   target: any,
@@ -9,12 +9,12 @@ export function decorator(
   moduleName: string,
   initializerForInitObject: Initializer,
   ctx: any,
-  buildDescriptor = createDescriptor
+  buildDescriptor = createDescriptor,
 ) {
   if (!isLikePropertyDecorator(descriptor))
-    throw new Error(useForNotPropDecorator(moduleName, property));
+    throw new Error(useForNotPropDecorator(moduleName, property))
 
-  return buildDescriptor(descriptor, property, initializerForInitObject, ctx);
+  return buildDescriptor(descriptor, property, initializerForInitObject, ctx)
 }
 
-export default decorator;
+export default decorator

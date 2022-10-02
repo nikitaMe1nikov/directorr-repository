@@ -17,7 +17,7 @@ Run `npm install @nimel/directorr-form --save` or `yarn add @nimel/directorr-for
 Usually used for binding in frameworks
 
 ```javascript
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { FormStore } from "directorr-form";
 import TextField from '@material-ui/core/TextField';
 
@@ -58,7 +58,6 @@ export default observer(TextInput);
 And then
 
 ```javascript
-import React from 'react';
 import ReactDOM from 'react-dom';
 import { connectStore } from "directorr";
 import { validate, FormStore, FORM_ACTIONS } from "directorr-form";

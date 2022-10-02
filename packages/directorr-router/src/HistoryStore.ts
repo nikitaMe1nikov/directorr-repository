@@ -1,6 +1,6 @@
-import { whenDestroy, EMPTY_FUNC, EMPTY_OBJECT } from '@nimel/directorr';
-import { createBrowserHistory } from 'history';
-import qs from 'query-string';
+import { whenDestroy, EMPTY_FUNC, EMPTY_OBJECT } from '@nimel/directorr'
+import { createBrowserHistory } from 'history'
+import qs from 'query-string'
 import {
   actionRouterPush,
   actionRouterReplace,
@@ -25,8 +25,8 @@ import {
   effectHistoryReplace,
   effectRouterState,
   actionRouterCancelBlock,
-} from './decorators';
-import { calcPath, reloadWindow } from './utils';
+} from './decorators'
+import { calcPath, reloadWindow } from './utils'
 import {
   Action,
   Blocker,
@@ -41,161 +41,169 @@ import {
   HistoryRouterTask,
   HistoryRouterHandler,
   ACTION,
-} from './types';
+} from './types'
 
 export default class HistoryStore {
-  path: string;
-  state?: LocationState;
-  queryObject?: QueryObject;
-  unsubHistory = EMPTY_FUNC;
-  action: Action;
-  private history: History;
-  private handlersStack: HistoryRouterHandler[] = [];
-  private blockState: BlockState = [EMPTY_FUNC, EMPTY_FUNC];
+  path: string
+
+  state?: LocationState
+
+  queryObject?: QueryObject
+
+  unsubHistory = EMPTY_FUNC
+
+  action: Action
+
+  private history: History
+
+  private handlersStack: HistoryRouterHandler[] = []
+
+  private blockState: BlockState = [EMPTY_FUNC, EMPTY_FUNC]
 
   constructor(history = createBrowserHistory()) {
-    this.history = history;
+    this.history = history
     const {
       location: { pathname, search, state },
       action,
-    } = this.history;
+    } = this.history
 
-    this.unsubHistory = this.history.listen(this.dispatchAction as any);
+    this.unsubHistory = this.history.listen(this.dispatchAction as any)
 
-    this.path = pathname;
-    this.queryObject = qs.parse(search);
-    this.state = state;
-    this.action = action;
+    this.path = pathname
+    this.queryObject = qs.parse(search)
+    this.state = state
+    this.action = action
   }
 
-  subscribe = (handler: HistoryRouterHandler) => this.handlersStack.push(handler);
+  subscribe = (handler: HistoryRouterHandler) => {
+    this.handlersStack = [...this.handlersStack, handler]
+  }
 
   unsubscribe = (handler: HistoryRouterHandler) => {
-    const index = this.handlersStack.indexOf(handler);
-    if (index !== -1) this.handlersStack.splice(index, 1);
-  };
+    this.handlersStack = this.handlersStack.filter(h => h !== handler)
+  }
 
   @effectRouterState
   toSetState = ({ path, queryObject, state }: RouterActionPayload) => {
-    this.path = path;
-    this.queryObject = queryObject;
-    this.state = state;
-  };
+    this.path = path
+    this.queryObject = queryObject
+    this.state = state
+  }
 
   @whenDestroy
   toDestroy = () => {
-    this.unsubHistory();
-  };
+    this.unsubHistory()
+  }
 
   @actionHistoryPush
-  toHistoryPush = (payload: HistoryActionPayload) => payload;
+  toHistoryPush = (payload: HistoryActionPayload) => payload
 
   @actionHistoryPop
-  toHistoryPop = (payload: HistoryActionPayload) => payload;
+  toHistoryPop = (payload: HistoryActionPayload) => payload
 
   @actionHistoryReplace
-  toHistoryReplace = (payload: HistoryActionPayload) => payload;
+  toHistoryReplace = (payload: HistoryActionPayload) => payload
 
   @effectHistoryPop
   @effectHistoryPush
   @effectHistoryReplace
   toPop = ({ path, queryObject, state, action }: HistoryActionPayload) => {
-    this.path = path;
-    this.queryObject = queryObject;
-    this.state = state;
-    this.action = action;
-  };
+    this.path = path
+    this.queryObject = queryObject
+    this.state = state
+    this.action = action
+  }
 
   @actionRouterPush
   push = (path: string, queryObject: QueryObject = EMPTY_OBJECT, state?: LocationState) => ({
     path,
     queryObject,
     state,
-  });
+  })
 
   @actionRouterReplace
   replace = (path: string, queryObject: QueryObject = EMPTY_OBJECT, state?: LocationState) => ({
     path,
     queryObject,
     state,
-  });
+  })
 
   @actionRouterBack
-  back = EMPTY_FUNC;
+  back = EMPTY_FUNC
 
   @actionRouterReload
-  reload = EMPTY_FUNC;
+  reload = EMPTY_FUNC
 
   @effectRouterReload
-  toReload = () => reloadWindow();
+  toReload = () => reloadWindow()
 
   @effectRouterPush
   toPush = ({ path, queryObject, state }: RouterActionPayload) =>
-    this.history.push(calcPath(path, queryObject), state);
+    this.history.push(calcPath(path, queryObject), state)
 
   @effectRouterReplace
   toReplace = ({ path, queryObject, state }: RouterActionPayload) =>
-    this.history.replace(calcPath(path, queryObject), state);
+    this.history.replace(calcPath(path, queryObject), state)
 
   @effectRouterBack
-  toBack = () => this.history.back();
+  toBack = () => this.history.back()
 
   @actionRouterGoTo
-  goTo = (index: number) => ({ index });
+  goTo = (index: number) => ({ index })
 
   @effectRouterGoTo
-  toGoTo = ({ index }: RouterGoToActionPayload) => this.history.go(index);
+  toGoTo = ({ index }: RouterGoToActionPayload) => this.history.go(index)
 
   @actionRouterForward
-  forward = EMPTY_FUNC;
+  forward = EMPTY_FUNC
 
   @effectRouterForward
-  toForward = () => this.history.forward();
+  toForward = () => this.history.forward()
 
   @actionRouterBlock
-  block = (blocker: Blocker) => ({ blocker });
+  block = (blocker: Blocker) => ({ blocker })
 
   @effectRouterBlock
   toBlock = ({ blocker }: RouterBlockActionPayload) => {
-    this.blockState = [blocker, this.history.block(blocker)];
-  };
+    this.blockState = [blocker, this.history.block(blocker)]
+  }
 
   @actionRouterCancelBlock
-  cancelBlock = (blocker: Blocker) => ({ blocker });
+  cancelBlock = (blocker: Blocker) => ({ blocker })
 
   @effectRouterCancelBlock
   toCancelBlock = ({ blocker }: RouterBlockActionPayload) => {
-    const [lastBlocker, handler] = this.blockState;
+    const [lastBlocker, handler] = this.blockState
 
     if (blocker === lastBlocker) {
-      handler();
+      handler()
     }
-  };
+  }
 
   dispatchAction = (task: HistoryRouterTask) => {
-    const { location, action } = task;
+    const { location, action } = task
     const routerPayload: HistoryActionPayload = {
       path: location.pathname,
       queryObject: qs.parse(location.search),
       ...(location.state && { state: location.state }),
       action,
-    };
+    }
 
     switch (action) {
       case ACTION.POP:
-        this.toHistoryPop(routerPayload);
-        break;
+        this.toHistoryPop(routerPayload)
+        break
       case ACTION.REPLACE:
-        this.toHistoryReplace(routerPayload);
-        break;
+        this.toHistoryReplace(routerPayload)
+        break
       default:
-        this.toHistoryPush(routerPayload);
+        this.toHistoryPush(routerPayload)
     }
 
-    for (const handler of this.handlersStack.concat()) {
-      handler(task);
+    for (const handler of this.handlersStack) {
+      handler(task)
     }
-  };
+  }
 
   toJSON() {}
 }

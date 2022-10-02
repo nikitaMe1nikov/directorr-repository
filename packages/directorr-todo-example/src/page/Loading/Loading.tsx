@@ -1,19 +1,19 @@
-import React, { FC } from 'react';
-import { observer } from 'mobx-react-lite';
-import { useStore } from '@nimel/directorr-react';
+import { FC } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useStore } from '@nimel/directorr-react'
 
-import Loader from 'components/Loader/Loader';
-import PageStore from 'page/Page.store';
-import styles from './Loading.css';
+import Loader from 'components/Loader/Loader'
+import PageStore from 'page/Page.store'
+import styles from './Loading.css'
 
 const Loading: FC = () => {
-  const { isLoading } = useStore(PageStore);
+  const { isLoading } = useStore(PageStore)
 
   if (isLoading) {
-    return <Loader className={styles.container} />;
+    return <Loader className={styles.container} />
   }
 
-  return null;
-};
+  return null
+}
 
-export default observer(Loading);
+export default observer(Loading)

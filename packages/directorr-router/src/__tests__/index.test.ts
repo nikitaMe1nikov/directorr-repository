@@ -29,39 +29,39 @@ import {
   actionHistoryReplace,
   effectHistoryReplace,
   calcPath,
-} from '../index';
+} from '../index'
 
 describe('index', () => {
   it('check exports', () => {
-    expect(HistoryStore).not.toBeUndefined();
-    expect(ANY_PATH).not.toBeUndefined();
-    expect(generatePath).not.toBeUndefined();
-    expect(matchPath).not.toBeUndefined();
-    expect(historyChange).not.toBeUndefined();
-    expect(actionRouterPush).not.toBeUndefined();
-    expect(effectRouterPush).not.toBeUndefined();
-    expect(actionRouterReplace).not.toBeUndefined();
-    expect(effectRouterReplace).not.toBeUndefined();
-    expect(actionRouterBack).not.toBeUndefined();
-    expect(effectRouterBack).not.toBeUndefined();
-    expect(actionRouterForward).not.toBeUndefined();
-    expect(effectRouterForward).not.toBeUndefined();
-    expect(actionRouterGoTo).not.toBeUndefined();
-    expect(effectRouterGoTo).not.toBeUndefined();
-    expect(actionRouterReload).not.toBeUndefined();
-    expect(effectRouterReload).not.toBeUndefined();
-    expect(actionRouterBlock).not.toBeUndefined();
-    expect(effectRouterBlock).not.toBeUndefined();
-    expect(actionRouterCancelBlock).not.toBeUndefined();
-    expect(effectRouterCancelBlock).not.toBeUndefined();
-    expect(actionRouterState).not.toBeUndefined();
-    expect(effectRouterState).not.toBeUndefined();
-    expect(actionHistoryPop).not.toBeUndefined();
-    expect(effectHistoryPop).not.toBeUndefined();
-    expect(actionHistoryPush).not.toBeUndefined();
-    expect(effectHistoryPush).not.toBeUndefined();
-    expect(actionHistoryReplace).not.toBeUndefined();
-    expect(effectHistoryReplace).not.toBeUndefined();
-    expect(calcPath).not.toBeUndefined();
-  });
-});
+    expect(HistoryStore).not.toBeUndefined()
+    expect(ANY_PATH).not.toBeUndefined()
+    expect(generatePath).not.toBeUndefined()
+    expect(matchPath).not.toBeUndefined()
+    expect(historyChange).not.toBeUndefined()
+    expect(actionRouterPush).not.toBeUndefined()
+    expect(effectRouterPush).not.toBeUndefined()
+    expect(actionRouterReplace).not.toBeUndefined()
+    expect(effectRouterReplace).not.toBeUndefined()
+    expect(actionRouterBack).not.toBeUndefined()
+    expect(effectRouterBack).not.toBeUndefined()
+    expect(actionRouterForward).not.toBeUndefined()
+    expect(effectRouterForward).not.toBeUndefined()
+    expect(actionRouterGoTo).not.toBeUndefined()
+    expect(effectRouterGoTo).not.toBeUndefined()
+    expect(actionRouterReload).not.toBeUndefined()
+    expect(effectRouterReload).not.toBeUndefined()
+    expect(actionRouterBlock).not.toBeUndefined()
+    expect(effectRouterBlock).not.toBeUndefined()
+    expect(actionRouterCancelBlock).not.toBeUndefined()
+    expect(effectRouterCancelBlock).not.toBeUndefined()
+    expect(actionRouterState).not.toBeUndefined()
+    expect(effectRouterState).not.toBeUndefined()
+    expect(actionHistoryPop).not.toBeUndefined()
+    expect(effectHistoryPop).not.toBeUndefined()
+    expect(actionHistoryPush).not.toBeUndefined()
+    expect(effectHistoryPush).not.toBeUndefined()
+    expect(actionHistoryReplace).not.toBeUndefined()
+    expect(effectHistoryReplace).not.toBeUndefined()
+    expect(calcPath).not.toBeUndefined()
+  })
+})

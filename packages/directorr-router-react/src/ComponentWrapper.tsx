@@ -1,7 +1,7 @@
-import React, { FC, memo, ComponentType } from 'react';
+import { FC, memo, ComponentType } from 'react'
 
 const ComponentWrapper: FC<{ component: ComponentType<any> }> = ({ component: SomeComponent }) => (
   <SomeComponent />
-);
+)
 
-export default memo(ComponentWrapper);
+export default memo(ComponentWrapper)

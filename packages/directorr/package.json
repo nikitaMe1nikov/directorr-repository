@@ -41,14 +41,10 @@
     "test-typescript:w": "jest --rootDir='.' --config '../../jest.typescript.config.js' --watchAll"
   },
   "peerDependencies": {
-    "mobx": "^6.2.0",
-    "mobx-state-tree": "^5.0.1",
     "redux": "^4.0.5"
   },
   "dependencies": {},
   "devDependencies": {
-    "mobx": "^6.2.0",
-    "mobx-state-tree": "^5.0.1",
     "redux": "^4.0.5"
   },
   "author": "Nikita Melnikov",

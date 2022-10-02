@@ -1,30 +1,25 @@
-import createPropertyDecoratorFactory from '../createPropertyDecoratorFactory';
-import decorator from '../decorator';
-import { moduleName } from '../__mocks__/mocks';
+import createPropertyDecoratorFactory from '../createPropertyDecoratorFactory'
+import decorator from '../decorator'
+import { moduleName } from '../__mocks__/mocks'
 
 jest.mock('../createDecoratorFactory', () => {
-  const createDecoratorFactory = jest.fn().mockImplementation(() => createDecoratorFactory);
+  const createDecoratorFactory = jest.fn().mockImplementation(() => createDecoratorFactory)
 
-  return createDecoratorFactory;
-});
+  return createDecoratorFactory
+})
 
 describe('createPropertyDecoratorFactory', () => {
   it('createPropertyDecoratorFactory', () => {
-    const initializer = jest.fn();
-    const createContext = jest.fn();
+    const initializer = jest.fn()
+    const createContext = jest.fn()
 
     const createDecoratorFactory = createPropertyDecoratorFactory(
       moduleName,
       initializer,
-      createContext
-    );
+      createContext,
+    )
 
-    expect(createDecoratorFactory).toBeCalledTimes(1);
-    expect(createDecoratorFactory).lastCalledWith(
-      moduleName,
-      decorator,
-      initializer,
-      createContext
-    );
-  });
-});
+    expect(createDecoratorFactory).toBeCalledTimes(1)
+    expect(createDecoratorFactory).lastCalledWith(moduleName, decorator, initializer, createContext)
+  })
+})

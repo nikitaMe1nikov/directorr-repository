@@ -1,16 +1,16 @@
 export interface SomeClassConstructor<I = any, O = any> {
-  new (options?: O): I;
+  new (options?: O): I
 }
 
-export type InitOptions = SomeClassConstructor[];
+export type InitOptions = SomeClassConstructor[]
 
 export interface InitStorePayload {
-  stores: SomeClassConstructor[];
+  stores: SomeClassConstructor[]
 }
 
 export interface InitStoreErrorPayload {
-  store: SomeClassConstructor;
-  stores: SomeClassConstructor[];
+  store: SomeClassConstructor
+  stores: SomeClassConstructor[]
 }
 
-export type InitStoreSuccessPayload = InitStorePayload;
+export type InitStoreSuccessPayload = InitStorePayload

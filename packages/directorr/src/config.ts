@@ -7,7 +7,7 @@ import {
   hydrateStoresToState,
   mergeStateToStore,
   setStateToStore,
-} from './utils';
+} from './utils'
 import {
   BatchFunction,
   CreateActionFunction,
@@ -17,27 +17,27 @@ import {
   HydrateStoresToState,
   MergeStateToStores,
   SetStateToStore,
-} from './types';
+} from './types'
 
 class Config {
-  batchFunction: BatchFunction = batchFunction;
+  batchFunction: BatchFunction = batchFunction
 
-  createAction: CreateActionFunction = createAction;
+  createAction: CreateActionFunction = createAction
 
   createActionType: CreateActionTypeFunction = actionType =>
-    createActionType(actionType, this.actionTypeDivider);
+    createActionType(actionType, this.actionTypeDivider)
 
-  actionTypeDivider: string = ACTION_TYPE_DIVIDER;
+  actionTypeDivider: string = ACTION_TYPE_DIVIDER
 
-  dispatchEffectsOrig: DispatchEffects = dispatchEffects;
+  dispatchEffectsOrig: DispatchEffects = dispatchEffects
 
-  dispatchEffects: DispatchEffects = dispatchEffects;
+  dispatchEffects: DispatchEffects = dispatchEffects
 
-  hydrateStoresToState: HydrateStoresToState = hydrateStoresToState;
+  hydrateStoresToState: HydrateStoresToState = hydrateStoresToState
 
-  mergeStateToStore: MergeStateToStores = mergeStateToStore;
+  mergeStateToStore: MergeStateToStores = mergeStateToStore
 
-  setStateToStore: SetStateToStore = setStateToStore;
+  setStateToStore: SetStateToStore = setStateToStore
 
   configure: Configure = ({
     batchFunction,
@@ -50,29 +50,29 @@ class Config {
     setStateToStore,
   }) => {
     if (batchFunction) {
-      this.batchFunction = batchFunction;
-      this.dispatchEffects = batchFunction(this.dispatchEffectsOrig);
+      this.batchFunction = batchFunction
+      this.dispatchEffects = batchFunction(this.dispatchEffectsOrig)
     }
 
-    if (createAction) this.createAction = createAction;
+    if (createAction) this.createAction = createAction
 
-    if (createActionType) this.createActionType = createActionType;
+    if (createActionType) this.createActionType = createActionType
 
-    if (actionTypeDivider) this.actionTypeDivider = actionTypeDivider;
+    if (actionTypeDivider) this.actionTypeDivider = actionTypeDivider
 
     if (dispatchEffects) {
-      this.dispatchEffectsOrig = dispatchEffects;
-      this.dispatchEffects = this.batchFunction(dispatchEffects);
+      this.dispatchEffectsOrig = dispatchEffects
+      this.dispatchEffects = this.batchFunction(dispatchEffects)
     }
 
-    if (hydrateStoresToState) this.hydrateStoresToState = hydrateStoresToState;
+    if (hydrateStoresToState) this.hydrateStoresToState = hydrateStoresToState
 
-    if (mergeStateToStore) this.mergeStateToStore = mergeStateToStore;
+    if (mergeStateToStore) this.mergeStateToStore = mergeStateToStore
 
-    if (setStateToStore) this.setStateToStore = setStateToStore;
-  };
+    if (setStateToStore) this.setStateToStore = setStateToStore
+  }
 }
 
-export const config = new Config();
+export const config = new Config()
 
-export default config;
+export default config

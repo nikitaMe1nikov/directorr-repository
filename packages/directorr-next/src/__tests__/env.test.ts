@@ -1,7 +1,7 @@
-import { isServer } from '../env';
+import { isServer } from '../env'
 
 describe('env', () => {
   it('isServer', () => {
-    expect(isServer).toBeTruthy();
-  });
-});
+    expect(isServer).toBeTruthy()
+  })
+})

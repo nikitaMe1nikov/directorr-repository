@@ -40,20 +40,14 @@
   },
   "peerDependencies": {
     "@nimel/directorr": "^1.0.0-rc.17",
-    "mobx": "^6.2.0",
-    "mobx-state-tree": "^5.0.1",
-    "react": ">=16.10.0"
+    "react": ">=16.14"
   },
   "dependencies": {
     "hoist-non-react-statics": "^3.3.2"
   },
   "devDependencies": {
     "@nimel/directorr": "^1.0.0-rc.17",
-    "@types/hoist-non-react-statics": "^3.3.1",
-    "mobx": "^6.2.0",
-    "mobx-state-tree": "^5.0.1",
-    "react": "^16.13.1",
-    "react-test-renderer": "^16.13.1"
+    "@types/hoist-non-react-statics": "^3.3.1"
   },
   "author": "Nikita Melnikov",
   "license": "MIT",

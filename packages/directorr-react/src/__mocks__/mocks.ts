@@ -1,2 +1,2 @@
-export const someValue = {};
-export const someFunc = () => {};
+export const someValue = {}
+export const someFunc = () => {}

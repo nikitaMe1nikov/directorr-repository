@@ -1,6 +1,6 @@
-import { types, Instance } from 'mobx-state-tree';
+import { types, Instance } from 'mobx-state-tree'
 
-export type RootModelType = Instance<typeof RootModel>;
+export type RootModelType = Instance<typeof RootModel>
 
 export const RootModel = types
   .model('RootModel')
@@ -10,9 +10,9 @@ export const RootModel = types
   })
   .actions(self => ({
     changeOne() {
-      self.one += 'bla';
+      self.one += 'bla'
     },
     changeTwo() {
-      self.two += 1;
+      self.two += 1
     },
-  }));
+  }))

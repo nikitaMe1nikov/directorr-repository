@@ -11,9 +11,9 @@ import {
   isPayloadChecked,
   createActionTypes,
   hasOwnProperty,
-} from './utils';
-import config from './config';
-import { callWithStoreNotConnectedToDirrectorr } from './messages';
+} from './utils'
+import config from './config'
+import { callWithStoreNotConnectedToDirrectorr } from './messages'
 import {
   Action,
   EffectsMap,
@@ -21,84 +21,84 @@ import {
   SomeFunction,
   CheckPayload,
   DispatcherActionType,
-} from './types';
+} from './types'
 
-const MODULE_NAME = 'createDispatcher';
+const MODULE_NAME = 'createDispatcher'
 
 function clearDispatchers(this: any, payload: InitPayload) {
   if (this === payload.store) {
-    const dispatchers: SomeFunction[] = this[DISPATHERS_FIELD_NAME];
+    const dispatchers: SomeFunction[] = this[DISPATHERS_FIELD_NAME]
 
-    dispatchers.forEach(d => d());
+    dispatchers.forEach(d => d())
   }
 }
 
 export function createDispatcher(store: any) {
   if (!hasOwnProperty(store, DISPATHERS_FIELD_NAME)) {
-    const effectsMap: EffectsMap = store[EFFECTS_FIELD_NAME];
-    const effects = effectsMap.get(DIRECTORR_DESTROY_STORE_ACTION);
+    const effectsMap: EffectsMap = store[EFFECTS_FIELD_NAME]
+    const effects = effectsMap.get(DIRECTORR_DESTROY_STORE_ACTION)
 
     if (effects) {
-      effects.push(DISPATHERS_EFFECT_FIELD_NAME);
+      effects.push(DISPATHERS_EFFECT_FIELD_NAME)
     } else {
-      effectsMap.set(DIRECTORR_DESTROY_STORE_ACTION, [DISPATHERS_EFFECT_FIELD_NAME]);
+      effectsMap.set(DIRECTORR_DESTROY_STORE_ACTION, [DISPATHERS_EFFECT_FIELD_NAME])
     }
 
-    defineProperty(store, DISPATHERS_FIELD_NAME, createValueDescriptor([]));
-    defineProperty(store, DISPATHERS_EFFECT_FIELD_NAME, createValueDescriptor(clearDispatchers));
+    defineProperty(store, DISPATHERS_FIELD_NAME, createValueDescriptor([]))
+    defineProperty(store, DISPATHERS_EFFECT_FIELD_NAME, createValueDescriptor(clearDispatchers))
   }
 
   function dispatcher<P extends DispatcherActionType>(
     actionType: P,
-    payload?: ReturnType<Parameters<P>[0][Parameters<P>[1]]>
-  ): Action<P>;
+    payload?: ReturnType<Parameters<P>[0][Parameters<P>[1]]>,
+  ): Action<P>
   function dispatcher<P extends DispatcherActionType>(
     actionTypes: [P] | [P, DispatcherActionType] | [P, DispatcherActionType, DispatcherActionType],
     payload?: ReturnType<Parameters<P>[0][Parameters<P>[1]]>,
-    checker?: CheckPayload
-  ): Promise<Action<P>>;
+    checker?: CheckPayload,
+  ): Promise<Action<P>>
   function dispatcher(actionTypes: any, payload?: any, checker?: CheckPayload) {
     if (!store[SUBSCRIBE_FIELD_NAME])
-      throw new Error(callWithStoreNotConnectedToDirrectorr(MODULE_NAME, store));
+      throw new Error(callWithStoreNotConnectedToDirrectorr(MODULE_NAME, store))
 
     if (!Array.isArray(actionTypes))
       return store[DISPATCH_ACTION_FIELD_NAME](
-        config.createAction(config.createActionType(actionTypes), payload)
-      );
+        config.createAction(config.createActionType(actionTypes), payload),
+      )
 
-    const [firstActionType, secondActionType, thirdActionType] = actionTypes;
-    const types = createActionTypes(config.createActionType(firstActionType));
+    const [firstActionType, secondActionType, thirdActionType] = actionTypes
+    const types = createActionTypes(config.createActionType(firstActionType))
 
-    const type = types.type;
+    const { type } = types
     const typeSuccess = secondActionType
       ? config.createActionType(secondActionType)
-      : types.typeSuccess;
-    const typeError = thirdActionType ? config.createActionType(thirdActionType) : types.typeError;
+      : types.typeSuccess
+    const typeError = thirdActionType ? config.createActionType(thirdActionType) : types.typeError
 
-    const dispatchers: any[] = store[DISPATHERS_FIELD_NAME];
-    const allTypes = [typeSuccess, typeError];
+    const dispatchers: any[] = store[DISPATHERS_FIELD_NAME]
+    const allTypes = [typeSuccess, typeError]
 
     const promise = createPromiseCancelable<any>((res, rej, whenCancel) => {
       const unsub = store[SUBSCRIBE_FIELD_NAME]((_: any, action: Action) => {
         if (allTypes.includes(action.type) && isPayloadChecked(action.payload, checker)) {
-          unsub();
-          dispatchers.splice(dispatchers.indexOf(promise.cancel), 1);
+          unsub()
+          dispatchers.splice(dispatchers.indexOf(promise.cancel), 1)
 
-          if (action.type === typeSuccess) return res(action.payload);
+          if (action.type === typeSuccess) return res(action.payload)
 
-          return rej(action.payload);
+          return rej(action.payload)
         }
-      });
+      })
 
-      whenCancel(unsub);
-    });
+      whenCancel(unsub)
+    })
 
-    dispatchers.push(promise.cancel);
+    dispatchers.push(promise.cancel)
 
-    store[DISPATCH_ACTION_FIELD_NAME](config.createAction(type, payload));
+    store[DISPATCH_ACTION_FIELD_NAME](config.createAction(type, payload))
 
-    return promise;
+    return promise
   }
 
-  return dispatcher;
+  return dispatcher
 }

@@ -1,24 +1,24 @@
-import React, { FC } from 'react';
-import { observer } from 'mobx-react-lite';
-import clsx from 'clsx';
-import ToggleStore from './Toggle.store';
-import styles from './Toggle.css';
+import { FC } from 'react'
+import { observer } from 'mobx-react-lite'
+import clsx from 'clsx'
+import ToggleStore from './Toggle.store'
+import styles from './Toggle.css'
 
 interface SimpleToggleProps {
-  className?: string;
-  value: any;
-  onChange: (e: any) => any;
-  disabled?: boolean;
+  className?: string
+  value: any
+  onChange: (e: any) => any
+  disabled?: boolean
 }
 
-const TYPE = 'checkbox';
+const TYPE = 'checkbox'
 
 export const SimpleToggle: FC<SimpleToggleProps> = ({ className, value, onChange, disabled }) => (
   <label className={clsx([styles.container, className])}>
     <input type={TYPE} checked={value} onChange={onChange} disabled={disabled} />
     <span className={styles.check} />
   </label>
-);
+)
 
 const Toggle: FC<{ className?: string; store: ToggleStore }> = ({ className, store }) => (
   <SimpleToggle
@@ -27,6 +27,6 @@ const Toggle: FC<{ className?: string; store: ToggleStore }> = ({ className, sto
     onChange={store.onChange}
     disabled={store.disabled}
   />
-);
+)
 
-export default observer(Toggle);
+export default observer(Toggle)
