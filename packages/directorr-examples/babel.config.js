@@ -5,7 +5,7 @@ module.exports = {
         '@babel/preset-typescript',
         // '@babel/preset-env',
         ['@babel/preset-env', { useBuiltIns: 'usage', corejs: { version: 3 } }],
-        '@babel/preset-react',
+        ['@babel/preset-react', { runtime: 'automatic' }],
       ],
       plugins: [
         // Experimental
@@ -16,7 +16,11 @@ module.exports = {
       ],
     },
     production: {
-      presets: ['@babel/preset-typescript', '@babel/preset-env', '@babel/preset-react'],
+      presets: [
+        '@babel/preset-typescript',
+        '@babel/preset-env',
+        ['@babel/preset-react', { runtime: 'automatic' }],
+      ],
     },
   },
 }

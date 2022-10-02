@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs')
 
 module.exports = {
-  ignorePatterns: ['**/node_modules/**', '**/dist/**', '**/coverage/**'],
+  ignorePatterns: ['**/node_modules/**', '**/dist/**', '**/coverage/**', '**/*.css.d.ts'],
   parser: '@typescript-eslint/parser',
   extends: [
     'airbnb-typescript',

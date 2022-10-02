@@ -1,4 +1,4 @@
-const isDevIE = process.env.BROWSER_ENV === 'ie';
+const isDevIE = process.env.BROWSER_ENV === 'ie'
 
 module.exports = {
   env: {
@@ -13,7 +13,7 @@ module.exports = {
             targets: `${isDevIE ? 'ie >= 11, ' : ''}last 4 Chrome versions`,
           },
         ],
-        '@babel/preset-react',
+        ['@babel/preset-react', { runtime: 'automatic' }],
         '@babel/preset-typescript',
       ],
       plugins: [
@@ -25,7 +25,11 @@ module.exports = {
       ],
     },
     production: {
-      presets: ['@babel/preset-typescript', '@babel/preset-env', '@babel/preset-react'],
+      presets: [
+        '@babel/preset-typescript',
+        '@babel/preset-env',
+        ['@babel/preset-react', { runtime: 'automatic' }],
+      ],
     },
   },
-};
+}
