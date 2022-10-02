@@ -1,6 +1,6 @@
 {
   "name": "@nimel/directorr-appinitializer",
-  "version": "1.0.0-rc.17",
+  "version": "1.0.0-rc.18",
   "publishConfig": {
     "access": "public"
   },
@@ -40,12 +40,12 @@
   },
   "peerDependencies": {
     "mobx": "^6.2.0",
-    "@nimel/directorr": "^1.0.0-rc.17"
+    "@nimel/directorr": "^1.0.0-rc.18"
   },
   "dependencies": {},
   "devDependencies": {
     "mobx": "^6.2.0",
-    "@nimel/directorr": "^1.0.0-rc.17"
+    "@nimel/directorr": "^1.0.0-rc.18"
   },
   "author": "Nikita Melnikov",
   "license": "MIT",

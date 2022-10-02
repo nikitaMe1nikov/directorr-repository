@@ -1,6 +1,6 @@
 {
   "name": "@nimel/directorr-next",
-  "version": "1.0.0-rc.17",
+  "version": "1.0.0-rc.18",
   "publishConfig": {
     "access": "public"
   },
@@ -39,18 +39,18 @@
     "test-typescript:w": "jest --rootDir='.' --config '../../jest.typescript.config.js' --watchAll"
   },
   "peerDependencies": {
-    "@nimel/directorr": "^1.0.0-rc.17",
-    "@nimel/directorr-react": "^1.0.0-rc.17",
+    "@nimel/directorr": "^1.0.0-rc.18",
+    "@nimel/directorr-react": "^1.0.0-rc.18",
     "next": ">=9.5.0",
     "react": ">=16.14",
     "react-dom": ">=16.14"
   },
   "dependencies": {
-    "@nimel/directorr-router": "^1.0.0-rc.17"
+    "@nimel/directorr-router": "^1.0.0-rc.18"
   },
   "devDependencies": {
-    "@nimel/directorr": "^1.0.0-rc.17",
-    "@nimel/directorr-react": "^1.0.0-rc.17",
+    "@nimel/directorr": "^1.0.0-rc.18",
+    "@nimel/directorr-react": "^1.0.0-rc.18",
     "next": "^9.5.3"
   },
   "author": "Nikita Melnikov",

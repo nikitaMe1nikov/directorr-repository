@@ -1,6 +1,6 @@
 {
   "name": "@nimel/directorr-todo-example",
-  "version": "1.0.0-rc.17",
+  "version": "1.0.0-rc.18",
   "private": true,
   "description": "Todo example written on directorr",
   "main": "src/index.js",
@@ -18,9 +18,9 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.11.2",
-    "@nimel/directorr": "^1.0.0-rc.17",
-    "@nimel/directorr-middlewares": "^1.0.0-rc.17",
-    "@nimel/directorr-react": "^1.0.0-rc.17",
+    "@nimel/directorr": "^1.0.0-rc.18",
+    "@nimel/directorr-middlewares": "^1.0.0-rc.18",
+    "@nimel/directorr-react": "^1.0.0-rc.18",
     "clsx": "^1.1.1",
     "core-js": "^3.6.5",
     "localforage": "^1.9.0",
