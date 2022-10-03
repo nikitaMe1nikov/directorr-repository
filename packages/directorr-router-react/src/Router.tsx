@@ -30,18 +30,17 @@ import {
 
 export const MODULE_NAME = 'Router'
 
-type RouterProps = {
+export type RouterProps = {
   routes: Route[]
   startAnimationDelay?: number
   className?: string
   animation?: Animation
   persisted?: Persisted
   disableAnimationWhenNotShowRoute?: boolean
+  routerStore?: RouterStore
 }
 
-type RouterPropsWithDefault = RouterProps & { routerStore: RouterStore }
-
-interface RouterState {
+export interface RouterState {
   component: ComponentType
   redirect?: string
   route?: Route
@@ -49,7 +48,7 @@ interface RouterState {
   isShowComponent: boolean
   animation: Animation
   persisted: Persisted
-  action: Action
+  action?: Action
 }
 
 export class Router extends PureComponent<RouterProps> {
@@ -74,11 +73,12 @@ export class Router extends PureComponent<RouterProps> {
 
   routerHandler: RouterHandler
 
-  props: RouterPropsWithDefault = this.props
+  props: RouterProps
 
   constructor(props: RouterProps) {
     super(props)
 
+    this.props = props
     this.routesMap = new Map()
     this.promiseResolve = resolve => (this.endRouteTransition = resolve)
     this.routerHandler = ({ path, action }: RouterTask) => {
@@ -99,7 +99,7 @@ export class Router extends PureComponent<RouterProps> {
       }
 
       if ((route as RouteRedirect).redirect) {
-        routerStore.historyStore.push((route as RouteRedirect).redirect)
+        routerStore?.historyStore.push((route as RouteRedirect).redirect)
 
         return
       }
@@ -139,10 +139,9 @@ export class Router extends PureComponent<RouterProps> {
       routerStore,
     } = this.props
 
-    routerStore.subscribe(this.routerHandler)
+    routerStore?.subscribe(this.routerHandler)
 
-    const { action, path } = routerStore
-    const { component, route } = findRouteAndComponent(routes, path)
+    const { component, route } = findRouteAndComponent(routes, routerStore?.path || '')
 
     if (!route || !component) {
       this.prevRouteState = {
@@ -151,7 +150,7 @@ export class Router extends PureComponent<RouterProps> {
         isShowComponent: false,
         animation: animation,
         persisted,
-        action,
+        action: routerStore?.action,
       }
       this.nextRouteState = this.prevRouteState
 
@@ -166,11 +165,11 @@ export class Router extends PureComponent<RouterProps> {
         isShowComponent: false,
         animation: route.animation || animation,
         persisted,
-        action,
+        action: routerStore?.action,
       }
       this.nextRouteState = this.prevRouteState
 
-      routerStore.historyStore.push((route as RouteRedirect).redirect)
+      routerStore?.historyStore.push((route as RouteRedirect).redirect)
 
       return
     }
@@ -189,7 +188,7 @@ export class Router extends PureComponent<RouterProps> {
       isShowComponent: true,
       animation: route.animation || animation,
       persisted: (route as RouteComponent).persisted || persisted,
-      action,
+      action: routerStore?.action,
     }
     this.nextRouteState = this.prevRouteState
 
@@ -198,7 +197,7 @@ export class Router extends PureComponent<RouterProps> {
 
   componentWillUnmount() {
     clearTimeout(this.animationID)
-    this.props.routerStore.unsubscribe(this.routerHandler)
+    this.props.routerStore?.unsubscribe(this.routerHandler)
   }
 
   calcAnimation(
