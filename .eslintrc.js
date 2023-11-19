@@ -270,7 +270,9 @@ module.exports = {
       'error',
       { props: 'never', children: 'never', propElementValues: 'always' },
     ],
-    'react-hooks/exhaustive-deps': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+
+    'css-modules/no-unused-class': 'off',
   },
   // overrides: [
   //   {
