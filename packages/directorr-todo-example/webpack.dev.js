@@ -1,14 +1,14 @@
-const path = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
-const postcssInlineSvg = require('postcss-inline-svg');
-const postcssSimpleVars = require('postcss-simple-vars');
-const postcssPresetEnv = require('postcss-preset-env');
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const path = require('path')
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
+const postcssInlineSvg = require('postcss-inline-svg')
+const postcssSimpleVars = require('postcss-simple-vars')
+const postcssPresetEnv = require('postcss-preset-env')
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 
-const isDev = process.env.NODE_ENV === 'development';
-const isDevIE = isDev && process.env.BROWSER_ENV === 'ie';
+const isDev = process.env.NODE_ENV === 'development'
+const isDevIE = isDev && process.env.BROWSER_ENV === 'ie'
 
 module.exports = {
   mode: 'development',
@@ -81,7 +81,7 @@ module.exports = {
     splitChunks: {
       cacheGroups: {
         vendors: {
-          test: /[\\/]node_modules[\\/].+\.js$/,
+          test: /[/\\]node_modules[/\\].+\.js$/,
           name: 'vendors',
           chunks: 'all',
         },
@@ -116,4 +116,4 @@ module.exports = {
   bail: false,
   cache: true,
   stats: 'minimal',
-};
+}
