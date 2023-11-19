@@ -28,7 +28,7 @@ export class MiddlewareAdapter implements MiddlewareAdapterInterface {
   }
 
   run(action: Action) {
-    this.middleware(action, this.next, this.directorr)
+    void this.middleware(action, this.next, this.directorr)
   }
 }
 

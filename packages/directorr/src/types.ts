@@ -79,21 +79,19 @@ export type FindNextMiddleware = (nextIndex: number, action: Action) => any
 
 export type ReduxMiddlewareRunner = (action: Action) => any
 
-export type Next = (action: Action) => void
+export type Next = DispatchAction
 
-export type Middleware = (action: Action, next: Next, store: DirectorrInterface) => void
+export type Middleware<A = Action> = (
+  action: A,
+  next: Next,
+  store: DirectorrInterface,
+) => unknown | Promise<unknown>
 
 export type Afterware = (
   action: Action,
   dispatchType: DirectorrInterface['dispatchType'],
   directorr: DirectorrInterface,
-) => void
-
-export type PayloadAfterware = (
-  dispatchType: DirectorrInterface['dispatchType'],
-  payload: Action['payload'],
-  directorr: DirectorrInterface,
-) => void
+) => unknown | Promise<unknown>
 
 export interface MiddlewareAdapterInterface {
   run(action: Action): void

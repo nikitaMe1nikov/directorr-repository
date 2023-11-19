@@ -411,7 +411,7 @@ export class Directorr implements DirectorrInterface {
     }
 
     for (const afterware of this.afterwares) {
-      afterware(action, this.dispatchType, this)
+      void afterware(action, this.dispatchType, this)
     }
 
     for (const handler of this.subscribeHandlers) {
