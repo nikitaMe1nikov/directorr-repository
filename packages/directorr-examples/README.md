@@ -1,1 +1,0 @@
-# directorr-examples

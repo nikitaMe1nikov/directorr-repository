@@ -49,8 +49,12 @@ export const GLOBAL_DEP = { global: true }
 export const OMIT_ACTIONS = ['@APPLY_SNAPSHOT']
 
 export class Directorr implements DirectorrInterface {
-  constructor({ initState = EMPTY_OBJECT }: DirectorrOptions = EMPTY_OBJECT) {
+  constructor({ initState = EMPTY_OBJECT, middlewares, stores }: DirectorrOptions = EMPTY_OBJECT) {
     this.initState = initState
+
+    if (middlewares) this.addMiddlewares(middlewares)
+
+    if (stores) this.addStores(stores)
   }
 
   private initState: DirectorrStoresState
@@ -344,7 +348,7 @@ export class Directorr implements DirectorrInterface {
     this.addSomeMiddlewares(middlewares, MiddlewareAdapter)
   }
 
-  removeMiddleware(middleware: Middleware) {
+  removeMiddleware(middleware: Middleware | ReduxMiddleware) {
     const idx = this.middlewares.findIndex(m => m.middleware === middleware)
 
     this.middlewares.splice(idx, 1)

@@ -37,7 +37,8 @@
     "test-babel": "jest --rootDir='.' --config '../../jest.babel.config.js'",
     "test-babel:w": "jest --rootDir='.' --config '../../jest.babel.config.js' --watchAll",
     "test-typescript": "jest --rootDir='.' --config '../../jest.typescript.config.js'",
-    "test-typescript:w": "jest --rootDir='.' --config '../../jest.typescript.config.js' --watchAll"
+    "test-typescript:w": "jest --rootDir='.' --config '../../jest.typescript.config.js' --watchAll",
+    "storybook": "storybook dev -p 6006 --ci"
   },
   "peerDependencies": {
     "@nimel/directorr": "^1.0.0-rc.18",
@@ -46,11 +47,12 @@
   },
   "dependencies": {
     "@nimel/directorr-query": "^1.0.0-rc.18",
-    "lodash": "^4.17.21"
+    "lodash": ">=4.17.21"
   },
   "devDependencies": {
     "@nimel/directorr": "^1.0.0-rc.18",
     "@nimel/directorr-react": "^1.0.0-rc.18",
+    "@nimel/directorr-middlewares": "^1.0.0-rc.18",
     "@types/lodash": "^4.14.201",
     "react": ">=16.14"
   },

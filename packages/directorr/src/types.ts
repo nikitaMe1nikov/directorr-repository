@@ -261,6 +261,8 @@ export type DepencyName = symbol | SomeObject
 export interface DirectorrOptions {
   initState?: DirectorrStoresState
   context?: SomeObject
+  middlewares?: Middleware[]
+  stores?: DirectorrStoreClassConstructor<any>[]
 }
 
 export interface DirectorrInterface {

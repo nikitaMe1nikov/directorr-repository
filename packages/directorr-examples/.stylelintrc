@@ -1,9 +1,0 @@
-{
-  "extends": "stylelint-config-standard",
-  "rules": {
-    "property-no-unknown": [true, { "ignoreProperties": ["composes"] }],
-    "max-empty-lines": 4,
-    "comment-whitespace-inside": "never",
-    "comment-empty-line-before": "never"
-  }
-}

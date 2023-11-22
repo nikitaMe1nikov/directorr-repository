@@ -5,16 +5,7 @@ import { QueryQueue } from './QueryQueue'
 import { QueryRunner } from './QueryRunner'
 import { createUniqKey } from './utils'
 
-export type CreateQueryMiddlewareOptions = QueryCacheOptions & {
-  // name?: string
-  // latency?: number
-  // maxAge?: number
-  // trace?: boolean
-  // traceLimit?: number
-  // actionsBlacklist?: string[]
-  // actionsWhitelist?: string[]
-  // features?: Record<string, any>
-}
+export type CreateQueryMiddlewareOptions = QueryCacheOptions
 
 export function createQueryMiddleware(
   createOptions: CreateQueryMiddlewareOptions = {},

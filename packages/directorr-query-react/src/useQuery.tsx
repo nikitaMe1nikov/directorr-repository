@@ -11,6 +11,7 @@ import {
   ReturnTypeQuery,
 } from '@nimel/directorr-query'
 import isEqual from 'lodash/fp/isEqual'
+import packageMeta from '../package.json'
 
 export const DEFAULT_OPTIONS = {}
 
@@ -37,6 +38,9 @@ export const useQuery = <V extends Variables, Q extends Query<V, any>>(
   options: UseQueryOptions = DEFAULT_OPTIONS,
 ) => {
   const dir = useContext(DirectorrContext)
+
+  if (!dir)
+    throw new Error(`${packageMeta.name}: dont found directorr(@nimel/directorr-react) context`)
 
   const [state, setState] = useState<State<Q, V, ReturnTypeQuery<V, Q>>>(
     () =>

@@ -4,17 +4,7 @@ const fs = require('fs')
 module.exports = {
   ignorePatterns: ['**/node_modules/**', '**/dist/**', '**/coverage/**', '**/*.css.d.ts'],
   parser: '@typescript-eslint/parser',
-  extends: [
-    'airbnb-typescript',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:promise/recommended',
-    'plugin:prettier/recommended',
-    'plugin:optimize-regex/recommended',
-    'plugin:unicorn/recommended',
-    'plugin:sonarjs/recommended',
-    'plugin:css-modules/recommended',
-    'plugin:workspaces/recommended',
-  ],
+  extends: ['airbnb-typescript', 'plugin:@typescript-eslint/recommended', 'plugin:promise/recommended', 'plugin:prettier/recommended', 'plugin:optimize-regex/recommended', 'plugin:unicorn/recommended', 'plugin:sonarjs/recommended', 'plugin:css-modules/recommended', 'plugin:workspaces/recommended', 'plugin:storybook/recommended'],
   plugins: [
     'react',
     'react-hooks',

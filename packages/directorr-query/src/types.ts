@@ -6,7 +6,7 @@ export type UniqKey = string
 export type Variables = any
 
 export type QueryArg<V extends Variables = Variables> = {
-  variables?: V
+  variables: V
   runQuery: RunQuery<Query>
 }
 

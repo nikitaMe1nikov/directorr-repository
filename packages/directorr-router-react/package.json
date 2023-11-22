@@ -50,6 +50,7 @@
   "devDependencies": {
     "@nimel/directorr": "^1.0.0-rc.18",
     "@nimel/directorr-react": "^1.0.0-rc.18",
+    "@nimel/directorr-middlewares": "^1.0.0-rc.18",
     "history": "^5.0.0"
   },
   "author": "Nikita Melnikov",

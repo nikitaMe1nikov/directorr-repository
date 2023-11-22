@@ -21,7 +21,7 @@ export function initializer(
   initObject: any,
   value: any,
   property: string,
-  [delay = 0]: number[],
+  [delay = 0]: [number],
   addFields = addInitFields,
 ) {
   if (!isFunction(value)) throw new Error(callWithPropNotEquallFunc(MODULE_NAME, property))
