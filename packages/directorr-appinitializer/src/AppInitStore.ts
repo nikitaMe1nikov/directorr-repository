@@ -1,51 +1,84 @@
 import { observable, makeObservable } from 'mobx'
-import { Action, DirectorrInterface, isStoreReady, isStoreError } from '@nimel/directorr'
+import {
+  // Action,
+  // DirectorrInterface,
+  isStoreReady,
+  isStoreError,
+  injectDirectorr,
+  Directorr,
+  whenState,
+  // isFunction,
+} from '@nimel/directorr'
 import {
   initStoreAction,
+  initStoreEffect,
   initStoreErrorAction,
+  initStoreErrorEffect,
   initStoreSuccessAction,
-  isReadyEffect,
+  initStoreSuccessEffect,
+  // isReadyEffect,
 } from './decorators'
-import { InitOptions } from './types'
+import {
+  InitOptions,
+  InitStoreErrorPayload,
+  InitStorePayload,
+  InitStoreSuccessPayload,
+  SomeClassConstructor,
+} from './types'
+
+function isStores(payload: InitStoreSuccessPayload, store: AppInitStore) {
+  return store.loadingStores === payload.stores
+}
 
 export class AppInitStore {
-  static afterware = (
-    { type, payload }: Action,
-    dispatchType: DirectorrInterface['dispatchType'],
-    directorr: DirectorrInterface,
-  ) => {
-    if (type === initStoreAction.type) {
-      const { stores } = payload
-
-      directorr.addStores(stores)
-
-      const waitStores = directorr.waitStoresState(stores, isStoreReady)
-      const waitStoreWithError = directorr.findStoreState(isStoreError)
-
-      void Promise.race([waitStores, waitStoreWithError]).then(store => {
-        if (store) {
-          waitStores.cancel()
-          dispatchType(initStoreErrorAction.type, { store, stores })
-        } else {
-          waitStoreWithError.cancel()
-          dispatchType(initStoreSuccessAction.type, { stores })
-        }
-      })
-    }
-  }
-
-  constructor() {
+  constructor(options?: InitOptions) {
     makeObservable(this)
+
+    this.loadingStores = options
   }
+
+  @injectDirectorr directorr: Directorr
+
+  @observable.ref storeWithError?: SomeClassConstructor = undefined
 
   @observable isInitComplated = false
+
+  loadingStores?: InitOptions
 
   @initStoreAction
   loadStores = (stores: InitOptions) => ({ stores })
 
-  @isReadyEffect
-  toSuccess = () => {
+  @initStoreEffect
+  waitStores = ({ stores }: InitStorePayload) => {
+    this.loadingStores = stores
+    this.directorr.addStores(stores)
+
+    const waitStores = this.directorr.waitStoresState(stores, isStoreReady)
+    const waitStoreWithError = this.directorr.findStoreState(isStoreError)
+
+    void Promise.race([waitStores, waitStoreWithError]).then(store => {
+      if (store) {
+        waitStores.cancel()
+        this.directorr.dispatch(initStoreErrorAction.createAction({ store, stores }))
+      } else {
+        waitStoreWithError.cancel()
+        this.directorr.dispatch(initStoreSuccessAction.createAction({ stores }))
+      }
+    })
+  }
+
+  @initStoreSuccessEffect
+  @whenState(isStores)
+  whenSuccess = () => {
     this.isInitComplated = true
+    this.storeWithError = undefined
+  }
+
+  @initStoreErrorEffect
+  @whenState(isStores)
+  whenError = ({ store }: InitStoreErrorPayload) => {
+    this.isInitComplated = false
+    this.storeWithError = store
   }
 }
 

@@ -8,12 +8,13 @@ import {
 } from '@nimel/directorr'
 import {
   initStoreAction,
-  isReadyAction,
   initStoreSuccessEffect,
   initStoreErrorEffect,
+  initStoreSuccessAction,
 } from '../decorators'
 import AppInitStore from '../AppInitStore'
 import { flushPromises } from '../../../../tests/utils'
+import { SomeClassConstructor } from '../types'
 
 const CHANGE_READY = 'CHANGE_READY'
 const CHANGE_ERROR = 'CHANGE_ERROR'
@@ -69,11 +70,12 @@ describe('AppInitStore', () => {
   })
 
   it('change state isInitComplated', () => {
-    const store: any = new AppInitStore()
+    const options = [] as SomeClassConstructor<any, any>[]
+    const store: any = new AppInitStore(options)
 
     expect(store.isInitComplated).toBeFalsy()
 
-    dispatchEffectInStore(store, isReadyAction.type)
+    dispatchEffectInStore(store, initStoreSuccessAction.createAction({ stores: options }))
 
     expect(store.isInitComplated).toBeTruthy()
   })

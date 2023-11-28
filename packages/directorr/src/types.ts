@@ -23,7 +23,6 @@ export interface DirectorrStoreClassConstructor<I = DirectorrStoreClass, O = any
   new (options?: O): I
   storeName?: string
   storeInitOptions?: O
-  afterware?: Afterware
 }
 
 export type SomeObject = Record<string, any>
@@ -85,12 +84,6 @@ export type Middleware<A = Action> = (
   action: A,
   next: Next,
   store: DirectorrInterface,
-) => unknown | Promise<unknown>
-
-export type Afterware = (
-  action: Action,
-  dispatchType: DirectorrInterface['dispatchType'],
-  directorr: DirectorrInterface,
 ) => unknown | Promise<unknown>
 
 export interface MiddlewareAdapterInterface {
@@ -266,6 +259,7 @@ export interface DirectorrOptions {
 }
 
 export interface DirectorrInterface {
+  stores: DirectorrStores
   addStores(storeConstructors: DirectorrStoreClassConstructor<any>[]): void
   addStore<I>(storeConstructor: DirectorrStoreClassConstructor<I>): I
   removeStore(storeConstructor: DirectorrStoreClassConstructor<any>): void
@@ -292,6 +286,8 @@ export interface DirectorrInterface {
     StoreConstructor: DirectorrStoreClassConstructor<any>,
     depName: DepencyName,
   ): void
+  subscribe: (handler: SubscribeHandler) => UnsubscribeHandler
+  unsubscribe: (handler: SubscribeHandler) => void
 }
 
 export type SubscribeHandler = (store: DirectorrStores, action: Action) => void

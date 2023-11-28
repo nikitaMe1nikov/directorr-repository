@@ -1,4 +1,4 @@
-import { getStoreName } from '../utils'
+import { getStoreName } from '../Directorr/directorrUtils'
 import { DirectorrInterface, Action, PromiseCancelable } from '../types'
 
 export class DirectorrMock implements DirectorrInterface {
@@ -75,4 +75,8 @@ export class DirectorrMock implements DirectorrInterface {
   setStateToStore = jest.fn()
 
   removeMiddleware = jest.fn()
+
+  subscribe = jest.fn()
+
+  unsubscribe = jest.fn()
 }

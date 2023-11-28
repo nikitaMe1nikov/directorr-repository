@@ -1,13 +1,11 @@
 import {
-  batchFunction,
   createAction,
   createActionType,
-  ACTION_TYPE_DIVIDER,
   dispatchEffects,
   hydrateStoresToState,
   mergeStateToStore,
   setStateToStore,
-} from './utils'
+} from './Directorr/directorrUtils'
 import {
   BatchFunction,
   CreateActionFunction,
@@ -18,6 +16,8 @@ import {
   MergeStateToStores,
   SetStateToStore,
 } from './types'
+import { ACTION_TYPE_DIVIDER } from './constants'
+import { batchFunction } from './utils/primitives'
 
 class Config {
   batchFunction: BatchFunction = batchFunction

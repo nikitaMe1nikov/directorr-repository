@@ -1,3 +1,4 @@
+import './config'
 import { ReactElement, FC } from 'react'
 import { Directorr } from '@nimel/directorr'
 import { DirectorrProvider } from '@nimel/directorr-react'

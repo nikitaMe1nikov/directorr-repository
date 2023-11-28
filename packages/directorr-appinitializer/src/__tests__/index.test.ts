@@ -5,8 +5,6 @@ import {
   initStoreErrorEffect,
   initStoreSuccessAction,
   initStoreSuccessEffect,
-  isReadyAction,
-  isReadyEffect,
 } from '../decorators'
 
 describe('index', () => {
@@ -17,7 +15,5 @@ describe('index', () => {
     expect(initStoreErrorEffect).not.toBeUndefined()
     expect(initStoreSuccessAction).not.toBeUndefined()
     expect(initStoreSuccessEffect).not.toBeUndefined()
-    expect(isReadyAction).not.toBeUndefined()
-    expect(isReadyEffect).not.toBeUndefined()
   })
 })

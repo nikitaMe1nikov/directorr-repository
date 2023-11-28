@@ -1,4 +1,4 @@
-import { DIRECTORR_INIT_STORE_ACTION } from '../utils'
+import { DIRECTORR_INIT_STORE_ACTION } from '../constants'
 import config from '../config'
 
 export const someValue = { someValue: 'someValue' }

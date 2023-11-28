@@ -1,8 +1,8 @@
 import createPropertyDecoratorFactory from '../createPropertyDecoratorFactory'
-import decorator from '../decorator'
+import decorator from '../decorators/decorator'
 import { moduleName } from '../__mocks__/mocks'
 
-jest.mock('../createDecoratorFactory', () => {
+jest.mock('../decorators/createDecoratorFactory', () => {
   const createDecoratorFactory = jest.fn().mockImplementation(() => createDecoratorFactory)
 
   return createDecoratorFactory

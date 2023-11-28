@@ -38,6 +38,9 @@ export const useForPropNotEquallObject: MessageFunc = (moduleName, property) =>
 export const notFoundDirectorrStore: MessageFunc = (moduleName, StoreConstructor) =>
   `${moduleName}: store with constuctor=${StoreConstructor.name} not add to Dirrector`
 
+export const notFoundDirectorr: MessageFunc = moduleName =>
+  `${moduleName}: store not add to Dirrector`
+
 export const notFoundStoreInDirectorrStore: MessageFunc = (
   moduleName,
   StoreConstructor,

@@ -1,22 +1,15 @@
 /**
  * @jest-environment jsdom
  */
-import '../director'
 import { FC } from 'react'
-import { action, effect, createActionFactory } from '@nimel/directorr'
-import {
-  initStoreSuccessEffect,
-  isReadyAction,
-  initStoreErrorEffect,
-} from '@nimel/directorr-appinitializer'
-import AppInit from '../AppInit'
+import { action, effect } from '@nimel/directorr'
+import { initStoreSuccessEffect, initStoreErrorEffect } from '@nimel/directorr-appinitializer'
+import { AppInit } from '../AppInit'
 import { createDirectorr, mountWithDirectorr } from '../__mocks__/utils'
 import { flushPromises } from '../../../../tests/utils'
 
 const CHANGE_READY = 'CHANGE_READY'
 const CHANGE_ERROR = 'CHANGE_ERROR'
-
-const createIsReadyAction = createActionFactory<{ isReady: boolean }>(isReadyAction.type)
 
 class StoreOne {
   isReady = false
@@ -56,6 +49,8 @@ const SomeComponent: FC = () => null
 
 const ChildComponent: FC = () => <SomeComponent />
 
+const ErrorComponent: FC = () => null
+
 describe('AppInit', () => {
   it('with not ready stores', () => {
     const directorr = createDirectorr()
@@ -68,6 +63,7 @@ describe('AppInit', () => {
     )
 
     expect(wrapper.find(SomeComponent)).toHaveLength(0)
+    expect(wrapper.find(ErrorComponent)).toHaveLength(0)
   })
 
   it('with not ready stores and LoadingComponent', () => {
@@ -90,17 +86,20 @@ describe('AppInit', () => {
     const stores = [StoreOne]
 
     const wrapper = mountWithDirectorr(
-      <AppInit stores={stores}>
+      <AppInit stores={stores} ErrorComponent={ErrorComponent}>
         <ChildComponent />
       </AppInit>,
       directorr,
     )
 
     expect(wrapper.find(SomeComponent)).toHaveLength(0)
+    expect(wrapper.find(ErrorComponent)).toHaveLength(0)
 
     const storeOne = directorr.getStore(StoreOne) as StoreOne
 
     expect(storeOne).toBeInstanceOf(StoreOne)
+    expect(wrapper.update().find(SomeComponent)).toHaveLength(0)
+    expect(wrapper.update().find(ErrorComponent)).toHaveLength(0)
 
     storeOne.changeReady()
 
@@ -108,11 +107,8 @@ describe('AppInit', () => {
 
     expect(storeOne.toReadyAppinit).toBeCalledTimes(1)
     expect(storeOne.toReadyAppinit).toBeCalledWith({ stores })
-    expect(wrapper.update().find(SomeComponent)).toHaveLength(0)
-
-    directorr.dispatch(createIsReadyAction())
-
     expect(wrapper.update().find(SomeComponent)).toHaveLength(1)
+    expect(wrapper.update().find(ErrorComponent)).toHaveLength(0)
   })
 
   it('with stores where some have error state', async () => {
@@ -120,17 +116,20 @@ describe('AppInit', () => {
     const stores = [StoreOne, StoreError]
 
     const wrapper = mountWithDirectorr(
-      <AppInit stores={stores}>
+      <AppInit stores={stores} ErrorComponent={ErrorComponent}>
         <ChildComponent />
       </AppInit>,
       directorr,
     )
 
     expect(wrapper.find(SomeComponent)).toHaveLength(0)
+    expect(wrapper.find(ErrorComponent)).toHaveLength(0)
 
     const storeError = directorr.getStore(StoreError) as StoreError
 
     expect(storeError).toBeInstanceOf(StoreError)
+    expect(wrapper.update().find(SomeComponent)).toHaveLength(0)
+    expect(wrapper.update().find(ErrorComponent)).toHaveLength(0)
 
     storeError.changeError()
 
@@ -139,9 +138,6 @@ describe('AppInit', () => {
     expect(storeError.toErrorAppinit).toBeCalledTimes(1)
     expect(storeError.toErrorAppinit).toBeCalledWith({ store: storeError, stores })
     expect(wrapper.update().find(SomeComponent)).toHaveLength(0)
-
-    directorr.dispatch(createIsReadyAction())
-
-    expect(wrapper.update().find(SomeComponent)).toHaveLength(1)
+    expect(wrapper.update().find(ErrorComponent)).toHaveLength(1)
   })
 })

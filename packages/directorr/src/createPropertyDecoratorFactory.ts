@@ -1,5 +1,5 @@
-import createDecoratorFactory from './createDecoratorFactory'
-import decorator from './decorator'
+import createDecoratorFactory from './decorators/createDecoratorFactory'
+import decorator from './decorators/decorator'
 import { CreateDecorator, Initializer, CreateContext } from './types'
 
 export function createPropertyDecoratorFactory<T1 = any, T2 = any>(

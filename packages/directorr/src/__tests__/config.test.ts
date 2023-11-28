@@ -1,14 +1,16 @@
 import {
-  batchFunction,
+  // batchFunction,
   createAction,
   createActionType,
-  ACTION_TYPE_DIVIDER,
+  // ACTION_TYPE_DIVIDER,
   dispatchEffects,
   hydrateStoresToState,
   mergeStateToStore,
-} from '../utils'
+} from '../Directorr/directorrUtils'
 import config from '../config'
 import { actionType, actionType2 } from '../__mocks__/mocks'
+import { ACTION_TYPE_DIVIDER } from '../constants'
+import { batchFunction } from '../utils/primitives'
 
 describe('config', () => {
   it('config default', () => {
