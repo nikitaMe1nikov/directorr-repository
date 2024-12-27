@@ -50,7 +50,6 @@ import { createValueDescriptor } from '../utils/decoratorsUtils'
 
 export const MODULE_NAME = 'Directorr'
 export const GLOBAL_DEP = { global: true }
-export const OMIT_ACTIONS = ['@APPLY_SNAPSHOT']
 
 export class Directorr implements DirectorrInterface {
   constructor({ initState = EMPTY_OBJECT, middlewares, stores }: DirectorrOptions = EMPTY_OBJECT) {
@@ -241,6 +240,9 @@ export class Directorr implements DirectorrInterface {
       if (!store[INJECTED_FROM_FIELD_NAME].length && !store[DEPENDENCY_FIELD_NAME].length) {
         this.dispatchType(DIRECTORR_DESTROY_STORE_ACTION, { store })
         defineProperty(store, DISPATCH_ACTION_FIELD_NAME, createValueDescriptor(EMPTY_FUNC))
+        defineProperty(store, STORES_FIELD_NAME, createValueDescriptor(undefined))
+        defineProperty(store, SUBSCRIBE_FIELD_NAME, createValueDescriptor(EMPTY_FUNC))
+        defineProperty(store, INJECTED_DIRECTORR_FIELD_NAME, createValueDescriptor(undefined))
 
         // remove store
         this.stores.delete(storeName)
@@ -321,7 +323,7 @@ export class Directorr implements DirectorrInterface {
 
   reduxStore: Store = {
     getState: () => this.getHydrateStoresState(),
-    dispatch: this.dispatch,
+    dispatch: this.dispatch as Store['dispatch'],
     subscribe: this.subscribe,
     replaceReducer: EMPTY_FUNC,
     [Symbol.observable]: () => {

@@ -1,6 +1,6 @@
 import {
   createConnector,
-  createUseStoreHooks,
+  createUseStoreHook,
   DirectorrContext,
   DirectorrProvider,
   useStore,
@@ -11,7 +11,7 @@ import {
 describe('index', () => {
   it('check exports', () => {
     expect(createConnector).not.toBeUndefined()
-    expect(createUseStoreHooks).not.toBeUndefined()
+    expect(createUseStoreHook).not.toBeUndefined()
     expect(connector).not.toBeUndefined()
     expect(DirectorrContext).not.toBeUndefined()
     expect(DirectorrProvider).not.toBeUndefined()

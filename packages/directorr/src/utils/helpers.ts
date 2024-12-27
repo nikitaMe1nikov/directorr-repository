@@ -41,3 +41,5 @@ export function dispatchActionInStore(store: SomeObject, actionOrType: any, payl
       typeof actionOrType !== 'string' ? actionOrType : config.createAction(actionOrType, payload),
     )
 }
+
+// export

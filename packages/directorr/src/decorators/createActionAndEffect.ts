@@ -9,33 +9,56 @@ export function createActionAndEffect<
   SP = any,
   EP = { error: Error },
   LP = any,
-  T = string,
+  T extends string = string,
 >(
   actionType: T,
 ): [
   DecoratorValueTypedWithType<P, SomeAction<P | null>, T>,
   DecoratorValueTypedWithType<P, SomeEffect<P>, T>,
-  DecoratorValueTypedWithType<SP, SomeAction<SP | null>, T>,
-  DecoratorValueTypedWithType<SP, SomeEffect<SP>, T>,
-  DecoratorValueTypedWithType<EP, SomeAction<EP | null>, T>,
-  DecoratorValueTypedWithType<EP, SomeEffect<EP>, T>,
-  DecoratorValueTypedWithType<LP, SomeAction<LP | null>, T>,
-  DecoratorValueTypedWithType<LP, SomeEffect<LP>, T>,
+  DecoratorValueTypedWithType<SP, SomeAction<SP | null>, `${T}_SUCCESS`>,
+  DecoratorValueTypedWithType<SP, SomeEffect<SP>, `${T}_SUCCESS`>,
+  DecoratorValueTypedWithType<EP, SomeAction<EP | null>, `${T}_ERROR`>,
+  DecoratorValueTypedWithType<EP, SomeEffect<EP>, `${T}_ERROR`>,
+  DecoratorValueTypedWithType<LP, SomeAction<LP | null>, `${T}_LOADING`>,
+  DecoratorValueTypedWithType<LP, SomeEffect<LP>, `${T}_LOADING`>,
 ] {
-  const { type, typeSuccess, typeError, typeLoading } = createActionTypes(
-    config.createActionType(actionType as unknown as string),
+  const [type, typeSuccess, typeError, typeLoading] = createActionTypes<T>(
+    config.createActionType(actionType) as T,
   )
 
   return [
-    action<P, T>(type),
-    effect<P, T>(type),
-    action<SP, T>(typeSuccess),
-    effect<SP, T>(typeSuccess),
-    action<EP, T>(typeError),
-    effect<EP, T>(typeError),
-    action<LP, T>(typeLoading),
-    effect<LP, T>(typeLoading),
+    action<P, typeof type>(type),
+    effect<P, typeof type>(type),
+    action<SP, typeof typeSuccess>(typeSuccess),
+    effect<SP, typeof typeSuccess>(typeSuccess),
+    action<EP, typeof typeError>(typeError),
+    effect<EP, typeof typeError>(typeError),
+    action<LP, typeof typeLoading>(typeLoading),
+    effect<LP, typeof typeLoading>(typeLoading),
   ]
 }
 
 export default createActionAndEffect
+
+// const [actionD, effectD, actonS] = createActionAndEffect<
+//   { some: '1' },
+//   { some: '1' },
+//   { some: '1' },
+//   { some: '1' },
+//   'some1'
+// >('some1')
+// const t = actionD.type
+// const d = effectD.payload
+// const ts = actonS.type
+
+// function foo<A extends string, B extends number>(x: A): A {
+//   return x
+// }
+
+// const test0 = foo('word')
+// `A` inferred : ['e', 2, true, {f: ['g']}]
+// const act = {}
+
+// if (actionD.isAction(act)) {
+//   act.payload.
+// }

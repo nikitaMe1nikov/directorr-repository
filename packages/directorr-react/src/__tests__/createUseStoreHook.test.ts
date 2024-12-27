@@ -1,10 +1,11 @@
 import { renderHook } from '@testing-library/react-hooks'
 import { createContext } from 'react'
-import createUseStoreHooks, {
+import {
+  createUseStoreHook,
   BUILDER_MODULE_NAME,
   HOOK_MODULE_NAME,
   DEP_NAME,
-} from '../createUseStoreHooks'
+} from '../createUseStoreHook'
 import {
   whenNotReactContext,
   whenNotStoreConstructor,
@@ -16,15 +17,15 @@ describe('createUseStoreHooks', () => {
   it('throw when call with not like context', () => {
     const context: any = 1
 
-    expect(() => createUseStoreHooks(context)).toThrowError(
+    expect(() => createUseStoreHook(context)).toThrowError(
       whenNotReactContext(BUILDER_MODULE_NAME, context),
     )
   })
 
   it('useStore throw when call with not constructor', () => {
     const SomeStore: any = 1
-    const context = createContext<Directorr>(new DirectorrMock() as any)
-    const useStore = createUseStoreHooks(context)
+    const context = createContext<Directorr | undefined>(new DirectorrMock() as any)
+    const useStore = createUseStoreHook(context)
 
     expect(() => renderHook(() => useStore(SomeStore as any)).result.current).toThrowError(
       whenNotStoreConstructor(HOOK_MODULE_NAME, SomeStore),
@@ -34,8 +35,8 @@ describe('createUseStoreHooks', () => {
   it('throw when call with context not like Directorr', () => {
     class SomeStore {}
     const FakeDirectorr = {}
-    const context = createContext<Directorr>(FakeDirectorr as any)
-    const useStore = createUseStoreHooks(context)
+    const context = createContext<Directorr | undefined>(FakeDirectorr as any)
+    const useStore = createUseStoreHook(context)
 
     expect(() => renderHook(() => useStore(SomeStore)).result.current).toThrowError(
       whenContextNotLikeDirrector(HOOK_MODULE_NAME, FakeDirectorr),
@@ -46,7 +47,7 @@ describe('createUseStoreHooks', () => {
     class SomeStore {}
     const directorr = new DirectorrMock()
     const context = createContext<Directorr>(directorr as any)
-    const useStore = createUseStoreHooks(context as any)
+    const useStore = createUseStoreHook(context as any)
 
     const {
       result: { current: store },
@@ -67,8 +68,8 @@ describe('createUseStoreHooks', () => {
   it('useStore return store when rerender', () => {
     class SomeStore {}
     const directorr = new DirectorrMock()
-    const context = createContext<Directorr>(directorr as any)
-    const useStore = createUseStoreHooks(context)
+    const context = createContext<Directorr | undefined>(directorr as any)
+    const useStore = createUseStoreHook(context)
 
     const {
       result: { current: store },

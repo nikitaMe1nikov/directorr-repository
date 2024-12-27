@@ -14,6 +14,8 @@ import {
   ConvertPayloadFunction,
   InitPayload,
   CheckPayloadFunc,
+  SubscribeObjectHandler,
+  // SubscribeOnDirectorrStoreHandler,
 } from '../types'
 import { notFindStoreName } from '../messages'
 import {
@@ -22,6 +24,10 @@ import {
   DIRECTORR_ANY_ACTION_TYPE,
   TIMERS_FIELD_NAME,
   TRUPHY_FUNC,
+  SUBSCRIBERS_FIELD_NAME,
+  SUBSCRIBE_FIELD_NAME,
+  DISPATCH_SUBSCRIBERS_FIELD_NAME,
+  UNSUBSCRIBE_FIELD_NAME,
 } from '../constants'
 import {
   compareObjectWithPattern,
@@ -128,11 +134,48 @@ export function dispatchEffects(this: any, action: Action): void {
       this[effectsForAnyActionType[i]](action)
     }
   }
+
+  this[DISPATCH_SUBSCRIBERS_FIELD_NAME](action)
+}
+
+export function dispatchSubscribersOnStore(this: any, action: Action): void {
+  const subscribers = this[SUBSCRIBERS_FIELD_NAME] as SubscribeObjectHandler[]
+
+  for (let i = 0, l = subscribers.length; i < l; ++i) {
+    subscribers[i](action)
+  }
+}
+
+export function subscribeOnStore(this: any, subscriberHandler: SubscribeObjectHandler): () => void {
+  this[SUBSCRIBERS_FIELD_NAME].push(subscriberHandler)
+
+  return () => this[UNSUBSCRIBE_FIELD_NAME](subscriberHandler)
+}
+
+export function unsubscribeOnStore(this: any, subscriberHandler: SubscribeObjectHandler): void {
+  const index = this[SUBSCRIBERS_FIELD_NAME].indexOf(subscriberHandler)
+
+  this[SUBSCRIBERS_FIELD_NAME].splice(index, 1)
+}
+
+export function subscribeOnDirectorrStore(
+  store: DirectorrStoreClass,
+  subscribeHandler: SubscribeObjectHandler,
+) {
+  return store[SUBSCRIBE_FIELD_NAME](subscribeHandler)
+}
+
+export function unsubscribeOnDirectorrStore(
+  store: DirectorrStoreClass,
+  subscribeHandler: SubscribeObjectHandler,
+) {
+  return store[UNSUBSCRIBE_FIELD_NAME](subscribeHandler)
 }
 
 export function isStoreReady(store: DirectorrStoreClass): boolean {
   return (
-    store.isReady === undefined || (isFunction(store.isReady) ? store.isReady() : store.isReady)
+    store.isStoreStateReady === undefined ||
+    (isFunction(store.isStoreStateReady) ? store.isStoreStateReady() : store.isStoreStateReady)
   )
 }
 
@@ -159,7 +202,7 @@ export function checkStoresState(
 }
 
 export function isStoreError(store: DirectorrStoreClass): boolean {
-  return store.isError !== undefined && store.isError
+  return store.isStoreStateError !== undefined && store.isStoreStateError
 }
 
 export function findStoreStateInStores(
@@ -257,11 +300,6 @@ export function isPayloadChecked(payload: any, checker: CheckPayload = TRUPHY_FU
   return true
 }
 
-export function createActionTypes(type: string) {
-  return {
-    type,
-    typeLoading: `${type}_LOADING`,
-    typeSuccess: `${type}_SUCCESS`,
-    typeError: `${type}_ERROR`,
-  }
+export function createActionTypes<S extends string>(type: S) {
+  return [type, `${type}_SUCCESS`, `${type}_ERROR`, `${type}_LOADING`] as const
 }

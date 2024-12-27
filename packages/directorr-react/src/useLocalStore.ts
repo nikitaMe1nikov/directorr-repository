@@ -15,5 +15,3 @@ export const useLocalStore: UseStoreHook = (StoreConstructor: any) => {
 
   return store.current
 }
-
-export default useLocalStore

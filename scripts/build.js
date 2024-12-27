@@ -4,6 +4,8 @@ const { nodeResolve: resolvePlugin } = require('@rollup/plugin-node-resolve')
 const filesizePlugin = require('rollup-plugin-filesize')
 const replacePlugin = require('@rollup/plugin-replace')
 const external = require('rollup-plugin-peer-deps-external')
+const commonjs = require('rollup-plugin-commonjs')
+
 const terserPlugin = require('rollup-plugin-terser').terser
 
 const fs = require('fs-extra')
@@ -65,6 +67,7 @@ async function generateBundledModule(inputFile, outputFile, format, production) 
 
   plugins = production
     ? [
+        commonjs(),
         external({
           includeDependencies: true,
         }),
@@ -74,6 +77,7 @@ async function generateBundledModule(inputFile, outputFile, format, production) 
         filesizePlugin(),
       ]
     : [
+        commonjs(),
         external({
           includeDependencies: true,
         }),

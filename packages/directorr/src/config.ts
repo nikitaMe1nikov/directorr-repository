@@ -2,9 +2,12 @@ import {
   createAction,
   createActionType,
   dispatchEffects,
+  dispatchSubscribersOnStore,
   hydrateStoresToState,
   mergeStateToStore,
   setStateToStore,
+  subscribeOnStore,
+  unsubscribeOnStore,
 } from './Directorr/directorrUtils'
 import {
   BatchFunction,
@@ -15,6 +18,9 @@ import {
   HydrateStoresToState,
   MergeStateToStores,
   SetStateToStore,
+  DispatchSubscribersOnStore,
+  SubscribeOnStore,
+  UnsubscribeOnStore,
 } from './types'
 import { ACTION_TYPE_DIVIDER } from './constants'
 import { batchFunction } from './utils/primitives'
@@ -33,6 +39,12 @@ class Config {
 
   dispatchEffects: DispatchEffects = dispatchEffects
 
+  dispatchSubscribersOnStore: DispatchSubscribersOnStore = dispatchSubscribersOnStore
+
+  subscribeOnStore: SubscribeOnStore = subscribeOnStore
+
+  unsubscribeOnStore: UnsubscribeOnStore = unsubscribeOnStore
+
   hydrateStoresToState: HydrateStoresToState = hydrateStoresToState
 
   mergeStateToStore: MergeStateToStores = mergeStateToStore
@@ -48,7 +60,10 @@ class Config {
     hydrateStoresToState,
     mergeStateToStore,
     setStateToStore,
-  }) => {
+    dispatchSubscribersOnStore,
+    subscribeOnStore,
+    unsubscribeOnStore,
+  } = {}) => {
     if (batchFunction) {
       this.batchFunction = batchFunction
       this.dispatchEffects = batchFunction(this.dispatchEffectsOrig)
@@ -70,6 +85,12 @@ class Config {
     if (mergeStateToStore) this.mergeStateToStore = mergeStateToStore
 
     if (setStateToStore) this.setStateToStore = setStateToStore
+
+    if (dispatchSubscribersOnStore) this.dispatchSubscribersOnStore = dispatchSubscribersOnStore
+
+    if (subscribeOnStore) this.subscribeOnStore = subscribeOnStore
+
+    if (unsubscribeOnStore) this.unsubscribeOnStore = unsubscribeOnStore
   }
 }
 

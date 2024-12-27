@@ -1,7 +1,7 @@
 import './utils/checkEnv'
 export * from './Directorr'
 export * from './config'
-export * from './utils/testUtils'
+export * from './utils/helpers'
 export * from './createPropertyDecoratorFactory'
 export * from './createActionFactory'
 export {

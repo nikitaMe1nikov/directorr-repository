@@ -3,7 +3,7 @@ import {
   // notFoundDirectorrStore,
   // notFoundStoreInDirectorrStore,
   dontUseWithAnotherDecorator,
-  notFoundDirectorr,
+  // notFoundDirectorr,
 } from '../messages'
 import {
   // DirectorrStoreClassConstructor,
@@ -12,10 +12,12 @@ import {
   DecoratorValueTyped,
   // DirectorrStoreClass,
   // SomeObject,
-  DirectorrInterface,
+  // DirectorrInterface,
+  DispatchAction,
 } from '../types'
 import {
-  INJECTED_DIRECTORR_FIELD_NAME,
+  DISPATCH_ACTION_FIELD_NAME,
+  // INJECTED_DIRECTORR_FIELD_NAME,
   // INJECTED_STORES_FIELD_NAME,
   // STORES_FIELD_NAME,
 } from '../constants'
@@ -25,36 +27,38 @@ import {
   // createValueDescriptor,
   isTypescriptDecorator,
 } from '../utils/decoratorsUtils'
+import { addInitFields } from '../utils/initFields'
 // import { defineProperty, hasOwnProperty, isFunction } from '../utils/primitives'
 
-export const MODULE_NAME = 'injectDirectorr'
+export const MODULE_NAME = 'injectDispatch'
 
-export function injectDecoratorr(moduleName: string) {
-  function get(this: any) {
-    if (!this[INJECTED_DIRECTORR_FIELD_NAME]) throw new Error(notFoundDirectorr(moduleName))
+function getDispatchAction(this: any) {
+  return this[DISPATCH_ACTION_FIELD_NAME]
+}
 
-    return this[INJECTED_DIRECTORR_FIELD_NAME]
-  }
-
-  return createPropertyDescriptor(get)
+export function injectStoreDecoratorr() {
+  return createPropertyDescriptor(getDispatchAction)
 }
 
 export function createInjectDirectorr(
   moduleName: string,
   createDescriptor: (moduleName: string) => PropertyDescriptor,
+  addFields = addInitFields,
 ) {
   return (target: any, property: string, descriptor?: BabelDescriptor) => {
     if (isTypescriptDecorator(descriptor)) throw new Error(dontUseWithAnotherDecorator(moduleName))
+
+    addFields(target)
 
     return createDescriptor(moduleName)
   }
 }
 
-export type DecoratorValueWithDirectorr = DecoratorValueTyped<DirectorrInterface>
+export type DecoratorValueWithDispatch = DecoratorValueTyped<DispatchAction>
 
-export const injectDirectorr: DecoratorValueWithDirectorr = createInjectDirectorr(
+export const injectDispatch: DecoratorValueWithDispatch = createInjectDirectorr(
   MODULE_NAME,
-  injectDecoratorr,
+  injectStoreDecoratorr,
 )
 
-export default injectDirectorr
+export default injectDispatch

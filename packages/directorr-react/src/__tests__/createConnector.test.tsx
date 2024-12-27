@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import { shallow } from 'enzyme'
 import { DirectorrMock, getStoreName } from '@nimel/directorr'
-import createConnector, { lowercaseFirstLetter } from '../createConnector'
+import { createConnector, lowercaseFirstLetter } from '../createConnector'
 
 const someProps = {
   someProp: 'someProp',

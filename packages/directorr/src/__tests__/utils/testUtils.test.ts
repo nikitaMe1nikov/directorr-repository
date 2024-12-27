@@ -4,7 +4,7 @@ import {
   dispatchDestroyEffectInStore,
   dispatchReloadEffectInStore,
   dispatchActionInStore,
-} from '../../utils/testUtils'
+} from '../../utils/helpers'
 import {
   DISPATCH_EFFECTS_FIELD_NAME,
   DIRECTORR_INIT_STORE_ACTION,

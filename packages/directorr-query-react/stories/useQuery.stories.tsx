@@ -1,16 +1,12 @@
-// import { QueryArg } from '@nimel/directorr-query'
 import type { Meta, StoryObj } from '@storybook/react'
-import { FC } from 'react'
+import { FC, HTMLAttributes } from 'react'
 import { useQuery } from '../src'
-import { QueryArg } from '@nimel/directorr-query'
-import { Directorr } from '@nimel/directorr'
+import { QueryArg, Query } from '@nimel/directorr-query'
 import { logMiddleware } from '@nimel/directorr-middlewares'
-import { DirectorrProvider } from '@nimel/directorr-react'
-import { createQueryMiddleware } from '@nimel/directorr-query'
+import { createDecoratorWithDirectorr } from '../../../.storybook/utils'
+// import { createQueryMiddleware } from '@nimel/directorr-query'
 
-const directorr = new Directorr({ middlewares: [logMiddleware, createQueryMiddleware()] })
-
-function delay(ms = 1000) {
+export function delay(ms = 1000) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
@@ -37,14 +33,16 @@ async function someQueryUseAnotherQuery({
 
 type Story = StoryObj<typeof QueryRunner>
 
-let count = 0
-
-const QueryRunner: FC<any> = ({ query, variables }) => {
+export const QueryRunner: FC<{
+  query: Query
+  variables: any
+  style: HTMLAttributes<HTMLDivElement>['style']
+}> = ({ query, variables, children, style }) => {
   const { fetch, data, isLoading, isSuccess, isError, error } = useQuery(query, variables)
 
   return (
-    <>
-      <button onClick={() => fetch({ id: count++ })}>run query</button>
+    <div style={style}>
+      <button onClick={() => fetch({ id: 0 })}>run query</button>
       <>
         <h4>{`data: ${data}`}</h4>
         <h4>{`isLoading: ${isLoading}`}</h4>
@@ -52,7 +50,8 @@ const QueryRunner: FC<any> = ({ query, variables }) => {
         <h4>{`isError: ${isError}`}</h4>
         <h4>{`error: ${error}`}</h4>
       </>
-    </>
+      {children}
+    </div>
   )
 }
 
@@ -83,14 +82,19 @@ export const WhenError: Story = {
   },
 }
 
+export const InnerQuery: Story = {
+  args: {
+    query: someQuery,
+    variables: { id: 0 },
+    style: { background: 'red' },
+    children: (
+      <QueryRunner query={someQuery} variables={{ id: 0 }} style={{ background: 'green' }} />
+    ),
+  },
+}
+
 export default {
   title: 'useQuery',
   component: QueryRunner,
-  decorators: [
-    (Story, context) => (
-      <DirectorrProvider value={directorr}>
-        <Story {...context} />
-      </DirectorrProvider>
-    ),
-  ],
+  decorators: [createDecoratorWithDirectorr({ middlewares: [logMiddleware] })],
 } as Meta<typeof QueryRunner>

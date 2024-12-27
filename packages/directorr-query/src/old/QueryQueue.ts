@@ -1,4 +1,4 @@
-import { UniqKey } from './types'
+import { UniqKey } from '../types'
 
 export class QueryQueue {
   queryPending = new Set<UniqKey>()

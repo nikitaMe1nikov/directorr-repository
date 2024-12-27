@@ -1,9 +1,9 @@
 import { renderHook } from '@testing-library/react-hooks'
-import useLocalStore, { HOOK_MODULE_NAME } from '../useLocalStore'
+import { HOOK_MODULE_NAME, useLocalStore } from '../useLocalStore'
 import { whenNotStoreConstructor } from '../messages'
 
 describe('useLocalStore', () => {
-  it('should useLocalStore throw when call with not constructor', () => {
+  it('should throw when call with not constructor', () => {
     const SomeStore: any = 1
 
     expect(() => renderHook(() => useLocalStore(SomeStore)).result.current).toThrowError(
@@ -11,7 +11,7 @@ describe('useLocalStore', () => {
     )
   })
 
-  it('should useLocalStore return store', () => {
+  it('should return store', () => {
     class SomeStore {}
 
     const {
@@ -21,7 +21,7 @@ describe('useLocalStore', () => {
     expect(store).toBeInstanceOf(SomeStore)
   })
 
-  it('should useLocalStore return store when rerender', () => {
+  it('should return store when rerender', () => {
     class SomeStore {}
 
     const {

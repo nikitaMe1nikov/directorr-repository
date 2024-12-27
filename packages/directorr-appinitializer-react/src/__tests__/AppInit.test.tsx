@@ -12,16 +12,16 @@ const CHANGE_READY = 'CHANGE_READY'
 const CHANGE_ERROR = 'CHANGE_ERROR'
 
 class StoreOne {
-  isReady = false
+  isStoreStateReady = false
 
   @action(CHANGE_READY)
   changeReady = () => ({
-    isReady: !this.isReady,
+    isStoreStateReady: !this.isStoreStateReady,
   })
 
   @effect(CHANGE_READY)
-  toChangeReady = ({ isReady }: { isReady: boolean }) => {
-    this.isReady = isReady
+  toChangeReady = ({ isStoreStateReady }: { isStoreStateReady: boolean }) => {
+    this.isStoreStateReady = isStoreStateReady
   }
 
   @initStoreSuccessEffect
@@ -29,16 +29,16 @@ class StoreOne {
 }
 
 class StoreError {
-  isError = false
+  isStoreStateError = false
 
   @action(CHANGE_ERROR)
   changeError = () => ({
-    isError: !this.isError,
+    isStoreStateError: !this.isStoreStateError,
   })
 
   @effect(CHANGE_ERROR)
-  toChangeReady = ({ isError }: { isError: boolean }) => {
-    this.isError = isError
+  toChangeReady = ({ isStoreStateError }: { isStoreStateError: boolean }) => {
+    this.isStoreStateError = isStoreStateError
   }
 
   @initStoreErrorEffect

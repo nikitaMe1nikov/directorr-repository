@@ -13,10 +13,10 @@ export interface PromiseCancelable<T = any> extends Promise<T> {
 }
 
 export interface DirectorrStoreClass {
-  isReady?: boolean | SomeFunction
-  isError?: boolean
+  isStoreStateReady?: boolean | SomeFunction
+  isStoreStateError?: boolean
   fromJSON?: (parsedClassInstance: any) => void
-  [key: string]: any
+  [key: string | symbol]: any
 }
 
 export interface DirectorrStoreClassConstructor<I = DirectorrStoreClass, O = any> {
@@ -24,6 +24,8 @@ export interface DirectorrStoreClassConstructor<I = DirectorrStoreClass, O = any
   storeName?: string
   storeInitOptions?: O
 }
+
+export type SomePrimitiveOrObject = string | number | boolean | SomeObject | SomeFunction
 
 export type SomeObject = Record<string, any>
 
@@ -36,16 +38,13 @@ export type ActionType = SomeActionType | SomeActionType[] | ActionType[]
 
 export type DispatcherActionType = DecoratorValueTypedWithType<any, any, string>
 
-export type Action<T = string, P = undefined> = undefined extends P
-  ? {
-      type: T
-      [extraProps: string]: any
-    }
-  : {
-      type: T
-      payload: P
-      [extraProps: string]: any
-    }
+export type Payload = Record<string, any>
+
+export type Action<T = string, P extends Payload = Payload> = {
+  type: T
+  payload: P
+  [extraProps: string]: any
+}
 
 export type EffectsMap = Map<string, (string | symbol)[]>
 
@@ -119,13 +118,14 @@ export type DecoratorValueTyped<R = any> = <T extends Record<K, R>, K extends st
 ) => void
 
 export interface DecoratorValueTypedWithType<
-  P = any,
+  P extends Payload = Payload,
   R extends (...args: any) => any = (...args: any) => any,
-  C = string,
+  C extends string = string,
 > extends DecoratorValueTyped<R> {
   type: C
   createAction: (payload: P) => Action<C, P>
   isAction: (action: any) => action is Action<string, P>
+  payloadType: P
 }
 
 export type SomeAction<A = any> = (...args: any[]) => A | Promise<A>
@@ -138,7 +138,7 @@ export type CreateDecoratorOneArgOption<A1 = any> = (arg?: A1) => Decorator
 
 export type CreateDecoratorOneArg<A = any, D = Decorator> = (arg: A) => D
 
-export type CreateDecoratorValueTypedEffect<A = any> = <P = any, T = string>(
+export type CreateDecoratorValueTypedEffect<A = any> = <P = any, T extends string = string>(
   arg: A,
 ) => DecoratorValueTypedWithType<P, SomeEffect<P>, T>
 
@@ -152,8 +152,8 @@ export type CreateDecoratorValueTypedWithTypeAction<A = any> = <P = any>(
 ) => DecoratorValueTypedWithType<P, SomeAction<P | null>>
 
 export type CreateDecoratorValueTypedWithTypeActionTwoOptions<A1 = any, A2 = any> = <
-  P = any,
-  T = string,
+  P,
+  T extends string,
 >(
   arg1: A1,
   arg2?: A2,
@@ -234,6 +234,9 @@ export type Configure = (config: {
   hydrateStoresToState?: HydrateStoresToState
   mergeStateToStore?: MergeStateToStores
   setStateToStore?: SetStateToStore
+  dispatchSubscribersOnStore?: DispatchSubscribersOnStore
+  subscribeOnStore?: SubscribeOnStore
+  unsubscribeOnStore?: UnsubscribeOnStore
 }) => void
 
 export type DirectorrStores = Map<string, any>
@@ -267,7 +270,7 @@ export interface DirectorrInterface {
   addMiddlewares: (middlewares: Middleware[]) => void
   removeMiddleware: (middleware: Middleware) => void
   dispatch: DispatchAction
-  dispatchType: (type: string, payload?: any) => Action
+  dispatchType: <P extends Payload>(type: string, payload?: P) => Action
   getStore<C>(StoreConstructor: DirectorrStoreClassConstructor<C>): C | undefined
   getHydrateStoresState: () => DirectorrStoresState
   mergeStateToStore: (storeState: DirectorrStoresState) => void
@@ -290,9 +293,21 @@ export interface DirectorrInterface {
   unsubscribe: (handler: SubscribeHandler) => void
 }
 
-export type SubscribeHandler = (store: DirectorrStores, action: Action) => void
+export type SubscribeHandler = (store: DirectorrStores, action: Action<string, any>) => void
 
 export type UnsubscribeHandler = () => void
+
+export type SubscribeObjectHandler = (action: Action<string, any>) => void
+
+// export type SubscribeOnDirectorrStoreHandler = (action: Action<string, any>) => void
+
+export type DispatchSubscribersOnStore = (action: Action) => void
+
+export type SubscribeOnStore = (
+  subscribeObjectHandler: SubscribeObjectHandler,
+) => UnsubscribeOnStore
+
+export type UnsubscribeOnStore = (subscribeObjectHandler: SubscribeObjectHandler) => void
 
 export type CheckStoreState = (someCalss: DirectorrStoreClass) => boolean
 

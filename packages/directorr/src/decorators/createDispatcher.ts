@@ -77,13 +77,14 @@ export function createDispatcher(store: any) {
       )
 
     const [firstActionType, secondActionType, thirdActionType] = actionTypes
-    const types = createActionTypes(config.createActionType(firstActionType))
+    const [firstType, firstTypeSuccess, firstTypeError] = createActionTypes(
+      config.createActionType(firstActionType),
+    )
 
-    const { type } = types
     const typeSuccess = secondActionType
       ? config.createActionType(secondActionType)
-      : types.typeSuccess
-    const typeError = thirdActionType ? config.createActionType(thirdActionType) : types.typeError
+      : firstTypeSuccess
+    const typeError = thirdActionType ? config.createActionType(thirdActionType) : firstTypeError
 
     const dispatchers: any[] = store[DISPATHERS_FIELD_NAME]
     const allTypes = [typeSuccess, typeError]
@@ -105,7 +106,7 @@ export function createDispatcher(store: any) {
 
     dispatchers.push(promise.cancel)
 
-    store[DISPATCH_ACTION_FIELD_NAME](config.createAction(type, payload))
+    store[DISPATCH_ACTION_FIELD_NAME](config.createAction(firstType, payload))
 
     return promise
   }

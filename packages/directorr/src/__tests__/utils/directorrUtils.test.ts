@@ -398,10 +398,10 @@ describe('utils', () => {
   it('isStoreReady', () => {
     const storeEmpty = {}
     const storeFalse = {
-      isReady: false,
+      isStoreStateReady: false,
     }
     const storeTrue = {
-      isReady: true,
+      isStoreStateReady: true,
     }
 
     expect(isStoreReady(storeEmpty)).toBeTruthy()
@@ -426,10 +426,10 @@ describe('utils', () => {
   it('isStoreError', () => {
     const storeEmpty = {}
     const storeFalse = {
-      isError: false,
+      isStoreStateError: false,
     }
     const storeTrue = {
-      isError: true,
+      isStoreStateError: true,
     }
 
     expect(isStoreError(storeEmpty)).toBeFalsy()

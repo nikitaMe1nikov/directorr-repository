@@ -1,7 +1,7 @@
 import { Directorr } from '@nimel/directorr'
-import { createUniqKey } from './utils'
-import { actionQuery } from './decorators'
-import { Query, QueryOptions, ReturnTypeQuery, UniqKey } from './types'
+import { createUniqKey } from '../utils'
+import { actionQuery } from '../decorators'
+import { Query, QueryOptions, ReturnTypeQuery, UniqKey } from '../types'
 
 export type Callbacks = { resolve: any; reject: any }
 
@@ -45,9 +45,9 @@ export class QueryRunner {
   >(
     query: Q,
     variables?: V,
-    options?: QueryOptions,
+    options: QueryOptions = {},
   ): Promise<R> => {
-    const key = createUniqKey([query.name, variables])
+    const key = createUniqKey(query, variables)
     let resolve: any
     let reject: any
     // eslint-disable-next-line promise/param-names

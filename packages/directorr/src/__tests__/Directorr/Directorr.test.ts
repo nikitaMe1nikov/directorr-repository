@@ -576,11 +576,11 @@ describe('Directorr', () => {
     expect(handler).toBeCalledTimes(1)
   })
 
-  it('waitAllStoresState with store isReady = true', async () => {
+  it('waitAllStoresState with store isStoreStateReady = true', async () => {
     const resolve = jest.fn()
     const reject = jest.fn()
     class StoreTrue extends Store {
-      isReady = true
+      isStoreStateReady = true
     }
 
     const director = new Directorr()
@@ -595,12 +595,12 @@ describe('Directorr', () => {
     expect(reject).not.toBeCalled()
   })
 
-  it('waitAllStoresState with store isReady = false', async () => {
+  it('waitAllStoresState with store isStoreStateReady = false', async () => {
     const resolve = jest.fn()
     const reject = jest.fn()
 
     class StoreFalse extends Store {
-      isReady = false
+      isStoreStateReady = false
     }
 
     const director = new Directorr()
@@ -615,15 +615,15 @@ describe('Directorr', () => {
     expect(reject).not.toBeCalled()
   })
 
-  it('waitAllStoresState with store that change isReady', async () => {
+  it('waitAllStoresState with store that change isStoreStateReady', async () => {
     const resolve = jest.fn()
     const reject = jest.fn()
 
     class StoreReady extends Store {
-      isReady = false
+      isStoreStateReady = false
 
       changeReady() {
-        this.isReady = !this.isReady
+        this.isStoreStateReady = !this.isStoreStateReady
       }
     }
 
@@ -657,11 +657,11 @@ describe('Directorr', () => {
     const reject = jest.fn()
 
     class StoreTrue extends Store {
-      isReady = true
+      isStoreStateReady = true
     }
 
     class StoreFalse extends Store {
-      isReady = false
+      isStoreStateReady = false
     }
 
     const director = new Directorr()
@@ -683,15 +683,15 @@ describe('Directorr', () => {
     expect(reject).not.toBeCalled()
   })
 
-  it('waitStoresState with store that change isReady', async () => {
+  it('waitStoresState with store that change isStoreStateReady', async () => {
     const resolve = jest.fn()
     const reject = jest.fn()
 
     class StoreReady extends Store {
-      isReady = false
+      isStoreStateReady = false
 
       changeReady() {
-        this.isReady = !this.isReady
+        this.isStoreStateReady = !this.isStoreStateReady
       }
     }
 
@@ -725,11 +725,11 @@ describe('Directorr', () => {
     const reject = jest.fn()
 
     class StoreTrue extends Store {
-      isError = true
+      isStoreStateError = true
     }
 
     class StoreFalse extends Store {
-      isError = false
+      isStoreStateError = false
     }
 
     const director = new Directorr()
@@ -744,15 +744,15 @@ describe('Directorr', () => {
     expect(reject).not.toBeCalled()
   })
 
-  it('findStoreState with store that change isError', async () => {
+  it('findStoreState with store that change isStoreStateError', async () => {
     const resolve = jest.fn()
     const reject = jest.fn()
 
     class StoreError extends Store {
-      isError = false
+      isStoreStateError = false
 
       changeError() {
-        this.isError = !this.isError
+        this.isStoreStateError = !this.isStoreStateError
       }
     }
 
@@ -781,23 +781,23 @@ describe('Directorr', () => {
     expect(reject).not.toBeCalled()
   })
 
-  it('check unsubscribe when findStoreState and waitStoresState in Promise.race with store that change isError', async () => {
+  it('check unsubscribe when findStoreState and waitStoresState in Promise.race with store that change isStoreStateError', async () => {
     const resolve = jest.fn()
     const reject = jest.fn()
 
     class StoreReady extends Store {
-      isReady = false
+      isStoreStateReady = false
 
       changeReady() {
-        this.isReady = !this.isReady
+        this.isStoreStateReady = !this.isStoreStateReady
       }
     }
 
     class StoreError extends Store {
-      isError = false
+      isStoreStateError = false
 
       changeError() {
-        this.isError = !this.isError
+        this.isStoreStateError = !this.isStoreStateError
       }
     }
 
